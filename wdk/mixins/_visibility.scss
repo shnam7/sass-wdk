@@ -1,0 +1,64 @@
+//=========================================================
+//
+//  @package Wicle Collection
+//  @module utils/visibility
+//
+//  @usage
+//  @include w-visibility-generate-classes; // generate all classes
+//  @include w-visibility-generate-classes((show, hide), (medium, large)); // generate selective classes and media queries
+//  @include w-visibility-generate-classes((show, hide), (medium, large), 'table); // set display mode to table in show state
+//
+//=========================================================
+
+
+//-----------------------------------------------
+//  Mixins
+//-----------------------------------------------
+//
+//  Generate visibility classes
+//  @param {string | List[string]} [$v-names=all] - Visibility class name list to generate.
+//    If the value is 'all', then it will be (show, hide, visible, invisible).
+//  @param {List} [$mq-list=null] - Media Query name list. If null, it means all.
+//  @param {string} [$
+//
+@mixin w-visibility-generate-classes($v-names:all, $mq-list:null, $display-type:block) {
+  $v-names: if($v-names==all, (show, hide, visible, invisible), $v-names);
+  $mq-list: if($mq-list==null, w-media-query-names(), $mq-list);
+
+  @if (list-contains($v-names, 'show')) { .show { display: block; } }
+  @if (list-contains($v-names, 'hide')) { .hide { display: none; } }
+  @if (list-contains($v-names, 'visible')) { .visible { visibility: visible; } }
+  @if (list-contains($v-names, 'invisible')) { .invisible { visibility: hidden; } }
+
+  @for $i from 1 through length($mq-list) {
+    $mq-name: nth($mq-list, $i);
+
+    @if (list-contains($v-names, 'show')) {
+      .show\@#{$mq-name} {
+        display: none;
+        @include w-media($mq-name) { display: unquote($display-type); }
+      }
+    }
+
+    @if (list-contains($v-names, 'hide')) {
+      .hide\@#{$mq-name} {
+        display: block;
+        @include w-media($mq-name) { display: none; }
+      }
+    }
+
+    @if (list-contains($v-names, 'visible')) {
+      .visible\@#{$mq-name} {
+        visibility: hidden;
+        @include w-media($mq-name) { visibility: visible; }
+      }
+    }
+
+    @if (list-contains($v-names, 'invisible')) {
+      .invisible\@#{$mq-name} {
+        visibility: hidden;
+        @include w-media($mq-name) { visibility: visible; }
+      }
+    }
+  }
+}

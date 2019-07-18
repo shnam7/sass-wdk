@@ -1,0 +1,74 @@
+//=========================================================
+//
+//  @package Sass-WDK
+//  @module modules/sys.reg
+//
+//  @description System database
+//
+//=========================================================
+
+@import "../functions/reg";
+
+//-----------------------------------------------
+//  global config database
+//-----------------------------------------------
+$w-sys-reg: () !default;
+
+//
+//  Set System Value
+//  @param {string} $category - System data category
+//  @param {string} $path - Location to store value
+//  @param {any} $value - Value to store
+//  @param {bool} $default - If true, $value is stored only when the location at $path is empty
+//
+@mixin ssv($category, $path, $value, $default:false) {
+  @if $path=='/' { $path: null; }
+  $addr: if($path, $category + "/" + $path, $category);
+
+  $w-sys-reg: scv($w-sys-reg, $addr, $value, $default) !global;
+}
+
+//  Merge System Value
+//  @param {string} $category - System data category
+//  @param {string} $path - Location to store value
+//  @param {any} $value - Value to store
+//  @param {bool} $default - If true, $value is stored only when the location at $path is empty
+//
+//  Example:
+//    $my-breakpoints: (seg1:0, seg2: 500px, sec3: 1000px);
+//    @include ssv('media', 'my-bp', $my-breakpoints);
+//    @debug gsv('media', 'my-bp'); --> (seg1: 0, seg2: 500px, sec3: 1000px)
+//    @include msv('media', 'my-bp', (seg2:600pc, seg4:1500px));
+//    @debug gsv('media', 'my-bp'); --> seg1: 0, seg2: 600pc, sec3: 1000px, seg4: 1500px)
+//
+@mixin msv($category, $path, $value-set, $default:false) {
+  @if type-of($value-set) != map {
+    @error "[_sys-reg.scss]: $value-set must be Map type."
+  }
+  @if $path=='/' { $path: null; }
+  $addr: if($path, $category + "/" + $path, $category);
+
+  $data: gcv($w-sys-reg, $addr);
+
+  $do-merge: false;
+  @if $default and data {
+    // do not update/store data
+  }
+  @else {
+    $data: map-merge($data, $value-set);
+    $w-sys-reg: scv($w-sys-reg, $addr, $data, $default) !global;
+  }
+}
+
+//
+//  Get System Value
+//  @param {string} $category - System data category
+//  @param {string} $path - Location to retrive value
+//  @param {any} [$default=null] - Default value returned when the retrived value is null
+//
+@function gsv($category, $path:null, $default:null) {
+  @if $path=='/' { $path: null; }
+  $addr: if($path, $category + "/" + $path, $category);
+
+  @return gcv($w-sys-reg, $addr, $default);
+}
