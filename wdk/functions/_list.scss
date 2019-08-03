@@ -20,7 +20,7 @@
 //  $first: first($list); // a
 //
 @function list-first($list) {
-  @return nth($list, 1);
+    @return nth($list, 1);
 }
 
 //
@@ -33,7 +33,7 @@
 //  $last: last($list);   // f
 //
 @function list-last($list) {
-  @return nth($list, length($list));
+    @return nth($list, length($list));
 }
 
 //
@@ -49,13 +49,15 @@
 //  $last-index: last-index($list, z); // null
 //
 @function list-last-index($list, $value) {
-  $index: null;
-  @for $i from 1 through length($list) {
-    @if nth($list, $i) == $value {
-      $index: $i;
+    $index: null;
+
+    @for $i from 1 through length($list) {
+        @if nth($list, $i)==$value {
+            $index: $i;
+        }
     }
-  }
-  @return $index;
+
+    @return $index;
 }
 
 //
@@ -70,7 +72,7 @@
 //  $new-list: prepend($list, now i know my a); // now, i, know, my, a, b, c, d, e, f
 //
 @function list-prepend($list, $value) {
-  @return join($value, $list);
+    @return join($value, $list);
 }
 
 //
@@ -90,26 +92,33 @@
 //  $new-list: insert-nth($list, zog, z); // error
 //
 @function list-insert-nth($list, $index, $value) {
-  $result: null;
-  @if type-of($index) != number {
-    @warn "$index: #{quote($index)} is not a number for `insert-nth`.";
-  }
-  @else if $index < 1 {
-    @warn "List index 0 must be a non-zero integer for `insert-nth`";
-  }
-  @else if $index > length($list) {
-    @warn "List index is #{$index} but list is only #{length($list)} item long for `insert-nth'.";
-  }
-  @else {
-    $result: ();
-    @for $i from 1 through length($list) {
-      @if $i == $index {
-        $result: append($result, $value);
-      }
-      $result: append($result, nth($list, $i));
+    $result: null;
+
+    @if type-of($index) !=number {
+        @warn "$index: #{quote($index)} is not a number for `insert-nth`.";
     }
-  }
-  @return $result;
+
+    @else if $index < 1 {
+        @warn "List index 0 must be a non-zero integer for `insert-nth`";
+    }
+
+    @else if $index>length($list) {
+        @warn "List index is #{$index} but list is only #{length($list)} item long for `insert-nth'.";
+    }
+
+    @else {
+        $result: ();
+
+        @for $i from 1 through length($list) {
+            @if $i==$index {
+                $result: append($result, $value);
+            }
+
+            $result: append($result, nth($list, $i));
+        }
+    }
+
+    @return $result;
 }
 
 //
@@ -128,26 +137,32 @@
 //  $new-list: remove-nth($list, zog); // error
 //
 @function list-remove-nth($list, $index) {
-  $result: null;
-  @if type-of($index) != number {
-    @warn "$index: #{quote($index)} is not a number for `remove-nth`.";
-  }
-  @else if $index == 0 {
-    @warn "List index 0 must be a non-zero integer for `remove-nth`.";
-  }
-  @else if abs($index) > length($list) {
-    @warn "List index is #{$index} but list is only #{length($list)} item long for `remove-nth`.";
-  }
-  @else {
-    $result: ();
-    $index: if($index < 0, length($list) + $index + 1, $index);
-    @for $i from 1 through length($list) {
-      @if $i != $index {
-        $result: append($result, nth($list, $i));
-      }
+    $result: null;
+
+    @if type-of($index) !=number {
+        @warn "$index: #{quote($index)} is not a number for `remove-nth`.";
     }
-  }
-  @return $result;
+
+    @else if $index==0 {
+        @warn "List index 0 must be a non-zero integer for `remove-nth`.";
+    }
+
+    @else if abs($index)>length($list) {
+        @warn "List index is #{$index} but list is only #{length($list)} item long for `remove-nth`.";
+    }
+
+    @else {
+        $result: ();
+        $index: if($index < 0, length($list) + $index + 1, $index);
+
+        @for $i from 1 through length($list) {
+            @if $i !=$index {
+                $result: append($result, nth($list, $i));
+            }
+        }
+    }
+
+    @return $result;
 }
 
 //
@@ -167,29 +182,36 @@
 //  $new-list: replace-nth($list, zog, c); // error
 //
 @function list-replace-nth($list, $index, $value) {
-  $result: null;
-  @if type-of($index) != number {
-    @warn "$index: #{quote($index)} is not a number for `replace-nth`.";
-  }
-  @else if $index == 0 {
-    @warn "List index 0 must be a non-zero integer for `replace-nth`.";
-  }
-  @else if abs($index) > length($list) {
-    @warn "List index is #{$index} but list is only #{length($list)} item long for `replace-nth`.";
-  }
-  @else {
-    $result: ();
-    $index: if($index < 0, length($list) + $index + 1, $index);
-    @for $i from 1 through length($list) {
-      @if $i == $index {
-        $result: append($result, $value);
-      }
-      @else {
-        $result: append($result, nth($list, $i));
-      }
+    $result: null;
+
+    @if type-of($index) !=number {
+        @warn "$index: #{quote($index)} is not a number for `replace-nth`.";
     }
-  }
-  @return $result;
+
+    @else if $index==0 {
+        @warn "List index 0 must be a non-zero integer for `replace-nth`.";
+    }
+
+    @else if abs($index)>length($list) {
+        @warn "List index is #{$index} but list is only #{length($list)} item long for `replace-nth`.";
+    }
+
+    @else {
+        $result: ();
+        $index: if($index < 0, length($list) + $index + 1, $index);
+
+        @for $i from 1 through length($list) {
+            @if $i==$index {
+                $result: append($result, $value);
+            }
+
+            @else {
+                $result: append($result, nth($list, $i));
+            }
+        }
+    }
+
+    @return $result;
 }
 
 //
@@ -205,21 +227,25 @@
 //  $new-list: replace($list, a, u, true); // u, b, r, u, c u, d u, b, r, u;
 //
 @function list-replace($list, $old-value, $new-value, $recursive:false) {
-  $result: ();
-  @for $i from 1 through length($list) {
-    @if type-of(nth($list, $i)) == list and $recursive {
-      $result: append($result, replace(nth($list, $i), $old-value, $new-value, $recursive));
+    $result: ();
+
+    @for $i from 1 through length($list) {
+        @if type-of(nth($list, $i))==list and $recursive {
+            $result: append($result, replace(nth($list, $i), $old-value, $new-value, $recursive));
+        }
+
+        @else {
+            @if nth($list, $i)==$old-value {
+                $result: append($result, $new-value);
+            }
+
+            @else {
+                $result: append($result, nth($list, $i));
+            }
+        }
     }
-    @else {
-      @if nth($list, $i) == $old-value {
-        $result: append($result, $new-value);
-      }
-      @else {
-        $result: append($result, nth($list, $i));
-      }
-    }
-  }
-  @return $result;
+
+    @return $result;
 }
 
 //
@@ -235,16 +261,19 @@
 //  $new-list: remove($list, z, true); // a, b, c, d, e, f
 //
 @function list-remove($list, $value, $recursive:false) {
-  $result: ();
-  @for $i from 1 through length($list) {
-    @if type-of(nth($list, $i)) == list and $recursive {
-      $result: append($result, remove(nth($list, $i), $value, $recursive));
+    $result: ();
+
+    @for $i from 1 through length($list) {
+        @if type-of(nth($list, $i))==list and $recursive {
+            $result: append($result, remove(nth($list, $i), $value, $recursive));
+        }
+
+        @else if nth($list, $i) !=$value {
+            $result: append($result, nth($list, $i));
+        }
     }
-    @else if nth($list, $i) != $value {
-      $result: append($result, nth($list, $i));
-    }
-  }
-  @return $result;
+
+    @return $result;
 }
 
 //
@@ -262,29 +291,37 @@
 //  $new-list: slice($list, -1, 10); // error
 //
 @function list-slice($list, $start: 1, $end: length($list)) {
-  $result: null;
-  @if type-of($start) != number or type-of($end) != number {
-    @warn "Either $start or $end are not a number for `slice`.";
-  }
-  @else if $start > $end {
-    @warn "The start index has to be lesser than or equals to the end index for `slice`.";
-  }
-  @else if $start < 1 or $end < 1 {
-    @warn "List indexes must be non-zero integers for `slice`.";
-  }
-  @else if $start > length($list) {
-    @warn "List index is #{$start} but list is only #{length($list)} item long for `slice`.";
-  }
-  @else if $end > length($list) {
-    @warn "List index is #{$end} but list is only #{length($list)} item long for `slice`.";
-  }
-  @else {
-    $result: ();
-    @for $i from $start through $end {
-      $result: append($result, nth($list, $i));
+    $result: null;
+
+    @if type-of($start) !=number or type-of($end) !=number {
+        @warn "Either $start or $end are not a number for `slice`.";
     }
-  }
-  @return $result;
+
+    @else if $start>$end {
+        @warn "The start index has to be lesser than or equals to the end index for `slice`.";
+    }
+
+    @else if $start < 1 or $end < 1 {
+        @warn "List indexes must be non-zero integers for `slice`.";
+    }
+
+    @else if $start>length($list) {
+        @warn "List index is #{$start} but list is only #{length($list)} item long for `slice`.";
+    }
+
+    @else if $end>length($list) {
+        @warn "List index is #{$end} but list is only #{length($list)} item long for `slice`.";
+    }
+
+    @else {
+        $result: ();
+
+        @for $i from $start through $end {
+            $result: append($result, nth($list, $i));
+        }
+    }
+
+    @return $result;
 }
 
 //
@@ -299,17 +336,23 @@
 //  $new-list: reverse($list, true); // h, g, f, e d c, b, a
 //
 @function list-reverse($list, $recursive: false) {
-  $result: ();
-  @if (length($list)==0) { @return $result; }
-  @for $i from length($list)*-1 through -1 {
-    @if type-of(nth($list, abs($i))) == list and $recursive {
-      $result: append($result, reverse(nth($list, abs($i)), $recursive));
+    $result: ();
+
+    @if (length($list)==0) {
+        @return $result;
     }
-    @else {
-      $result: append($result, nth($list, abs($i)));
+
+    @for $i from length($list)*-1 through -1 {
+        @if type-of(nth($list, abs($i)))==list and $recursive {
+            $result: append($result, reverse(nth($list, abs($i)), $recursive));
+        }
+
+        @else {
+            $result: append($result, nth($list, abs($i)));
+        }
     }
-  }
-  @return $result;
+
+    @return $result;
 }
 
 //
@@ -324,22 +367,27 @@
 //  $new-list: to-string($list);      // abcdefgh
 //  $new-list: to-string($list, '-'); // a-b-c-d-e-f-g-h
 //
-@function list-to-string($list, $glue:''/*, $unquote:true*/) {
-  $result: unquote('');
-  @if (length($list) == 0 ) { @return $result; }
+@function list-to-string($list, $glue:'', $unquote: true) {
+    $result: unquote('');
 
-  @for $i from 1 through length($list) {
-    $e: nth($list, $i);
-    @if type-of($e) == list {
-      $val: list-to-string($e, $glue/*, $unquote*/);
-      $result: if(str-length($result)>0, $result#{$glue}#{$val}, $result#{$val});
+    @if (length($list)==0) {
+        @return $result;
     }
-    @else {
-      $result: if(str-length($result)>0, $result#{$glue}#{$e}, $result#{$e});
+
+    @for $i from 1 through length($list) {
+        $e: nth($list, $i);
+
+        @if type-of($e)==list {
+            $val: list-to-string($e, $glue, $unquote);
+            $result: if(str-length($result)>0, $result#{$glue}#{$val}, $result#{$val});
+        }
+
+        @else {
+            $result: if(str-length($result)>0, $result#{$glue}#{$e}, $result#{$e});
+        }
     }
-  }
-  @return $result;
-  // @return if($unquote, unquote($result), $result);
+
+    @return if($unquote, unquote($result), $result);
 }
 
 //
@@ -354,11 +402,13 @@
 //  $new-list: loop($list, -1); // b, c, d, e, f, a
 //
 @function list-rotate($list, $count:1) {
-  $result: ();
-  @for $i from 0 to length($list) {
-    $result: append($result, nth($list, ($i - $count) % length($list) + 1));
-  }
-  @return $result;
+    $result: ();
+
+    @for $i from 0 to length($list) {
+        $result: append($result, nth($list, ($i - $count) % length($list) + 1));
+    }
+
+    @return $result;
 }
 
 //
@@ -366,7 +416,7 @@
 //  @param {List} $list - List to be operated
 //
 @function list-trim($list) {
-  @return remove($list, null, true);
+    @return remove($list, null, true);
 }
 
 //
@@ -376,10 +426,11 @@
 //  @returns {bool}
 //
 @function list-contains($list, $values...) {
-  @each $value in $values {
-    @if type-of(index($list, $value)) != "number" {
-      @return false;
+    @each $value in $values {
+        @if type-of(index($list, $value)) !="number" {
+            @return false;
+        }
     }
-  }
-  @return true;
+
+    @return true;
 }

@@ -16,37 +16,38 @@
 //  @credit
 //  https://github.com/zurb/foundation-sites/blob/master/scss/util/_mixins.scss
 //
-@mixin w-triangle(
-  $triangle-size,
-  $triangle-color,
-  $triangle-direction
-) {
-  content: '';
-  display: block;
-  width: 0;
-  height: 0;
-  border: inset $triangle-size;
+@mixin w-triangle($triangle-size,
+    $triangle-color,
+    $triangle-direction) {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border: inset $triangle-size;
 
-  @if ($triangle-direction == down) {
-    border-color: $triangle-color transparent transparent;
-    border-top-style: solid;
-    border-bottom-width: 0;
-  }
-  @if ($triangle-direction == up) {
-    border-color: transparent transparent $triangle-color;
-    border-bottom-style: solid;
-    border-top-width: 0;
-  }
-  @if ($triangle-direction == right) {
-    border-color: transparent transparent transparent $triangle-color;
-    border-left-style: solid;
-    border-right-width: 0;
-  }
-  @if ($triangle-direction == left) {
-    border-color: transparent $triangle-color transparent transparent;
-    border-right-style: solid;
-    border-left-width: 0;
-  }
+    @if ($triangle-direction==down) {
+        border-color: $triangle-color transparent transparent;
+        border-top-style: solid;
+        border-bottom-width: 0;
+    }
+
+    @if ($triangle-direction==up) {
+        border-color: transparent transparent $triangle-color;
+        border-bottom-style: solid;
+        border-top-width: 0;
+    }
+
+    @if ($triangle-direction==right) {
+        border-color: transparent transparent transparent $triangle-color;
+        border-left-style: solid;
+        border-right-width: 0;
+    }
+
+    @if ($triangle-direction==left) {
+        border-color: transparent $triangle-color transparent transparent;
+        border-right-style: solid;
+        border-left-width: 0;
+    }
 }
 
 //
@@ -63,93 +64,96 @@
 //  @credit
 //  https://github.com/zurb/foundation-sites/blob/master/scss/util/_mixins.scss
 //
-@mixin w-hamburger(
-  $color: $w-color-text-white,
-  $color-hover: null,
-  $width: 18px,
-  $height: 14px,
-  $weight: 2px,
-  $bars: 3
-) {
-  $color-hover: if($color-hover, $color-hover, smart-scale($color, 15%));
+@mixin w-hamburger($color: $w-color-text-white,
+    $color-hover: null,
+    $width: 18px,
+    $height: 14px,
+    $weight: 2px,
+    $bars: 3) {
+    $color-hover: if($color-hover, $color-hover, smart-scale($color, 15%));
 
-  // box-shadow CSS output
-  $shadow: ();
-  $hover-shadow: ();
+    // box-shadow CSS output
+    $shadow: ();
+    $hover-shadow: ();
 
-  // Spacing between bars is calculated based on the total height of the icon and the weight of each bar
-  $spacing: floor(($height - ($weight * $bars)) / ($bars - 1));
+    // Spacing between bars is calculated based on the total height of the icon and the weight of each bar
+    $spacing: floor(($height - ($weight * $bars)) / ($bars - 1));
 
-  //Icon container
-  position: relative;
-  //display: inline-block;
-  vertical-align: middle;
-  cursor: pointer;
-  width: $width;
-  height: $height;
+    //Icon container
+    position: relative;
+    //display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    width: $width;
+    height: $height;
 
-  // Icon bars
-  &::after {
-    content: '';
-    position: absolute;
-    display: block;
-    width: 100%;
-    height: $weight;
-    background: $color;
-    top: 0;
-    left: 0;
+    // Icon bars
+    &::after {
+        content: '';
+        position: absolute;
+        display: block;
+        width: 100%;
+        height: $weight;
+        background: $color;
+        top: 0;
+        left: 0;
 
-    @for $i from 2 through $bars {
-      $offset: ($weight + $spacing) * ($i - 1);
-      $shadow: append($shadow, 0 $offset 0 $color, comma);
+        @for $i from 2 through $bars {
+            $offset: ($weight + $spacing) * ($i - 1);
+            $shadow: append($shadow, 0 $offset 0 $color, comma);
+        }
+
+        box-shadow: $shadow;
     }
 
-    box-shadow: $shadow;
-  }
+    // Hover state
+    @if $color-hover {
 
-  // Hover state
-  @if $color-hover {
-    // Generate CSS
-    @for $i from 2 through $bars {
-      $offset: ($weight + $spacing) * ($i - 1);
-      $hover-shadow: append($hover-shadow, 0 $offset 0 $color-hover, comma);
-    }
+        // Generate CSS
+        @for $i from 2 through $bars {
+            $offset: ($weight + $spacing) * ($i - 1);
+            $hover-shadow: append($hover-shadow, 0 $offset 0 $color-hover, comma);
+        }
 
-    &:hover::after {
-      background: $color-hover;
-      box-shadow: $hover-shadow;
+        &:hover::after {
+            background: $color-hover;
+            box-shadow: $hover-shadow;
+        }
     }
-  }
 }
 
 //
 //  Clearfix
-//  @param {bool} $ie8 - IE8 
+//  @param {bool} $ie8 - IE8
 //
 //  @credit
 //  https://ismamz.github.io/postcss-utilities/docs#clear-fix
 //  http://nicolasgallagher.com/micro-clearfix-hack/
 //
 @mixin w-clearfix($ie8:false) {
-  @if $ie8 {
-    &:before,
-    &:after {
-      display: table;
-      content: ' ';
+    @if $ie8 {
+
+        &:before,
+        &:after {
+            display: table;
+            content: ' ';
+        }
+
+        &:after {
+            clear: both;
+        }
+
+        // IE6 and IE7 support is removed
+        // zoom: 1; // For IE 6/7 (trigger hasLayout)
     }
-    &:after {
-      clear: both;
+
+    @else {
+        &:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
     }
-    // IE6 and IE7 support is removed
-    // zoom: 1; // For IE 6/7 (trigger hasLayout)
-  }
-  @else {
-    &:after {
-      content: '';
-      display: block;
-      clear: both;
-    }
-  }
 }
 
 //
@@ -164,17 +168,19 @@
 //  w-border(red, 1px, solid, (left, right))
 //
 @mixin w-border($color:red, $width:1px, $style:solid, $where:null) {
-  @if $where==null or $where==all {
-    border: $width $style $color;
-  }
-  @else if $where==left or $where==top or $where==right or $where==bottom {
-    border-#{$where}: $width $style $color;
-  }
-  @else if type-of($where)==list {
-    @each $side in $where {
-      border-#{$side}: $width $style $color;
+    @if $where==null or $where==all {
+        border: $width $style $color;
     }
-  }
+
+    @else if $where==left or $where==top or $where==right or $where==bottom {
+        border-#{$where}: $width $style $color;
+    }
+
+    @else if type-of($where)==list {
+        @each $side in $where {
+            border-#{$side}: $width $style $color;
+        }
+    }
 }
 
 //
@@ -187,17 +193,19 @@
 //  w-border-color(red, (left, right))
 //
 @mixin w-border-color($color, $where:null) {
-  @if $where==null or $where==all {
-    border-color: $color;
-  }
-  @else if $where==left or $where==top or $where==right or $where==bottom {
-    border-#{$where}-color: $color;
-  }
-  @else if type-of($where)==list {
-    @each $side in $where {
-      border-#{$side}-color: $color;
+    @if $where==null or $where==all {
+        border-color: $color;
     }
-  }
+
+    @else if $where==left or $where==top or $where==right or $where==bottom {
+        border-#{$where}-color: $color;
+    }
+
+    @else if type-of($where)==list {
+        @each $side in $where {
+            border-#{$side}-color: $color;
+        }
+    }
 }
 
 //
@@ -210,17 +218,19 @@
 //  w-border-radius(1px, (left, right))
 //
 @mixin w-border-radius($radius, $where:null) {
-  @if $where==null or $where==all {
-    border-radius: $radius;
-  }
-  @else if $where==left or $where==right {
-    border-top-#{$where}-radius: $radius;
-    border-bottom-#{$where}-radius: $radius;
-  }
-  @else if $where==top or $where==bottom {
-    border-#{$where}-left-radius: $radius;
-    border-#{$where}-right-radius: $radius;
-  }
+    @if $where==null or $where==all {
+        border-radius: $radius;
+    }
+
+    @else if $where==left or $where==right {
+        border-top-#{$where}-radius: $radius;
+        border-bottom-#{$where}-radius: $radius;
+    }
+
+    @else if $where==top or $where==bottom {
+        border-#{$where}-left-radius: $radius;
+        border-#{$where}-right-radius: $radius;
+    }
 }
 
 //
@@ -233,17 +243,19 @@
 //  w-border-style(solid, (left, right))
 //
 @mixin w-border-style($style, $where:null) {
-  @if $where==null or $where==all {
-    border-style: $style;
-  }
-  @else if $where==left or $where==top or $where==right or $where==bottom {
-    border-#{$where}-style: $style;
-  }
-  @else if type-of($where)==list {
-    @each $side in $where {
-      border-#{$side}-style: $style;
+    @if $where==null or $where==all {
+        border-style: $style;
     }
-  }
+
+    @else if $where==left or $where==top or $where==right or $where==bottom {
+        border-#{$where}-style: $style;
+    }
+
+    @else if type-of($where)==list {
+        @each $side in $where {
+            border-#{$side}-style: $style;
+        }
+    }
 }
 
 //
@@ -279,10 +291,13 @@
 //  @param {Color} [$color=null] - Color of the circle
 //
 @mixin w-circle($radius, $color:null) {
-  height: $radius;
-  width: $radius;
-  border-radius: 50%;
-  @if $color { background: $color; }
+    height: $radius;
+    width: $radius;
+    border-radius: 50%;
+
+    @if $color {
+        background: $color;
+    }
 }
 
 // @mixin w-size($width, $height:null) {
@@ -303,28 +318,31 @@
 //    if $w-line-height variable exists, it's used. Or 1.5 is assigned as default
 //
 @mixin w-text-truncate($lines:1, $line-height: null) {
-  @if $line-height==null {
-    @if not variable_exists('w-line-height') {
-      @warn "[util.scss]:$w-line-height is not defined. Using 1.5 as default\0A"
-        + "To supress this warning, define $w-line-height with !global option.\0A"
-        + "ex) $w-line-height: 1.5 !global;";
-      $line-height: 1.5;
-    }
-    @else {
-      $line-height: $w-line-height;
-    }
-  }
+    @if $line-height==null {
+        @if not variable_exists('w-line-height') {
+            @warn "[util.scss]:$w-line-height is not defined. Using 1.5 as default\0A"
+            +"To supress this warning, define $w-line-height with !global option.\0A"
+            +"ex) $w-line-height: 1.5 !global;";
+            $line-height: 1.5;
+        }
 
-  @if $lines == 1 {
-    white-space: nowrap;
-  }
-  @else {
-    display: box;
-    height: $lines * $line-height;
-    line-height: $line-height;
-    line-clamp: $lines;
-    box-orient: vertical;
-  }
-  overflow: hidden;
-  text-overflow: ellipsis;
+        @else {
+            $line-height: $w-line-height;
+        }
+    }
+
+    @if $lines==1 {
+        white-space: nowrap;
+    }
+
+    @else {
+        display: box;
+        height: $lines * $line-height;
+        line-height: $line-height;
+        line-clamp: $lines;
+        box-orient: vertical;
+    }
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

@@ -22,43 +22,74 @@
 //  @param {string} [$
 //
 @mixin w-visibility-generate-classes($v-names:all, $mq-list:null, $display-type:block) {
-  $v-names: if($v-names==all, (show, hide, visible, invisible), $v-names);
-  $mq-list: if($mq-list==null, w-media-query-names(), $mq-list);
-
-  @if (list-contains($v-names, 'show')) { .show { display: block; } }
-  @if (list-contains($v-names, 'hide')) { .hide { display: none; } }
-  @if (list-contains($v-names, 'visible')) { .visible { visibility: visible; } }
-  @if (list-contains($v-names, 'invisible')) { .invisible { visibility: hidden; } }
-
-  @for $i from 1 through length($mq-list) {
-    $mq-name: nth($mq-list, $i);
+    $v-names: if($v-names==all, (show, hide, visible, invisible), $v-names);
+    $mq-list: if($mq-list==null, w-media-query-names(), $mq-list);
 
     @if (list-contains($v-names, 'show')) {
-      .show\@#{$mq-name} {
-        display: none;
-        @include w-media($mq-name) { display: unquote($display-type); }
-      }
+        .show {
+            display: block;
+        }
     }
 
     @if (list-contains($v-names, 'hide')) {
-      .hide\@#{$mq-name} {
-        display: block;
-        @include w-media($mq-name) { display: none; }
-      }
+        .hide {
+            display: none;
+        }
     }
 
     @if (list-contains($v-names, 'visible')) {
-      .visible\@#{$mq-name} {
-        visibility: hidden;
-        @include w-media($mq-name) { visibility: visible; }
-      }
+        .visible {
+            visibility: visible;
+        }
     }
 
     @if (list-contains($v-names, 'invisible')) {
-      .invisible\@#{$mq-name} {
-        visibility: hidden;
-        @include w-media($mq-name) { visibility: visible; }
-      }
+        .invisible {
+            visibility: hidden;
+        }
     }
-  }
+
+    @for $i from 1 through length($mq-list) {
+        $mq-name: nth($mq-list, $i);
+
+        @if (list-contains($v-names, 'show')) {
+            .show\@#{$mq-name} {
+                display: none;
+
+                @include w-media($mq-name) {
+                    display: unquote($display-type);
+                }
+            }
+        }
+
+        @if (list-contains($v-names, 'hide')) {
+            .hide\@#{$mq-name} {
+                display: block;
+
+                @include w-media($mq-name) {
+                    display: none;
+                }
+            }
+        }
+
+        @if (list-contains($v-names, 'visible')) {
+            .visible\@#{$mq-name} {
+                visibility: hidden;
+
+                @include w-media($mq-name) {
+                    visibility: visible;
+                }
+            }
+        }
+
+        @if (list-contains($v-names, 'invisible')) {
+            .invisible\@#{$mq-name} {
+                visibility: hidden;
+
+                @include w-media($mq-name) {
+                    visibility: visible;
+                }
+            }
+        }
+    }
 }

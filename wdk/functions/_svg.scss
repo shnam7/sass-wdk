@@ -23,36 +23,39 @@
 //  svg-url($svg-image) --> url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300...
 //
 @function svg-url($svg, $fill-to-replace:null, $new-fill:null) {
-  // Add missing namespace
-  @if not str-index($svg,xmlns) {
-    $svg: str-replace($svg, '<svg','<svg xmlns="http://www.w3.org/2000/svg"');
-  }
 
-  // replace fill color if new-fill is specified
-  @if $new-fill {
-    $svg: str-replace($svg, to-string($fill-to-replace), to-string($new-fill));
-  }
+    // Add missing namespace
+    @if not str-index($svg, xmlns) {
+        $svg: str-replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
 
-  // Chunk up string in order to avoid "stack level too deep" error
-  $encoded:'';
-  $slice: 2000;
-  $index: 0;
-  $loops: ceil(str-length($svg)/$slice);
-  @for $i from 1 through $loops {
-    $chunk: str-slice($svg, $index, $index + $slice - 1);
-    //
-    //   Encode (may need a few extra replacements)
-    //
-    $chunk: str-replace($chunk,'"', '\'');
-    $chunk: str-replace($chunk,'%', '%25');
-    $chunk: str-replace($chunk,'&', '%26');
-    $chunk: str-replace($chunk,'#', '%23');       
-    $chunk: str-replace($chunk,'{', '%7B');
-    $chunk: str-replace($chunk,'}', '%7D');         
-    $chunk: str-replace($chunk,'<', '%3C');
-    $chunk: str-replace($chunk,'>', '%3E');
-    $encoded: #{$encoded}#{$chunk};
-    $index: $index + $slice;
-  }
-  @return url("data:image/svg+xml;charset=utf8,#{$encoded}");
+    // replace fill color if new-fill is specified
+    @if $new-fill {
+        $svg: str-replace($svg, to-string($fill-to-replace), to-string($new-fill));
+    }
+
+    // Chunk up string in order to avoid "stack level too deep" error
+    $encoded:'';
+    $slice: 2000;
+    $index: 0;
+    $loops: ceil(str-length($svg)/$slice);
+
+    @for $i from 1 through $loops {
+        $chunk: str-slice($svg, $index, $index + $slice - 1);
+        //
+        //   Encode (may need a few extra replacements)
+        //
+        $chunk: str-replace($chunk, '"', '\'');
+        $chunk: str-replace($chunk, '%', '%25');
+        $chunk: str-replace($chunk, '&', '%26');
+        $chunk: str-replace($chunk, '#', '%23');
+        $chunk: str-replace($chunk, '{', '%7B');
+        $chunk: str-replace($chunk, '}', '%7D');
+        $chunk: str-replace($chunk, '<', '%3C');
+        $chunk: str-replace($chunk, '>', '%3E');
+        $encoded: #{$encoded}#{$chunk};
+        $index: $index + $slice;
+    }
+
+    @return url("data:image/svg+xml;charset=utf8,#{$encoded}");
 }

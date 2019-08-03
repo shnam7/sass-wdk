@@ -13,10 +13,10 @@
 //  @returns {number} normalized YIQ value (0.0 ~ 1.0)
 //
 @function yiq($color) {
-  $r: red($color);
-  $g: green($color);
-  $b: blue($color);
-  @return (($r*299) + ($g*587) + ($b*114))/(256*1000);
+    $r: red($color);
+    $g: green($color);
+    $b: blue($color);
+    @return (($r*299) + ($g*587) + ($b*114))/(256*1000);
 }
 
 
@@ -29,7 +29,7 @@
 //  @returns {Color} $black or $white which has higher contrast with $color
 //
 @function yiq-color($color, $threshold:0.6, $black:#444, $white:#EEE) {
-  @return if(yiq($color) >= $threshold, $black, $white);
+    @return if(yiq($color) >=$threshold, $black, $white);
 }
 
 //
@@ -38,7 +38,7 @@
 //  @param {Percent} [$percent=5%] - Percentage of white to be mixed
 //
 @function tint($color, $percent:5%) {
-  @return mix(#fff, $color, $percent);
+    @return mix(#fff, $color, $percent);
 }
 
 //  Mix a color with black
@@ -46,7 +46,7 @@
 //  @param {Percent} [$percent=5%] - Percentage of black to be mixed
 //
 @function shade($color, $percent:5%) {
-  @return mix(#000, $color, $percent);
+    @return mix(#000, $color, $percent);
 }
 
 //
@@ -56,8 +56,8 @@
 //  @returns {Color} Gray scale color
 //
 @function gray($percent, $alpha:null) {
-  $val: lighten(#000, $percent);
-  @return if($alpha, rgba($val, $alpha), $val);
+    $val: lighten(#000, $percent);
+    @return if($alpha, rgba($val, $alpha), $val);
 }
 
 //
@@ -70,10 +70,11 @@
 //  @returns {Color} A scaled color.
 //
 @function smart-scale($color, $scale:5%, $threshold:40%) {
-  @if lightness($color) > $threshold {
-    $scale: -$scale;
-  }
-  @return scale-color($color, $lightness: $scale);
+    @if lightness($color)>$threshold {
+        $scale: -$scale;
+    }
+
+    @return scale-color($color, $lightness: $scale);
 }
 
 //
@@ -83,7 +84,10 @@
 //  @param {string} [$direction=bottom] - Direction of the gradient. See CSS linear-gradient() docs
 //
 @function gradient($color, $gradient-level:10%, $direction:bottom) {
-  @if $color==transparent or strip-unit($gradient-level)==0 { @return $color; }
-  @return linear-gradient(to $direction,
-          tint($color, $gradient-level/2), shade($color, $gradient-level/2));
+    @if $color==transparent or strip-unit($gradient-level)==0 {
+        @return $color;
+    }
+
+    @return linear-gradient(to $direction,
+        tint($color, $gradient-level/2), shade($color, $gradient-level/2));
 }

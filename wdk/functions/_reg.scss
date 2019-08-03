@@ -29,9 +29,13 @@
 //  reg-get($reg, '//B/C') --> 789
 //
 @function reg-set($reg, $path, $value, $default:false) {
-  // if default option is set, return without storing
-  @if $default and reg-get($reg, $path) { @return $reg; }
-  @return map-deep-set($reg, str-split($path,'/:',''), $value);
+
+    // if default option is set, return without storing
+    @if $default and reg-get($reg, $path) {
+        @return $reg;
+    }
+
+    @return map-deep-set($reg, str-split($path, '/:', ''), $value);
 }
 
 //
@@ -47,19 +51,19 @@
 //  reg-get($reg, 'A/B/C') --> 123
 //
 @function reg-get($reg, $path, $default:null) {
-  $val: map-deep-get($reg, str-split($path,'/',''));
-  @return if($val, $val, $default);
+    $val: map-deep-get($reg, str-split($path, '/', ''));
+    @return if($val, $val, $default);
 }
 
 
 //  Set Config Value: shortcut for reg-set
 @function scv($reg, $path, $value, $default:null) {
-  //$path: str-trim($path, left, '/');
-  @return reg-set($reg, $path, $value, $default);
+    //$path: str-trim($path, left, '/');
+    @return reg-set($reg, $path, $value, $default);
 }
 
 //  Get Config Value: shortcut for reg-get
 @function gcv($reg, $path, $default:null) {
-  //$path: str-trim($path, left, '/');
-  @return reg-get($reg, $path, $default);
+    //$path: str-trim($path, left, '/');
+    @return reg-get($reg, $path, $default);
 }

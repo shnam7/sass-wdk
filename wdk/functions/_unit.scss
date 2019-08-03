@@ -8,15 +8,16 @@
 //=========================================================
 
 @function __default-font-size() {
-  @if not variable_exists('w-font-size') {
-    @warn "[unit.scss]:$w-font-size is not defined. Using 16px as default.\0A"
-      + "To supress this warning, define $w-font-size with !global option.\0A"
-      + "ex) $w-font-size: 16px !global;";
-    @return 16px;
-  }
-  @else {
-    @return $w-font-size;  
-  }
+    @if not variable_exists('w-font-size') {
+        @warn "[unit.scss]:$w-font-size is not defined. Using 16px as default.\0A"
+        +"To supress this warning, define $w-font-size with !global option.\0A"
+        +"ex) $w-font-size: 16px !global;";
+        @return 16px;
+    }
+
+    @else {
+        @return $w-font-size;
+    }
 }
 
 
@@ -26,10 +27,11 @@
 //  @returns {number} Unitless number
 //
 @function strip-unit($num) {
-  @if type-of($num) == 'number' and not unitless($num) {
-    @return $num / ($num * 0 + 1);
-  }
-  @return $num;
+    @if type-of($num)=='number'and not unitless($num) {
+        @return $num / ($num * 0 + 1);
+    }
+
+    @return $num;
 }
 
 //
@@ -39,11 +41,15 @@
 //  @returns {number} Value in rem unit
 //
 @function _px2rem($value, $base) {
-  @if unit($value) != 'rem' {
-    $value: strip-unit($value) / strip-unit($base) * 1rem;
-  }
-  @if $value == 0rem { $value: 0; }
-  @return $value;
+    @if unit($value) !='rem' {
+        $value: strip-unit($value) / strip-unit($base) * 1rem;
+    }
+
+    @if $value==0rem {
+        $value: 0;
+    }
+
+    @return $value;
 }
 
 //
@@ -53,11 +59,15 @@
 //  @returns {number} Value in px unit
 //
 @function _rem2px($value, $base) {
-  @if unit($value) != 'px' {
-    $value: strip-unit($value) * strip-unit($base) * 1px;
-  }
-  @if $value == 0px { $value: 0; }
-  @return $value;
+    @if unit($value) !='px' {
+        $value: strip-unit($value) * strip-unit($base) * 1px;
+    }
+
+    @if $value==0px {
+        $value: 0;
+    }
+
+    @return $value;
 }
 
 
@@ -68,19 +78,22 @@
 //  @return {number|List[number]} Values in rem unit
 //
 @function rem($values, $base:__default-font-size()) {
-  $rem-values: ();
-  $count: length($values);
+    $rem-values: ();
+    $count: length($values);
 
-  @if unit($base) == '%' {
-    $base: ($base / 100%) * __default-font-size();
-  }
-  @if $count == 1 {
-    @return _px2rem($values, $base);
-  }
-  @for $i from 1 through $count {
-    $rem-values: append($rem-values, _px2rem(nth($values, $i), $base));
-  }
-  @return $rem-values;
+    @if unit($base)=='%' {
+        $base: ($base / 100%) * __default-font-size();
+    }
+
+    @if $count==1 {
+        @return _px2rem($values, $base);
+    }
+
+    @for $i from 1 through $count {
+        $rem-values: append($rem-values, _px2rem(nth($values, $i), $base));
+    }
+
+    @return $rem-values;
 }
 
 //
@@ -90,17 +103,20 @@
 //  @return {number|List[number]} Values in px unit
 //
 @function px($values, $base:__default-font-size()) {
-  $px-values: ();
-  $count: length($values);
+    $px-values: ();
+    $count: length($values);
 
-  @if unit($base) == '%' {
-    $base: ($base / 100%) * __default-font-size();
-  }
-  @if $count == 1 {
-    @return _rem2px($values, $base);
-  }
-  @for $i from 1 through $count {
-    $px-values: append($px-values, _rem2px(nth($values, $i), $base));
-  }
-  @return $px-values;
+    @if unit($base)=='%' {
+        $base: ($base / 100%) * __default-font-size();
+    }
+
+    @if $count==1 {
+        @return _rem2px($values, $base);
+    }
+
+    @for $i from 1 through $count {
+        $px-values: append($px-values, _rem2px(nth($values, $i), $base));
+    }
+
+    @return $px-values;
 }

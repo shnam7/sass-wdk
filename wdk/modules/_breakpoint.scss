@@ -8,7 +8,6 @@
 //=========================================================
 
 @import "../functions/unit";
-
 //-----------------------------------------------
 //  internal functions
 //-----------------------------------------------
@@ -40,39 +39,46 @@
 //
 // @function __mq-set-of($breakpoints) {
 @function __mq-set-of($breakpoints) {
-  $result: ();
-  $keys: map-keys($breakpoints);
-  $length: length($keys);
-  @if $length >= 2 {
-    $min: map-get($breakpoints, nth($keys, 1));
-    @if strip-unit($min) != 0 {
-      @error 'First element of the breakpoint list should have zero value';
+    $result: ();
+    $keys: map-keys($breakpoints);
+    $length: length($keys);
+
+    @if $length>=2 {
+        $min: map-get($breakpoints, nth($keys, 1));
+
+        @if strip-unit($min) !=0 {
+            @error 'First element of the breakpoint list should have zero value';
+        }
+
+        $name: nth($keys, 1);
+        $max: map-get($breakpoints, nth($keys, 2));
+        $result: ($name: '(max-width:'+ ($max - 1) + ')');
+
+        @for $i from 2 to $length {
+            $name: nth($keys, $i);
+            $min: $max;
+            $max: map-get($breakpoints, nth($keys, $i+1));
+            $result: map-merge($result, ($name: '(min-width:'+ $min + ')'));
+            $result: map-merge($result, ($name+'-only': '(min-width:'+ $min + ') and (max-width:'+ ($max - 1) + ')'));
+            $result: map-merge($result, ($name+'-down': '(max-width:'+ $max + ')'));
+        }
+
+        $name: nth($keys, $length);
+        $max: map-get($breakpoints, nth($keys, $length));
+        $result: map-merge($result, ($name: '(min-width:'+ $max + ')'));
     }
 
-    $name: nth($keys, 1);
-    $max: map-get($breakpoints, nth($keys, 2));
-    $result: ($name: '(max-width:' + ($max - 1) + ')');
-    @for $i from 2 to $length {
-      $name: nth($keys, $i);
-      $min: $max;
-      $max: map-get($breakpoints, nth($keys, $i+1));
-      $result: map-merge($result, ($name: '(min-width:' + $min + ')'));
-      $result: map-merge($result, ($name+'-only': '(min-width:' + $min + ') and (max-width:' + ($max - 1) + ')'));
-      $result: map-merge($result, ($name+'-down': '(max-width:' + $max + ')'));
+    @else if $length==1 {
+        $name: nth($keys, 1);
+        $val: map-get($breakpoints, nth($keys, 1));
+
+        @if $val>0 {
+            $result: map-merge($result, ($name: '(min-width:'+ $val + ')'));
+            //$result: map-merge($result, ($name+'-down': '(max-width:' + ($val - 1) + ')'));
+        }
     }
-    $name: nth($keys, $length);
-    $max: map-get($breakpoints, nth($keys, $length));
-    $result: map-merge($result, ($name: '(min-width:' + $max + ')'));
-  }
-  @else if $length == 1 {
-    $name: nth($keys, 1);
-    $val: map-get($breakpoints, nth($keys, 1));
-    @if $val > 0 {
-      $result: map-merge($result, ($name: '(min-width:' + $val + ')'));
-      //$result: map-merge($result, ($name+'-down': '(max-width:' + ($val - 1) + ')'));
-    }
-  }
-  @return $result;
+
+    @return $result;
 }
 
 //
@@ -81,10 +87,8 @@
 //  @returns {boolean} - true if $name is in mq-set
 //
 @function __mq-invalid($name) {
-  @return not map-has-key($w-mq-set, $name);
+    @return not map-has-key($w-mq-set, $name);
 }
-
-
 
 //-----------------------------------------------
 //  data
@@ -161,8 +165,7 @@ $w-breakpoints-default: $w-breakpoints-basic !default;
 
 // }
 
-$w-mq-set:                      __mq-set-of($w-breakpoints-default) !default;
-
+$w-mq-set: __mq-set-of($w-breakpoints-default) !default;
 
 
 //-----------------------------------------------
@@ -173,14 +176,14 @@ $w-mq-set:                      __mq-set-of($w-breakpoints-default) !default;
 //  Returns currently active mq-set
 //
 @function w-media-query-list() {
-  @return $w-mq-set;
+    @return $w-mq-set;
 }
 
 //
 //  Returns the list of media query names of current mq-set
 //
 @function w-media-query-names() {
-  @return map-keys($w-mq-set);
+    @return map-keys($w-mq-set);
 }
 
 
@@ -194,8 +197,8 @@ $w-mq-set:                      __mq-set-of($w-breakpoints-default) !default;
 //    @param {Map}    $breakpoints  List of breakpoints
 //
 @mixin w-media-set-breakpoints($breakpoints: null) {
-  $breakpoints: if($breakpoints==null, $w-breakpoints-default, $breakpoints);
-  $w-mq-set: __mq-set-of($breakpoints) !global;
+    $breakpoints: if($breakpoints==null, $w-breakpoints-default, $breakpoints);
+    $w-mq-set: __mq-set-of($breakpoints) !global;
 }
 
 //
@@ -216,13 +219,14 @@ $w-mq-set:                      __mq-set-of($w-breakpoints-default) !default;
 //    @include w-media(medium-down) {...} --> "(max-width:960px)"
 //
 @mixin w-media($name, $media-type:null) {
-  @if __mq-invalid($name) {
-    @error '[_breakpoint.scss:w-media]: #{$name} is not in media-query list.';
-    @error '[_breakpoint.scss:w-media]: mq-set: #{$w-mq-set}';
-  }
+    @if __mq-invalid($name) {
+        @error '[_breakpoint.scss:w-media]: #{$name} is not in media-query list.';
+        @error '[_breakpoint.scss:w-media]: mq-set: #{$w-mq-set}';
+    }
 
-  $media-type: if($media-type, $media-type + " and ", "");
-  @media #{$media-type + map-get($w-mq-set, $name)}  {
-    @content;
-  }
+    $media-type: if($media-type, $media-type + " and ", "");
+
+    @media #{$media-type + map-get($w-mq-set, $name)} {
+        @content;
+    }
 }
