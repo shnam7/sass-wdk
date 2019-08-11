@@ -1,7 +1,7 @@
 //=========================================================
 //
 //  @package Sass-WDK
-//  @module variables/colors
+//  @module constnats/colors
 //
 //  @description Color collection
 //  @notes Color names are from http://www.htmlcsscolor.com
@@ -106,7 +106,7 @@ $w-color-orange:                    #FFA500 !default;
 $w-color-dark-red:                  #A30000 !default;
 $w-color-alice-blue:                #F3F6FA !default;
 
-// text colors  
+// text colors
 $w-color-text-white:                $w-color-whisper !default;
 $w-color-text-black:                $w-color-charcoal !default; // recommended for text reading. better than black.
 $w-color-text-blue:                 $w-color-lochmara !default;
@@ -114,12 +114,12 @@ $w-color-text-red:                  $w-color-medium-carmine !default;
 $w-color-text-orange:               $w-color-orange !default;
 $w-color-code-block-bright:         #f3f6fa !default;
 
-//--- color scheme  
+//--- color scheme
 $w-color-primary:                   $w-color-lochmara !default;
 $w-color-secondary:                 $w-color-raven !default;
 $w-color-success:                   $w-color-chateau-green !default;
 $w-color-info:                      $w-color-pelorous !default;
-$w-color-warning:                   $w-color-pumpkin !default;
+$w-color-warning:                   $w-color-orange !default;
 $w-color-danger:                    $w-color-mandy !default;
 $w-color-scheme:                    ( primary: $w-color-primary,
                                       secondary: $w-color-secondary,
