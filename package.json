@@ -1,6 +1,6 @@
 {
     "name": "sass-wdk",
-    "version": "1.0.0-dev",
+    "version": "1.0.0",
     "description": "Sass web style development kit",
     "main": "index.js",
     "files": [
