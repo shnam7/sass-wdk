@@ -1,8 +1,7 @@
 # Sass WDK - Sass Web Development Kit
 Sass programming library extension for web style developers.
 
-Importing any part of this toolkit will generate no CSS output, unless mixins are specifically called.
-So, you can have this tool on your side with no output overhead concern, and use it whenever necessary.
+Importing any part of this toolkit will not generate any CSS output without explicit mixin calls.
 
 
 ## Installation
@@ -38,5 +37,5 @@ https://github.com/zurb/foundation-sites/blob/master/scss/util/_mixins.scss
 
 <br>
 <div align="center">
-  <p align=center>Copyright &copy; 2019~, under <a href="./LICENSE">MIT</a></p>
+  <p align=center>Copyright &copy; 2019, under <a href="./LICENSE">MIT</a></p>
 </div>
