@@ -131,6 +131,16 @@ $w-breakpoints-bootstrap: (
         xl:                     1200px,    // extra large:  1200~
 ) !default;
 
+$w-breakpoints-uiframework: (
+  // generic states (UI Framework compatible: https://codyhouse.co/ds/docs/framework/breakpoints)
+        xxs:                    0,          // extra extra small: 0~511
+        xs:                     32rem,      // extra small:  512~
+        sm:                     48rem,      // small:        768~
+        md:                     64rem,      // medium:       1024~
+        lg:                     80rem,      // large:        1280~
+        xl:                     90rem,      // extra large:  1440~
+) !default;
+
 $w-breakpoints-simple: (
         mobile:                 0,
         computer:               960px,
