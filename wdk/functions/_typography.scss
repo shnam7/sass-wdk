@@ -1,0 +1,30 @@
+//=========================================================
+//
+//  @package Sass-WDK
+//  @module modules/typography
+//
+//=========================================================
+
+//
+//  Scale font size
+//  @param {number} $scale-factor - # of scaling. if negative, scale down
+//  @returns {FontSize} Scaled font size
+//
+@function font-scale($scale-factor) {
+    $font-size: var(--text-base-size, 1em);
+    $scaler: var(--text-scaler, 1.25);
+
+    @if $scale-factor>0 {
+        @for $i from 0 to $scale-factor {
+            $font-size: calc(#{$font-size} * #{$scaler});
+        }
+    }
+
+    @else if $scale-factor < 0 {
+        @for $i from 0 to $scale-factor {
+            $font-size: calc(#{$font-size} * var(--text-down-scaler, 0.9));
+        }
+    }
+
+    @return $font-size;
+}

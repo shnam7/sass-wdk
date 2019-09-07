@@ -1,0 +1,10 @@
+//=========================================================
+//
+//  @package Sass-WDK
+//  @module modules/spacing
+//
+//=========================================================
+
+@function spacing($scale) {
+    @return calc(var(--spacing-unit, 1em) * $scale);
+}
