@@ -9,6 +9,8 @@
 //=========================================================
 
 // html colors: http://www.htmlcsscolor.com
+$w-color-dim-gray:                  #737373 !default;   // #737373===gray(45)
+$w-color-cerulean:                  #007BA7 !default;
 $w-color-deep-blush:                #ED6983 !default;
 $w-color-rouge:                     #B12F5C !default;
 $w-color-shalimar:                  #F2F4AB !default;
@@ -108,12 +110,11 @@ $w-color-alice-blue:                #F3F6FA !default;
 
 // text colors
 $w-color-text-white:                $w-color-whisper !default;
-$w-color-text-light:                gray(45) !default;
+$w-color-text-gray:                 $w-color-dim-gray !default;
 $w-color-text-black:                $w-color-charcoal !default; // recommended for text reading. better than black.
 $w-color-text-blue:                 $w-color-lochmara !default;
 $w-color-text-red:                  $w-color-medium-carmine !default;
 $w-color-text-orange:               $w-color-orange !default;
-$w-color-code-block-bright:         #f3f6fa !default;
 
 //--- color scheme
 $w-color-primary:                   $w-color-navy-blue !default;
@@ -129,3 +130,13 @@ $w-color-scheme:                    ( primary: $w-color-primary,
                                       warning: $w-color-warning,
                                       danger: $w-color-danger
                                     ) !default;
+
+//--- default colors
+$w-color-text:                      $w-color-text-black !default;   // default text color
+$w-color-bg:                        #FFF;                         // default background color
+
+$w-color-link:                      $w-color-cerulean !default;     // <a> color
+$w-color-link-visited:              $w-color-link !default;
+$w-color-link-hover:                darken($w-color-link, 10%) !default;
+
+// $w-color-code-block:                $w-color-alice-blue !default;   // <pre><code> color
