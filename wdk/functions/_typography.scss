@@ -10,21 +10,32 @@
 //  @param {number} $scale-factor - # of scaling. if negative, scale down
 //  @returns {FontSize} Scaled font size
 //
-@function font-scale($scale-factor) {
-    $font-size: var(--text-base-size, 1em);
-    $scaler: var(--text-scaler, 1.25);
+@function font-scale($scale-index, $scaler:$w-font-scaler, $down-scaler:$w-font-down-scaler, $base-font-size:1em) {
+    $font-size: $base-font-size;
 
-    @if $scale-factor>0 {
-        @for $i from 0 to $scale-factor {
-            $font-size: calc(#{$font-size} * #{$scaler});
-        }
+    @if $scale-index>0 {
+        $font-size: pow($scaler, $scale-index) * $base-font-size;
+
+        // @for $i from 0 to $scale-factor {
+        //     $font-size: calc(#{$font-size} * #{$scaler});
+        // }
     }
 
-    @else if $scale-factor < 0 {
-        @for $i from 0 to $scale-factor {
-            $font-size: calc(#{$font-size} * var(--text-down-scaler, 0.9));
-        }
+    @else if $scale-index < 0 {
+        $font-size: pow($down-scaler, $scale-index * -1) * $base-font-size;
+        // @for $i from 0 to $scale-factor {
+        //     $font-size: calc(#{$font-size} * var(--text-down-scaler, 0.9));
+        // }
     }
 
     @return $font-size;
+}
+
+//
+//  Spacing calculator
+//  @param {number} $count - # of spacing units
+//  @param {Size} [$space-unit=$w-font-spacing-unit] - Unit spacing size
+//
+@function spacing($count, $space-unit:$w-space-unit) {
+    @return $space-unit * $count;
 }

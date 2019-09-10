@@ -7,8 +7,10 @@ $enable-string-test: false;
 $enable-list-test: false;
 $enable-map-test: false;
 $enable-reg-test: false;
+$enable-spacing-test: false;
 $enable-svg-test: false;
 $enable-type-test: false;
+$enable-typography-test: true;
 $enable-unit-test: false;
 $enable-align-test: false;
 $enable-sys-reg-test: false;
@@ -143,6 +145,15 @@ $enable-visibility-test: true;
 }
 
 
+/** Test _spaciing.scss */
+@if $enable-spacing-test {
+    @debug "----- _spacing.scss Test -----\10";
+    @for $i from -5 through 5 {
+        @debug "spacing #{$i}=" spacing($i);
+    }
+}
+
+
 /** Test _svg.scss */
 @if $enable-svg-test {
     @debug "----- _svg.scss Test -----\10";
@@ -163,6 +174,16 @@ $enable-visibility-test: true;
         @debug to-string($my-color);
 
         content: quote(to-string($my-color));
+    }
+}
+
+
+/** Test _typography.scss **/
+@if $enable-typography-test {
+    @debug "----- _typography.scss Test -----\10";
+
+    @for $i from -5 through 5 {
+        @debug "font-scale(#{$i})=" font-scale($i);
     }
 }
 

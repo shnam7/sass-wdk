@@ -7,15 +7,17 @@
 //
 //=========================================================
 
-//--- Google web fonts
-// Usage
-// <link href="https://fonts.googleapis.com/css?family=Roboto|Fira+Sans" rel="stylesheet">
-// @import url("//fonts.googleapis.com/css?family=Roboto|Fira+Sans")
-// @import url($w-font-roboto-url);
+//-----------------------------------------------------------------------------
+//  Webfonts (Google web fonts)
 //
-// Note: It's recommended to use <link> rather than @import for better performance using parallel file loading
+//  @Usage
+//    <link href="https://fonts.googleapis.com/css?family=Roboto|Fira+Sans" rel="stylesheet">
+//    @import url("//fonts.googleapis.com/css?family=Roboto|Fira+Sans")
+//    @import url($w-font-roboto-url);
 //
-
+//  @note:
+//    It's recommended to use <link> rather than @import for better performance using parallel file loading
+//-----------------------------------------------------------------------------
 $w-font-sans-default:             Arial,Helvetica,Verdana,sans-serif !default;
 $w-font-serif-default:            Georgia,Times,Times New Roman,serif !default;
 
@@ -43,7 +45,7 @@ $w-font-source-sans-pro-uri:      '//fonts.googleapis.com/css?family=Source+Sans
 $w-font-roboto-mono:              'Roboto mono',monospace !default;
 $w-font-roboto-url:               '//fonts.googleapis.com/css?family=Roboto+Mono' !default;
 
-// Nanum fonts
+//--- nNanum fonts
 $w-font-nanum-gothic:             'Nanum Gothic',sans-serif !default;
 $w-font-nanum-gothic-url:         '//fonts.googleapis.com/css?family=Nanum+Gothic' !default;
 

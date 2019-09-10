@@ -51,11 +51,13 @@
 
 //
 //  Returns gray scale color
-//  @param {Percent} $percent - Gray scale level from black
+//  @param {Percent|number} $percent - Gray scale level from black
 //  @param {Percent} [$alpha=null] - Alpha value
 //  @returns {Color} Gray scale color
+//  @notes gray(40%) === gray(40)
 //
 @function gray($percent, $alpha:null) {
+    $percent: strip-unit($percent) * 1%;
     $val: lighten(#000, $percent);
     @return if($alpha, rgba($val, $alpha), $val);
 }
