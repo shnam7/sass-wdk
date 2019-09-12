@@ -1,7 +1,6 @@
 # Sass WDK - Sass Web Development Kit
 Sass programming library extension for web style developers.
-
-Importing any part of this toolkit will not generate any CSS output without explicit mixin calls.
+Importing any part of this library will not generate any CSS output.
 
 
 ## Installation
@@ -16,11 +15,11 @@ In your scss file, just import 'wdk'.
 //...
 ```
 
-# Documentation
+## Documentation
 Not available yet. See the source codes comments for now.
 
 
-# Credit
+## Credits
 Thanks to the authors of the excellent web contents below.
 
 http://www.htmlcsscolor.com<br>
