@@ -185,6 +185,15 @@ $enable-visibility-test: true;
     @for $i from -5 through 5 {
         @debug "font-scale(#{$i})=" font-scale($i);
     }
+
+    @debug unquote("$w-text-xxs=    ") $w-text-xxs;
+    @debug unquote("$w-text-xs=     ") $w-text-xs;
+    @debug unquote("$w-text-sm=     ") $w-text-sm;
+    @debug unquote("$w-text-md=     ") $w-text-md;
+    @debug unquote("$w-text-lg=     ") $w-text-lg;
+    @debug unquote("$w-text-xl=     ") $w-text-xl;
+    @debug unquote("$w-text-xxl=    ") $w-text-xxl;
+    @debug unquote("$w-text-xxxl=   ") $w-text-xxxl;
 }
 
 

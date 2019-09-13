@@ -16,14 +16,14 @@ $w-font-scaler:                 1.25 !default;
 $w-font-down-scaler:            0.9 !default;
 $w-font-scale-up-unit:          0.5 !default;
 $w-font-scale-down-unit:        0.25 !default;
-$w-font-size-xxs:               1em / ((1 + $w-font-scale-down-unit * 2) * $w-font-scaler) !default;
-$w-font-size-xs:                1em / ((1 + $w-font-scale-down-unit * 1) * $w-font-scaler) !default;
-$w-font-size-sm:                1em / ((1 + $w-font-scale-down-unit * 0) * $w-font-scaler) !default;
-$w-font-size-md:                1em * ((1 + $w-font-scale-up-unit * 0) * $w-font-scaler) !default;
-$w-font-size-lg:                1em * ((1 + $w-font-scale-up-unit * 1) * $w-font-scaler) !default;
-$w-font-size-xl:                1em * ((1 + $w-font-scale-up-unit * 2) * $w-font-scaler) !default;
-$w-font-size-xxl:               1em * ((1 + $w-font-scale-up-unit * 3) * $w-font-scaler) !default;
-$w-font-size-xxxl:              1em * ((1 + $w-font-scale-up-unit * 4) * $w-font-scaler) !default;
+$w-font-size-xxs:               1em * $w-font-down-scaler * $w-font-down-scaler * $w-font-down-scaler !default;
+$w-font-size-xs:                $w-font-size-xxs / $w-font-down-scaler !default;
+$w-font-size-sm:                $w-font-size-xs / $w-font-down-scaler !default;
+$w-font-size-md:                1em * $w-font-scaler !default;
+$w-font-size-lg:                $w-font-size-md * $w-font-scaler !default;
+$w-font-size-xl:                $w-font-size-lg * $w-font-scaler !default;
+$w-font-size-xxl:               $w-font-size-xl * $w-font-scaler !default;
+$w-font-size-xxxl:              $w-font-size-xxl * $w-font-scaler !default;
 
 // font-size aliases
 $w-text-xxs:                    $w-font-size-xxs !default;
