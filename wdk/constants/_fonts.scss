@@ -16,6 +16,7 @@
 //    @import url($w-font-roboto-url);
 //
 //  @note:
+//    Multiple fonts can be loaded from fonts.googleapis.com using | between font names
 //    It's recommended to use <link> rather than @import for better performance using parallel file loading
 //-----------------------------------------------------------------------------
 $w-font-roboto:                     'Roboto',sans-serif !default;

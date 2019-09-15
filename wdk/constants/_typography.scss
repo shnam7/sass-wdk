@@ -6,9 +6,10 @@
 //=========================================================
 
 //--- font defaults
+// Adding Korean fonts in the list enables Korean characters to use them
 $w-font-size:                   14px !default;
-$w-font-heading:                $w-font-montserrat !default;
-$w-font-text:                   $w-font-roboto !default;
+$w-font-heading:                Montserrat,Roboto,Nanum Gothic,sans-serif !default;
+$w-font-text:                   Roboto,Nanum Gothic,sans-serif !default;
 $w-font-code:                   $w-font-roboto-mono !default;
 
 //--- font scaling
