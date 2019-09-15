@@ -5,11 +5,11 @@
 //
 //=========================================================
 
-//--- fonts
+//--- font defaults
 $w-font-size:                   14px !default;
-$w-font-sans:                   $w-font-sans-default !default;
-$w-font-serif:                  $w-font-serif-default !default;
-$w-font-mono:                   Roboto Mono,Consolas,Courier,monospace;
+$w-font-heading:                $w-font-montserrat !default;
+$w-font-text:                   $w-font-roboto !default;
+$w-font-code:                   $w-font-roboto-mono !default;
 
 //--- font scaling
 $w-font-scaler:                 1.25 !default;
