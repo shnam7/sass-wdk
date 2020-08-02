@@ -32,7 +32,8 @@
     },
     "homepage": "https://github.com/shnam7/sass-wdk#readme",
     "devDependencies": {
-        "node-sass": "^4.14.0",
+        "node-sass": "^4.14.1",
         "rimraf": "^3.0.2"
-    }
+    },
+    "dependencies": {}
 }
