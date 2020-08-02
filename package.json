@@ -1,6 +1,6 @@
 {
     "name": "sass-wdk",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "Sass web style development kit",
     "main": "index.js",
     "files": [
@@ -11,7 +11,6 @@
         "build": "node-sass -r test/ --output test/css",
         "watch": "node-sass -w -r --output-style compact test/ --output test/css",
         "clean": "rimraf test/**/*.css test/css",
-        "prepare": "npm run clean",
         "prepare-to-commit": "npm run build && npm run clean",
         "npm-dry-run": "npm publish --dry-run"
     },
@@ -34,6 +33,5 @@
     "devDependencies": {
         "node-sass": "^4.14.1",
         "rimraf": "^3.0.2"
-    },
-    "dependencies": {}
+    }
 }
