@@ -1,0 +1,109 @@
+//=========================================================
+//
+//  @package sass-wdk
+//
+//  @module ui/border
+//
+//=========================================================
+
+//
+//  Set borders
+//  @param {Color} $color - Border color
+//  @param {number} $width - Border width
+//  @param {string} $style - Border style
+//  @param {string, List[string]}} $where - all, top, right, bottom, left
+//
+//  Examples:
+//  w-border() or w-border($where:all)
+//  w-border(red, 1px, solid, (left, right))
+//
+@mixin set($color:red, $width:1px, $style:solid, $where:null) {
+    @if $where==null or $where==all {
+        border: $width $style $color;
+    }
+
+    @else if $where==left or $where==top or $where==right or $where==bottom {
+        border-#{$where}: $width $style $color;
+    }
+
+    @else if type-of($where)==list {
+        @each $side in $where {
+            border-#{$side}: $width $style $color;
+        }
+    }
+}
+
+//
+//  Set border colors
+//  @param {Color} $color - Border color
+//  @param {string|List[string]} $where - all, top, right, bottom, left
+//
+//  Examples:
+//  w-border-color(red)
+//  w-border-color(red, (left, right))
+//
+@mixin set-color($color, $where:null) {
+    @if $where==null or $where==all {
+        border-color: $color;
+    }
+
+    @else if $where==left or $where==top or $where==right or $where==bottom {
+        border-#{$where}-color: $color;
+    }
+
+    @else if type-of($where)==list {
+        @each $side in $where {
+            border-#{$side}-color: $color;
+        }
+    }
+}
+
+//
+//  Set border radius
+//  @param {number} $radius - Border radius
+//  @param {string|List[string]} $where - all, top, right, bottom, left
+//
+//  Examples:
+//  w-border-radius(1px)
+//  w-border-radius(1px, (left, right))
+//
+@mixin set-radius($radius, $where:null) {
+    @if $where==null or $where==all {
+        border-radius: $radius;
+    }
+
+    @else if $where==left or $where==right {
+        border-top-#{$where}-radius: $radius;
+        border-bottom-#{$where}-radius: $radius;
+    }
+
+    @else if $where==top or $where==bottom {
+        border-#{$where}-left-radius: $radius;
+        border-#{$where}-right-radius: $radius;
+    }
+}
+
+//
+//  Sets border styles
+//  @param {string} $style - Border style
+//  @param {string|List[string]} $where - all, top, right, bottom, left
+//
+//  Examples:
+//  w-border-style(solid)
+//  w-border-style(solid, (left, right))
+//
+@mixin set-style($style, $where:null) {
+    @if $where==null or $where==all {
+        border-style: $style;
+    }
+
+    @else if $where==left or $where==top or $where==right or $where==bottom {
+        border-#{$where}-style: $style;
+    }
+
+    @else if type-of($where)==list {
+        @each $side in $where {
+            border-#{$side}-style: $style;
+        }
+    }
+}

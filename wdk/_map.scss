@@ -1,0 +1,114 @@
+//=========================================================
+//
+//  @package sass-wdk
+//
+//  @module map
+//  @description Sass map operations
+//
+//  @credit:
+//    https://css-tricks.com/snippets/sass/deep-getset-maps
+//    http://www.sassmeister.com/gist/7525f0546479acd1d6e1
+//
+//=========================================================
+
+@forward "sass:map";
+
+@use "sass:map";
+@use "sass:list";
+
+//
+//  Map deep get
+//  @param {Map} $map - Map
+//  @param {List} $keys - Key chain (list of key values)
+//  @returns {any} - Retrived value.
+//
+@function deep-get($map, $keys) {
+    @return map.get($map, $keys...);
+}
+
+@function to-string($map) {
+    @return inspect($map);
+}
+
+//
+//  Deep set function to set a value in nested maps
+//  @param {Map} $map - Map
+//  @param {List} $keys -  Key chain (list of key values
+//  @param {any} $value - Value to set
+//  @returns {Map} New map containg the value at the location described in $keys
+//
+@function deep-set($map, $keys, $value) {
+    @return map.set($map, list.append($keys, $value)...);
+}
+
+//
+//  JQuery-style extend function
+//  Sass built-in function, map-merge() has following limitation:
+//    * Takes only 2 maps as arguments
+//    * Not recursive (No deep copy)
+//  This function supports
+//    * Unlimited number of maps to merge
+//    * Recursive (Deep copy) optionally if the last argument value is true
+//
+//  @param {Map} $object - first map
+//  @param {List...} $objects - List of maps to be merged
+//  @param {bool} [$deep=false] - Enable recursive mode
+//  @returns {Map} New map extended(merged)
+//
+//  Examples:
+//    extend-standard  : extend($map-1, $map-2, $map-3);  // shallow merge
+//    extend-recursive : extend($map-1, $map-2, $map-3, true);  // deep merge
+//
+@function extend($object, $objects...
+
+    /*, $deep */
+) {
+    $last: list.nth($objects, -1);
+    $deep: $last==true;
+    $max: if($deep, list.length($objects)-1, list.length($objects));
+    $object: if($object==null, (), $object);
+
+    @for $i from 1 through $max {
+        $object: map.deep-merge($object, list.nth($objects, $i));
+    }
+    @return $object;
+}
+
+//
+//  Remove null entries from a Map
+//  @param {Map} $map - Map to be operated
+//  @param {bool} [$recursive=false] - If true, trim child maps recursively
+//  @param {bool} [$trim-keys=true] - If true, removes all entries with null key
+//  @param {bool} [$trim-values=true] - If true, removes all entries with null value
+//  @returns {Map} New map trimmed
+//
+//  Examples:
+//  $map: ('a':123, null:'null','b':('1':null,'2':2), 'c':null);
+//  map-trim($map) --> ("a": 123, null: "null", "b": ("1": null, "2": 2)) // 'c' key removed
+//  map-trim($map, true) --> ("a": 123, "b": ("1": null, "2": 2)) // null key removed
+//  map-trim($map, true);
+//  map-trim($map, true, true, true) --> ("a": 123, "b": ("2": 2))
+//
+@function trim($map, $recursive:false, $trim-keys:true, $trim-values:true) {
+
+    @if ($trim-keys) {
+        $map: map.remove($map, null);
+    }
+
+    @each $key in map.keys($map) {
+        $val: map.get($map, $key);
+
+        // @debug 'map:' $key, map.get($map, $key);
+        @if ($trim-values and $val==null) {
+            $map: map.remove($map, $key);
+        }
+
+        @else if ($recursive and type-of($val)==map) {
+            $new-val: trim($val, $recursive, $trim-keys, $trim-values);
+            @if $new-val != null {
+                $map: map.merge($map, ($key: $new-val));
+            }
+        }
+    }
+    @return $map;
+}

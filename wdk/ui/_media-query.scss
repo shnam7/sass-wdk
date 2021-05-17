@@ -1,13 +1,15 @@
 //=========================================================
 //
-//  @package Sass-WDK
-//  @module modules/mq
+//  @package sass-wdk
 //
-//  @description Media query
+//  @module modules/mq
+//  @description Media query service module
 //
 //=========================================================
 
-@import "../functions/unit";
+@use "../unit";
+@use "sass:map";
+
 //-----------------------------------------------
 //  internal functions
 //-----------------------------------------------
@@ -46,7 +48,7 @@
     @if $length>=2 {
         $min: map-get($breakpoints, nth($keys, 1));
 
-        @if strip-unit($min) !=0 {
+        @if unit.strip-unit($min) != 0 {
             @error 'First element of the breakpoint list should have zero value';
         }
 
@@ -165,14 +167,14 @@ $w-mq-set: __mq-set-of($w-breakpoints-default) !default;
 //
 //  Returns currently active mq-set
 //
-@function w-media-query-list() {
+@function current() {
     @return $w-mq-set;
 }
 
 //
 //  Returns the list of media query names of current mq-set
 //
-@function w-media-query-names() {
+@function query-names() {
     @return map-keys($w-mq-set);
 }
 
@@ -186,7 +188,7 @@ $w-mq-set: __mq-set-of($w-breakpoints-default) !default;
 //  Init media query with breakpoint list
 //    @param {Map}    $breakpoints  List of breakpoints
 //
-@mixin w-media-set-breakpoints($breakpoints: null) {
+@mixin set-breakpoints($breakpoints: null) {
     $breakpoints: if($breakpoints==null, $w-breakpoints-default, $breakpoints);
     $w-mq-set: __mq-set-of($breakpoints) !global;
 }
@@ -208,7 +210,7 @@ $w-mq-set: __mq-set-of($w-breakpoints-default) !default;
 //    @include w-media(medium-only) {...} --> "(min-width:768px) and (max-width:959px)"
 //    @include w-media(medium-down) {...} --> "(max-width:960px)"
 //
-@mixin w-media($name, $media-type:null) {
+@mixin media($name, $media-type:null) {
     @if __mq-invalid($name) {
         @error '[_breakpoint.scss:w-media]: #{$name} is not in media-query list.';
         @error '[_breakpoint.scss:w-media]: mq-set: #{$w-mq-set}';
@@ -216,7 +218,7 @@ $w-mq-set: __mq-set-of($w-breakpoints-default) !default;
 
     $media-type: if($media-type, $media-type + " and ", "");
 
-    @media #{$media-type + map-get($w-mq-set, $name)} {
+    @media #{$media-type + map.get($w-mq-set, $name)} {
         @content;
     }
 }

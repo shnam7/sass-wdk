@@ -1,0 +1,144 @@
+//=========================================================
+//
+//  @package sass-wdk
+//
+//  @module reg
+//  @description Registry service module
+//  @notes: Registry is a logically organized map data structure
+//
+//=========================================================
+
+@use "list";
+@use "string" as str;
+@use "map";
+
+//
+//  Store value into the specified path in a database(Map)
+//  @param {Map} $reg - Configuration database
+//  @param {string} $path - Path to store value
+//  @param {any} $val - Value to store
+//  @param {bool} [$default=false] - If true, $value is stored only when the location at $path is empty
+//  @returns {Map} - Resulting configuration database
+//
+//  Examples
+//  $reg: ()
+//  reg-set($reg, 'A/B/C', 123) --> ("A": ("B": ("C": 123)))
+//  reg-set($reg, 'A:B:C', 456) --> ("A": ("B": ("C": 456)))
+//  reg-get($reg, 'A/B/C') --> 456
+//  reg-set($reg, '/B/C', 789) --> ("": ("B": ("C": 456)))
+//  reg-set($reg, '//B/C', 789) --> ("": ("": ("B": ("C": 123))))
+//  reg-get($reg, '//B/C') --> 789
+//
+@function set($reg, $path, $value, $default:false)
+{
+
+    // if default option is set, return without storing
+    @if $default and get($reg, $path) {
+        @return $reg;
+    }
+
+    @return map.deep-set($reg, str.split($path, '/:', ''), $value);
+}
+
+//
+//  Get vale from the configuration database
+//  @param {Map} $reg - Configuration database
+//  @param {string} $path - Path to store value
+//  @param {any} [$default=null] - Default value returned when the retrived value is null
+//  @return {any} Value extracted
+//
+//  Examples
+//  $reg: ()
+//  reg-set($reg, 'A/B/C', 123) --> ("A": ("B": ("C": 123)))
+//  reg-get($reg, 'A/B/C') --> 123
+//
+@function get($reg, $path, $default:null)
+{
+    $val: map.deep-get($reg, str.split($path, '/', ''));
+    @return if($val, $val, $default);
+}
+
+
+
+//-----------------------------------------------
+//  global config database
+//-----------------------------------------------
+$w-sys-reg: () !default;
+
+//
+//  Set System Value
+//  @param {string} $key - System registry key
+//  @param {string} $path - Location to store value
+//  @param {any} $value - Value to store
+//  @param {bool} $default - If true, $value is stored only when the location at $path is empty
+//
+@mixin ssv($key, $path, $value, $default:false)
+{
+    @if $path=='/' {
+        $path: null;
+    }
+
+    $addr: if($path, $key + "/"+ $path, $key);
+
+    $w-sys-reg: set($w-sys-reg, $addr, $value, $default) !global;
+}
+
+//
+//  Get System Value
+//  @param {string} $key - System registry key
+//  @param {string} $path - Location to retrive value
+//  @param {any} [$default=null] - Default value returned when the retrived value is null
+//
+@function gsv($key, $path:null, $default:null)
+{
+    @if $path=='/' {
+        $path: null;
+    }
+
+    $addr: if($path, $key + "/"+ $path, $key);
+
+    @return get($w-sys-reg, $addr, $default);
+}
+
+//  Merge System Value
+//  @param {string} $key - System registry key
+//  @param {string} $path - Location to store value
+//  @param {any} $value - Value to store
+//  @param {bool} $default - If true, $value is stored only when the location at $path is empty
+//
+//  Example:
+//    $my-breakpoints: (seg1:0, seg2: 500px, sec3: 1000px);
+//    @include ssv('media', 'my-bp', $my-breakpoints);
+//    @debug gsv('media', 'my-bp'); --> (seg1: 0, seg2: 500px, sec3: 1000px)
+//    @include msv('media', 'my-bp', (seg2:600pc, seg4:1500px));
+//    @debug gsv('media', 'my-bp'); --> seg1: 0, seg2: 600pc, sec3: 1000px, seg4: 1500px)
+//
+@mixin msv($key, $path, $value-set, $default:false)
+{
+    @if type-of($value-set) !=map {
+        @error "[_sys-reg.scss]: $value-set must be Map type."
+    }
+
+    @if $path=='/' {
+        $path: null;
+    }
+
+    $addr: if($path, $key + "/"+ $path, $key);
+    $data: get($w-sys-reg, $addr);
+    $do-merge: false;
+
+    @if $default and data {
+        // do not update/store data
+    }
+
+    @else {
+        $data: map.merge($data, $value-set);
+        $w-sys-reg: set($w-sys-reg, $addr, $data, $default) !global;
+    }
+}
+
+// return system registry
+@function sys-registry()
+{
+    @return $w-sys-reg;
+}

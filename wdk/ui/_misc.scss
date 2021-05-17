@@ -1,19 +1,95 @@
 //=========================================================
 //
-//  @package Wicle Collection
-//  @module utils/visibility
+//  @package sass-wdk
 //
-//  @usage
-//  @include w-visibility-generate-classes; // generate all classes
-//  @include w-visibility-generate-classes((show, hide), (medium, large)); // generate selective classes and media queries
-//  @include w-visibility-generate-classes((show, hide), (medium, large), 'table); // set display mode to table in show state
+//  @module ui/misc
 //
 //=========================================================
 
+@use "media-query" as mq;
 
-//-----------------------------------------------
-//  Mixins
-//-----------------------------------------------
+//
+//  Clearfix
+//  @param {bool} $ie8 - IE8
+//
+//  @credit
+//  https://ismamz.github.io/postcss-utilities/docs#clear-fix
+//  http://nicolasgallagher.com/micro-clearfix-hack/
+//
+@mixin clearfix($ie8:false) {
+    @if $ie8 {
+
+        &:before,
+        &:after {
+            display: table;
+            content: ' ';
+        }
+
+        &:after {
+            clear: both;
+        }
+
+        // IE6 and IE7 support is removed
+        // zoom: 1; // For IE 6/7 (trigger hasLayout)
+    }
+
+    @else {
+        &:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+    }
+}
+
+
+//--- alignment ---
+
+@mixin align($direction:left, $display:null) {
+    @if $display {
+        display: $display;
+    }
+
+    @if $display==table {
+        @if ($direction==center) {
+            margin: 0 auto;
+        }
+
+        @else {
+            margin-#{$direction}: 0;
+        }
+    }
+
+    @else {
+        @if ($direction==center) {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @else {
+            float: $direction;
+        }
+    }
+}
+
+@mixin align-left {
+    @include w-align(left);
+}
+
+@mixin align-right {
+    @include w-align(right);
+}
+
+@mixin align-center {
+    @include w-align(center);
+}
+
+@mixin align-middle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 //
 //  Generate visibility classes
 //  @param {string | List[string]} [$v-names=all] - Visibility class name list to generate.
@@ -21,7 +97,7 @@
 //  @param {List} [$mq-list=null] - Media Query name list. If null, it means all.
 //  @param {string} [$
 //
-@mixin w-visibility-generate-classes($v-names:all, $mq-list:null, $display-type:block) {
+@mixin generate-visibility-classes($v-names:all, $mq-list:null, $display-type:block) {
     $v-names: if($v-names==all, (show, hide, visible, invisible), $v-names);
     $mq-list: if($mq-list==null, w-media-query-names(), $mq-list);
 
@@ -56,7 +132,7 @@
             .show\@#{$mq-name} {
                 display: none;
 
-                @include w-media($mq-name) {
+                @include mq.media($mq-name) {
                     display: unquote($display-type);
                 }
             }
@@ -66,7 +142,7 @@
             .hide\@#{$mq-name} {
                 display: block;
 
-                @include w-media($mq-name) {
+                @include mq.media($mq-name) {
                     display: none;
                 }
             }
@@ -76,7 +152,7 @@
             .visible\@#{$mq-name} {
                 visibility: hidden;
 
-                @include w-media($mq-name) {
+                @include mq.media($mq-name) {
                     visibility: visible;
                 }
             }
@@ -86,7 +162,7 @@
             .invisible\@#{$mq-name} {
                 visibility: hidden;
 
-                @include w-media($mq-name) {
+                @include mq.media($mq-name) {
                     visibility: visible;
                 }
             }

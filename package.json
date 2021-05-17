@@ -8,9 +8,9 @@
         "_wdk.scss"
     ],
     "scripts": {
-        "build": "node-sass -r test/ --output test/css",
-        "watch": "node-sass -w -r --output-style compact test/ --output test/css",
-        "clean": "rimraf test/**/*.css test/css",
+        "build": "sass -I. --no-source-map test:__out",
+        "watch": "sass -w -I. --no-source-map test:__out",
+        "clean": "rimraf __out",
         "prepare-to-commit": "npm run build && npm run clean",
         "npm-dry-run": "npm publish --dry-run"
     },
@@ -31,7 +31,7 @@
     },
     "homepage": "https://github.com/shnam7/sass-wdk#readme",
     "devDependencies": {
-        "node-sass": "^4.14.1",
-        "rimraf": "^3.0.2"
+        "rimraf": "^3.0.2",
+        "sass": "^1.32.13"
     }
 }

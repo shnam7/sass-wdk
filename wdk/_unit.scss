@@ -1,37 +1,27 @@
 //=========================================================
 //
-//  @package Sass-WDK
-//  @module mixins/unit
+//  @package sass-wdk
 //
+//  @module mixins/unit
 //  @description Unit manipulation functions
 //
 //=========================================================
 
+@use "typography" as ty;
+@use "sass:meta";
+
+//--- internal functions ----
 @function __default-font-size() {
-    @if not variable_exists('w-font-size') {
-        @warn "[unit.scss]:$w-font-size is not defined. Using 16px as default.\0A"
-        +"To supress this warning, define $w-font-size with !global option.\0A"
+    @if not meta.global-variable-exists('w-font-size', ty) {
+        @warn "[unit.scss]:$w-font-size is not defined. Using 16px as default.\a"
+        +"To supress this warning, define $w-font-size with !global option.\a"
         +"ex) $w-font-size: 16px !global;";
         @return 16px;
     }
 
     @else {
-        @return $w-font-size;
+        @return ty.$w-font-size;
     }
-}
-
-
-//
-//  Remove the unit
-//  @param {number} $num - Number to remove unit from
-//  @returns {number} Unitless number
-//
-@function strip-unit($num) {
-    @if type-of($num)=='number'and not unitless($num) {
-        @return $num / ($num * 0 + 1);
-    }
-
-    @return $num;
 }
 
 //
@@ -41,10 +31,11 @@
 //  @returns {number} Value in rem unit
 //
 @function _px2rem($value, $base) {
-    @if unit($value) !='rem' {
-        $value: strip-unit($value) / strip-unit($base) * 1rem;
+    @if unit($value) !='px' {
+        @warn "[unit.scss:_px2rem]: $value #{$value} is not in pixel unit.";
     }
 
+    $value: strip-unit($value) / strip-unit($base) * 1rem;
     @if $value==0rem {
         $value: 0;
     }
@@ -59,10 +50,11 @@
 //  @returns {number} Value in px unit
 //
 @function _rem2px($value, $base) {
-    @if unit($value) !='px' {
-        $value: strip-unit($value) * strip-unit($base) * 1px;
+    @if unit($value) !='rem' {
+        @warn "[unit.scss:_rem2px]: $value #{$value} is not in rem unit.";
     }
 
+    $value: strip-unit($value) * strip-unit($base) * 1px;
     @if $value==0px {
         $value: 0;
     }
@@ -70,6 +62,21 @@
     @return $value;
 }
 
+//--- end of internal functions ---
+
+
+//
+//  Remove the unit
+//  @param {number} $num - Number to remove unit from
+//  @returns {number} Unitless number
+//
+@function strip-unit($num) {
+    @if type-of($num)=='number' {
+        @return $num / ($num * 0 + 1);
+    }
+
+    @return $num;
+}
 
 //
 //  Convert px values to rem values (single or multi in list)

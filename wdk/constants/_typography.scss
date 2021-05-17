@@ -1,16 +1,19 @@
 //=========================================================
 //
-//  @package Sass-WDK
-//  @module constants/typography (assorted font selections)
+//  @package sass-wdk
+//
+//  @module constants/typography
 //
 //=========================================================
+
+@use "font";
 
 //--- font defaults
 // Adding Korean fonts in the list enables Korean characters to use them
 $w-font-size:                   14px !default;
 $w-font-heading:                Montserrat,Roboto,Nanum Gothic,sans-serif !default;
 $w-font-text:                   Roboto,Nanum Gothic,sans-serif !default;
-$w-font-code:                   $w-font-roboto-mono !default;
+$w-font-code:                   font.$w-font-roboto-mono !default;
 
 //--- font scaling
 $w-font-scaler:                 1.25 !default;

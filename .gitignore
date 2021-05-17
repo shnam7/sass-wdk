@@ -1,5 +1,6 @@
 .vscode
+.sass-cache
 node_modules
-/__*/
+__*
 *.map
 *.css

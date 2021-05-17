@@ -1,20 +1,29 @@
 //=========================================================
 //
-//  @package Sass-WDK
+//  @package sass-wdk
+//
 //  @module modules/typography
+//  @description Typography functions
 //
 //=========================================================
+
+@forward "constants/typography";
+
+@use "constants/typography" as ty;
+@use "math";
 
 //
 //  Scale font size
 //  @param {number} $scale-factor - # of scaling. if negative, scale down
 //  @returns {FontSize} Scaled font size
 //
-@function font-scale($scale-index, $scaler:$w-font-scaler, $down-scaler:$w-font-down-scaler, $base-font-size:1em) {
+@function font-scale($scale-index, $scaler:ty.$w-font-scaler,
+    $down-scaler:ty.$w-font-down-scaler, $base-font-size:1em)
+{
     $font-size: $base-font-size;
 
-    @if $scale-index>0 {
-        $font-size: pow($scaler, $scale-index) * $base-font-size;
+    @if $scale-index > 0 {
+        $font-size: math.pow($scaler, $scale-index) * $base-font-size;
 
         // @for $i from 0 to $scale-factor {
         //     $font-size: calc(#{$font-size} * #{$scaler});
@@ -22,7 +31,7 @@
     }
 
     @else if $scale-index < 0 {
-        $font-size: pow($down-scaler, $scale-index * -1) * $base-font-size;
+        $font-size: math.pow($down-scaler, $scale-index * -1) * $base-font-size;
         // @for $i from 0 to $scale-factor {
         //     $font-size: calc(#{$font-size} * var(--text-down-scaler, 0.9));
         // }
@@ -36,6 +45,6 @@
 //  @param {number} $count - # of spacing units
 //  @param {Size} [$space-unit=$w-font-spacing-unit] - Unit spacing size
 //
-@function spacing($count, $space-unit:$w-space-unit) {
+@function spacing($count, $space-unit:ty.$w-space-unit) {
     @return $space-unit * $count;
 }

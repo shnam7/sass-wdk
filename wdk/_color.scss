@@ -1,11 +1,16 @@
 //=========================================================
 //
-//  @package Sass-WDK
-//  @module functions/color
+//  @package sass-wdk
 //
-//  @description Color manipulation functions
+//  @module color
+//  @description Color manipulation module
 //
 //=========================================================
+
+@forward "constants/color";
+@forward "sass:color";
+
+@use "unit";
 
 //
 //  Calculate YIQ value: https://24ways.org/2010/calculating-color-contrast
@@ -29,7 +34,7 @@
 //  @returns {Color} $black or $white which has higher contrast with $color
 //
 @function yiq-color($color, $threshold:0.6, $black:#444, $white:#EEE) {
-    @return if(yiq($color) >=$threshold, $black, $white);
+    @return if(yiq($color) >= $threshold, $black, $white);
 }
 
 //
@@ -57,7 +62,7 @@
 //  @notes gray(40%) === gray(40)
 //
 @function gray($percent, $alpha:null) {
-    $percent: strip-unit($percent) * 1%;
+    $percent: unit.strip-unit($percent) * 1%;
     $val: lighten(#000, $percent);
     @return if($alpha, rgba($val, $alpha), $val);
 }

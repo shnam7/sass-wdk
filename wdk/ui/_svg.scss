@@ -1,18 +1,18 @@
 //=========================================================
 //
-//  @package Sass-WDK
-//  @module functions/svg
+//  @package sass-wdk
 //
+//  @module svg
 //  @description SVG manipulation functions
 //
 //  @credit https://codepen.io/jakob-e/pen/doMoML
 //
 //=========================================================
 
-@import "string";
+@use "sass:string";
 
 //
-//  Convert svg file format striing into css url image format(svg+xml)
+//  Convert svg file format string into css url image format(svg+xml)
 //  @param {string} $svg - SVG css string
 //  @param {Color} [$fill-to-replace=null] - Fill color to be replaced
 //  @param {Color} [$new-fill=null] - New fill colore

@@ -1,0 +1,47 @@
+//=========================================================
+//
+//  @package sass-wdk
+//
+//  @module ui/text
+//
+//=========================================================
+
+@use "../typography" as ty;
+@use "sass:meta";
+
+//
+//  Truncate text
+//  @param {number} [$lines=1] - Number of lines to truncate
+//  @param {number} [$line-height=null] - line-hight value.
+//    if null, $w-line-height variable is checked.
+//    if $w-line-height variable exists, it's used. Or 1.5 is assigned as default
+//
+@mixin truncate-text($lines:1, $line-height: null) {
+    @if $line-height==null {
+        @if not meta.global-variable-exists('w-line-height', ty) {
+            @warn "[util.scss]:$w-line-height is not defined. Using 1.5 as default\a"
+            +"To supress this warning, define $w-line-height with !global option.\a"
+            +"ex) $w-line-height: 1.5 !global;";
+            $line-height: 1.5;
+        }
+
+        @else {
+            $line-height: ty.$w-line-height;
+        }
+    }
+
+    @if $lines==1 {
+        white-space: nowrap;
+    }
+
+    @else {
+        display: box;
+        height: $lines * $line-height;
+        line-height: $line-height;
+        line-clamp: $lines;
+        box-orient: vertical;
+    }
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,8 +1,8 @@
 //=========================================================
 //
-//  @package Sass-WDK
-//  @module functions/type
+//  @package sass-wdk
 //
+//  @module type
 //  @description Type conversion/manipulation functions
 //
 //  @credit
@@ -15,7 +15,8 @@
 //  @param {any} $value - Target for type conversion
 //  @returns {string} $value as string type
 //
-@function to-string($value) {
+@function to-string($value)
+{
     @return inspect($value);
 }
 
@@ -24,7 +25,8 @@
 //  @param {any} $value - Target for type conversion
 //  @returns {string} $value as string type
 //
-@function to-list($value) {
+@function to-list($value)
+{
     @return if(type-of($value)!=list, ($value, ), $value);
 }
 
@@ -33,10 +35,12 @@
 //  @param {any} $value - Target for type conversion
 //  @returns {string} $value as string type
 //
-@function to-map($value) {
-    @return if(type-of($value)!=map, (1: $value), $value);
+@function to-map($value, $key: 1)
+{
+    @return if(type-of($value)!=map, ($key: $value), $value);
 }
 
-@function to-bool($value) {
+@function to-bool($value)
+{
     @return not ($value or $value=='' or $value==0 or $value==());
 }
