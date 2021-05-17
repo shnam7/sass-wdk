@@ -7,11 +7,45 @@
 //
 //=========================================================
 
-@forward "constants/color";
+@forward "constants/color.constants";
 @forward "sass:color";
 
+@use "constants/color.constants" as *;
 @use "unit";
 
+//-----------------------------------------------------------------------------
+//  Variables (Configurables)
+//-----------------------------------------------------------------------------
+
+//--- color scheme
+$primary:                   $navy-blue !default;
+$secondary:                 $raven !default;
+$success:                   $chateau-green !default;
+$info:                      $pelorous !default;
+$warning:                   $amber !default;
+$danger:                    $amaranth !default;
+$scheme:                    (
+                            primary: $primary,
+                            secondary: $secondary,
+                            success: $success,
+                            info: $info,
+                            warning: $warning,
+                            danger: $danger
+                            ) !default;
+
+//--- default colors
+$text:                      $text-black !default;   // default text color
+$bg:                        #FFF;                         // default background color
+
+$link:                      $cerulean !default;     // <a> color
+$link-visited:              $link !default;
+$link-hover:                darken($link, 10%) !default;
+// $code-block:                $alice-blue !default;   // <pre><code> color
+
+
+//-----------------------------------------------------------------------------
+//  Functions
+//-----------------------------------------------------------------------------
 //
 //  Calculate YIQ value: https://24ways.org/2010/calculating-color-contrast
 //  @param {Color} $color - Color to be calculated (typically background color)

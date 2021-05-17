@@ -6,7 +6,9 @@
 //
 //=========================================================
 
+@use "../font";
 @use "media-query" as mq;
+@use "sass:meta";
 
 //
 //  Clearfix
@@ -40,6 +42,42 @@
             clear: both;
         }
     }
+}
+
+//
+//  Truncate text
+//  @param {number} [$lines=1] - Number of lines to truncate
+//  @param {number} [$line-height=null] - line-hight value.
+//    if null, $w-line-height variable is checked.
+//    if $w-line-height variable exists, it's used. Or 1.5 is assigned as default
+//
+@mixin truncate-text($lines:1, $line-height: null) {
+    @if $line-height==null {
+        @if not meta.global-variable-exists('line-height', font) {
+            @warn "[util.scss]:$w-line-height is not defined. Using 1.5 as default\a"
+            +"To supress this warning, load font module first.\a";
+            $line-height: 1.5;
+        }
+
+        @else {
+            $line-height: font.$line-height;
+        }
+    }
+
+    @if $lines==1 {
+        white-space: nowrap;
+    }
+
+    @else {
+        display: box;
+        height: $lines * $line-height;
+        line-height: $line-height;
+        line-clamp: $lines;
+        box-orient: vertical;
+    }
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 

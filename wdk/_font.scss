@@ -1,0 +1,88 @@
+//=========================================================
+//
+//  @package sass-wdk
+//
+//  @module constants/fonts
+//  @description Assorted web font collection
+//
+//=========================================================
+
+@forward "constants/font.constants";
+@use "constants/font.constants" as *;
+@use "math";
+
+//-----------------------------------------------------------------------------
+//  Variables (Configurables)
+//-----------------------------------------------------------------------------
+//--- default fonts
+$sans:                       Arial,Helvetica,Verdana,sans-serif !default;
+$serif:                      Georgia,Times,Times New Roman,serif !default;
+$mono:                       Consolas,Courier,monospace;
+
+// Adding Korean fonts in the list enables Korean characters to use them
+$text:                      Roboto,Nanum Gothic,sans-serif !default;
+$heading:                   Montserrat,Roboto,Nanum Gothic,sans-serif !default;
+$code:                      $roboto-mono !default;
+
+//--- font scaling
+$size:                   14px !default;
+$scaler:                 1.25 !default;
+$down-scaler:            0.9 !default;
+$scale-up-unit:          0.5 !default;
+$scale-down-unit:        0.25 !default;
+$size-xxs:               1em * $down-scaler * $down-scaler * $down-scaler !default;
+$size-xs:                $size-xxs / $down-scaler !default;
+$size-sm:                $size-xs / $down-scaler !default;
+$size-md:                1em * $scaler !default;
+$size-lg:                $size-md * $scaler !default;
+$size-xl:                $size-lg * $scaler !default;
+$size-xxl:               $size-xl * $scaler !default;
+$size-xxxl:              $size-xxl * $scaler !default;
+
+//--- line height
+$line-height:                 1.5 !default;
+
+//--- spacing
+$space-unit:                  1em !default;
+
+
+//-----------------------------------------------------------------------------
+//  Functions
+//-----------------------------------------------------------------------------
+//
+//  Scale font size
+//  @param {number} $scale-factor - # of scaling. if negative, scale down
+//  @returns {FontSize} Scaled font size
+//
+@function scale($scale-index, $scaler:$scaler,
+    $down-scaler:$down-scaler, $base-font-size:1em)
+{
+    $font-size: $base-font-size;
+
+    @if $scale-index > 0 {
+        $font-size: math.pow($scaler, $scale-index) * $base-font-size;
+
+        // @for $i from 0 to $scale-factor {
+        //     $font-size: calc(#{$font-size} * #{$scaler});
+        // }
+    }
+
+    @else if $scale-index < 0 {
+        $font-size: math.pow($down-scaler, $scale-index * -1) * $base-font-size;
+        // @for $i from 0 to $scale-factor {
+        //     $font-size: calc(#{$font-size} * var(--text-down-scaler, 0.9));
+        // }
+    }
+
+    @return $font-size;
+}
+
+//
+//  Spacing calculator
+//  @param {number} $count - # of spacing units
+//  @param {Size} [$space-unit=$w-font-spacing-unit] - Unit spacing size
+//
+@function spacing($count, $unit: $space-unit)
+{
+    @return $unit * $count;
+}

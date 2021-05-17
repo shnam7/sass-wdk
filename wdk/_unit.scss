@@ -7,20 +7,19 @@
 //
 //=========================================================
 
-@use "typography" as ty;
+@use "font";
 @use "sass:meta";
 
 //--- internal functions ----
 @function __default-font-size() {
-    @if not meta.global-variable-exists('w-font-size', ty) {
-        @warn "[unit.scss]:$w-font-size is not defined. Using 16px as default.\a"
-        +"To supress this warning, define $w-font-size with !global option.\a"
-        +"ex) $w-font-size: 16px !global;";
+    @if not meta.global-variable-exists('size', font) {
+        @warn "[unit.scss]:font.$size is not defined. Using 16px as default.\a"
+        +"To supress this warning, load font module first.\a";
         @return 16px;
     }
 
     @else {
-        @return ty.$w-font-size;
+        @return font.$size;
     }
 }
 
@@ -31,6 +30,8 @@
 //  @returns {number} Value in rem unit
 //
 @function _px2rem($value, $base) {
+    @if unit($value) =='rem' { @return $value; }
+
     @if unit($value) !='px' {
         @warn "[unit.scss:_px2rem]: $value #{$value} is not in pixel unit.";
     }
@@ -50,6 +51,8 @@
 //  @returns {number} Value in px unit
 //
 @function _rem2px($value, $base) {
+    @if unit($value) =='px' { @return $value; }
+
     @if unit($value) !='rem' {
         @warn "[unit.scss:_rem2px]: $value #{$value} is not in rem unit.";
     }

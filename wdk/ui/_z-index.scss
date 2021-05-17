@@ -1,0 +1,30 @@
+//=========================================================
+//
+//  @package sass-wdk
+//
+//  @module constants/z-index
+//  @description z-index definitions
+//
+//=========================================================
+
+$spacing:                1000 !default;  // interval between levels
+
+$shadow1:                -$spacing !default;
+$shadow2:                -$shadow1 - $spacing !default;
+$shadow3:                -$shadow2 - $spacing !default;
+$shadow4:                -$shadow3 - $spacing !default;
+$shadow5:                -$shadow4 - $spacing !default;
+$shadow6:                -$shadow5 - $spacing !default;
+$shadow7:                -$shadow6 - $spacing !default;
+$shadow8:                -$shadow7 - $spacing !default;
+$shadow9:                -$shadow8 - $spacing !default;
+
+$level1:                 $spacing !default;
+$level2:                 $level1 + $spacing !default;
+$level3:                 $level2 + $spacing !default;
+$level4:                 $level3 + $spacing !default;
+$level5:                 $level4 + $spacing !default;
+$level6:                 $level5 + $spacing !default;
+$level7:                 $level6 + $spacing !default;
+$level8:                 $level7 + $spacing !default;
+$level9:                 $level8 + $spacing !default;

@@ -63,7 +63,7 @@
 //-----------------------------------------------
 //  global config database
 //-----------------------------------------------
-$w-sys-reg: () !default;
+$__sys-reg: () !default;    // internal variable
 
 //
 //  Set System Value
@@ -80,7 +80,7 @@ $w-sys-reg: () !default;
 
     $addr: if($path, $key + "/"+ $path, $key);
 
-    $w-sys-reg: set($w-sys-reg, $addr, $value, $default) !global;
+    $__sys-reg: set($__sys-reg, $addr, $value, $default) !global;
 }
 
 //
@@ -97,7 +97,7 @@ $w-sys-reg: () !default;
 
     $addr: if($path, $key + "/"+ $path, $key);
 
-    @return get($w-sys-reg, $addr, $default);
+    @return get($__sys-reg, $addr, $default);
 }
 
 //  Merge System Value
@@ -124,7 +124,7 @@ $w-sys-reg: () !default;
     }
 
     $addr: if($path, $key + "/"+ $path, $key);
-    $data: get($w-sys-reg, $addr);
+    $data: get($__sys-reg, $addr);
     $do-merge: false;
 
     @if $default and data {
@@ -133,12 +133,12 @@ $w-sys-reg: () !default;
 
     @else {
         $data: map.merge($data, $value-set);
-        $w-sys-reg: set($w-sys-reg, $addr, $data, $default) !global;
+        $__sys-reg: set($__sys-reg, $addr, $data, $default) !global;
     }
 }
 
 // return system registry
 @function sys-registry()
 {
-    @return $w-sys-reg;
+    @return $__sys-reg;
 }

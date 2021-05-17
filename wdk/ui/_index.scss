@@ -6,14 +6,10 @@
 //
 //=========================================================
 
-//--- constants
-@forward "../constants/font";
-@forward "../constants/timing-function";
-@forward "../constants/z-index";
-
-@forward "text";
-@forward "shape";
 @forward "svg";
-@forward "border"           as border-*;
-@forward "media-query"      as mq-*;
+@forward "shape";
+@forward "border"                       as border-*;
+@forward "media-query"                  as mq-*;
+@forward "../constants/tf.constants."   as timing-*;
+@forward "z-index"                      as z-index-*;
 @forward "misc";

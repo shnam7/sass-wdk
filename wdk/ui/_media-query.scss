@@ -7,13 +7,14 @@
 //
 //=========================================================
 
+@forward "../constants/mq.constants";
+@use "../constants/mq.constants" as *;
 @use "../unit";
 @use "sass:map";
 
-//-----------------------------------------------
-//  internal functions
-//-----------------------------------------------
-
+//-----------------------------------------------------------------------------
+//  Internals
+//-----------------------------------------------------------------------------
 //
 //  Converts breakpoint list into mq-set (media query set)
 //  @param  {Map}   [$breakpoints]  Array of breakpoints
@@ -39,7 +40,6 @@
 //      large: "(min-width:960px)"
 //    )
 //
-// @function __mq-set-of($breakpoints) {
 @function __mq-set-of($breakpoints) {
     $result: ();
     $keys: map-keys($breakpoints);
@@ -89,108 +89,43 @@
 //  @returns {boolean} - true if $name is in mq-set
 //
 @function __mq-invalid($name) {
-    @return not map-has-key($w-mq-set, $name);
+    @return not map-has-key($__mq-set, $name);
 }
 
-//-----------------------------------------------
-//  data
-//-----------------------------------------------
-$w-breakpoints-foundation: (
-  // screen based states (foundation-site compatible)
-        mini:                   0,
-        small:                  320px,    // foundation-site small    : 320~
-        medium:                 640px,    // foundation-site medium   : 640~
-        large:                  1024px,   // foundation-site large    : 1024~
-        xlarge:                 1200px,   // foundation-site xlarge   : 1200~
-        xxlarge:                1440px,   // foundation-site xxlarge  : 1440~
-) !default;
-
-$w-breakpoints-semantic-ui: (
-  // device based states (semantic-ui compatible)
-        mini:                   0,
-        phone:                  320px,    // semantic-ui mobile   : 320px~ (20em~)
-        tablet:                 768px,    // semantic-ui tablet   : 768px~ (48em~)
-        computer:               992px,    // semantic-ui computer : 992px~ (62em~ )
-        largeMonitor:           1200px,   // semantic-ui largeMonitor : 1200px~ (75em~ )
-        wideMonitor:            1920px,   // semantic-ui wideMonitor  : 1920px~ (120em~ )
-) !default;
-
-$w-breakpoints-uikit: (
-  // generic states (UIKit compatible)
-        mini:                   0,         // mini: 0~479 (phone portrait)
-        small:                  480px,     // uikit small(phone landscape):     480~
-        medium:                 768px,     // uikit medium(tablet portrait):    768~
-        large:                  960px,     // uikit large(desktop and tablet landscape):  960~
-        xlarge:                 1220px,    // uikit large(large desktop):       1220~
-) !default;
-
-$w-breakpoints-bootstrap: (
-  // generic states (Bootstrap compatible)
-        xs:                     0,         // extra small:  0~575
-        sm:                     576px,     // small:        480~
-        md:                     768px,     // medium:       768~
-        lg:                     992px,     // large:        992~
-        xl:                     1200px,    // extra large:  1200~
-) !default;
-
-$w-breakpoints-uiframework: (
-  // generic states (UI Framework compatible: https://codyhouse.co/ds/docs/framework/breakpoints)
-        xxs:                    0,          // extra extra small: 0~511
-        xs:                     32rem,      // extra small:  512~
-        sm:                     48rem,      // small:        768~
-        md:                     64rem,      // medium:       1024~
-        lg:                     80rem,      // large:        1280~
-        xl:                     90rem,      // extra large:  1440~
-) !default;
-
-$w-breakpoints-simple: (
-        mobile:                 0,
-        computer:               960px,
-) !default;
-
-$w-breakpoints-basic: (
-        small:                  0,
-        medium:                 768px,
-        large:                  960px,
-        xlarge:                 1220px
-) !default;
-
-$w-breakpoints-default: $w-breakpoints-basic !default;
-
-$w-mq-set: __mq-set-of($w-breakpoints-default) !default;
+//--- internal variables
+$__breakpoints-default: $w-breakpoints-basic !default;
+$__mq-set: __mq-set-of($__breakpoints-default) !default;
 
 
-//-----------------------------------------------
-//  functions
-//-----------------------------------------------
-
+//-----------------------------------------------------------------------------
+//  Functions
+//-----------------------------------------------------------------------------
 //
 //  Returns currently active mq-set
 //
 @function current() {
-    @return $w-mq-set;
+    @return $__mq-set;
 }
 
 //
 //  Returns the list of media query names of current mq-set
 //
 @function query-names() {
-    @return map-keys($w-mq-set);
+    @return map-keys($__mq-set);
 }
 
 
 
-//-----------------------------------------------
-//  mixin's
-//-----------------------------------------------
-
+//-----------------------------------------------------------------------------
+//  Mixin's
+//-----------------------------------------------------------------------------
 //
 //  Init media query with breakpoint list
 //    @param {Map}    $breakpoints  List of breakpoints
 //
 @mixin set-breakpoints($breakpoints: null) {
-    $breakpoints: if($breakpoints==null, $w-breakpoints-default, $breakpoints);
-    $w-mq-set: __mq-set-of($breakpoints) !global;
+    $breakpoints: if($breakpoints==null, $__breakpoints-default, $breakpoints);
+    $__mq-set: __mq-set-of($breakpoints) !global;
 }
 
 //
@@ -213,12 +148,12 @@ $w-mq-set: __mq-set-of($w-breakpoints-default) !default;
 @mixin media($name, $media-type:null) {
     @if __mq-invalid($name) {
         @error '[_breakpoint.scss:w-media]: #{$name} is not in media-query list.';
-        @error '[_breakpoint.scss:w-media]: mq-set: #{$w-mq-set}';
+        @error '[_breakpoint.scss:w-media]: mq-set: #{$__mq-set}';
     }
 
     $media-type: if($media-type, $media-type + " and ", "");
 
-    @media #{$media-type + map.get($w-mq-set, $name)} {
+    @media #{$media-type + map.get($__mq-set, $name)} {
         @content;
     }
 }
