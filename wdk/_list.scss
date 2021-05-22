@@ -104,7 +104,7 @@
 @function insert-at($list, $index, $value) {
     $result: null;
 
-    @if type-of($index) !=number {
+    @if type-of($index) != number {
         @warn "$index: #{quote($index)} is not a number for `insert-at()`.";
     }
 

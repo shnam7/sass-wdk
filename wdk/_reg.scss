@@ -29,12 +29,14 @@
 //  reg-set($reg, '//B/C', 789) --> ("": ("": ("B": ("C": 123))))
 //  reg-get($reg, '//B/C') --> 789
 //
-@function set($reg, $path, $value, $default:false)
+@function set($reg, $path, $value, $is-default:false)
 {
-
     // if default option is set, return without storing
-    @if $default and get($reg, $path) {
+    @if $is-default and get($reg, $path) {
         @return $reg;
+    }
+    @if ($path=='/' or $path==null or str.length($path)==0) {
+        @return map.deep-set($reg, '', $value);
     }
 
     @return map.deep-set($reg, str.split($path, '/:', ''), $value);
@@ -54,8 +56,26 @@
 //
 @function get($reg, $path, $default:null)
 {
+    @if ($path=='/' or $path==null or str.length($path)==0) {
+        @return map.deep-get($reg, '');
+    }
+
     $val: map.deep-get($reg, str.split($path, '/', ''));
     @return if($val, $val, $default);
+}
+
+@function merge($reg, $value-set, $path:null, $is-default:false)
+{
+    @if $value-set == null { @return $reg; }
+
+    $val: get($reg, $path);
+    @if $is-default and $val {
+        @return $reg; // do not update/store data
+    }
+
+    $val: map.merge(if($val, $val, ()), $value-set);
+
+    @return if($path==null, map.merge($reg, $val), set($reg, $path, $val));
 }
 
 
@@ -72,15 +92,11 @@ $__sys-reg: () !default;    // internal variable
 //  @param {any} $value - Value to store
 //  @param {bool} $default - If true, $value is stored only when the location at $path is empty
 //
-@mixin ssv($key, $path, $value, $default:false)
+@mixin ssv($key, $path, $value, $is-default:false)
 {
-    @if $path=='/' {
-        $path: null;
-    }
-
     $addr: if($path, $key + "/"+ $path, $key);
 
-    $__sys-reg: set($__sys-reg, $addr, $value, $default) !global;
+    $__sys-reg: set($__sys-reg, $addr, $value, $is-default) !global;
 }
 
 //
@@ -91,10 +107,6 @@ $__sys-reg: () !default;    // internal variable
 //
 @function gsv($key, $path:null, $default:null)
 {
-    @if $path=='/' {
-        $path: null;
-    }
-
     $addr: if($path, $key + "/"+ $path, $key);
 
     @return get($__sys-reg, $addr, $default);
@@ -113,27 +125,24 @@ $__sys-reg: () !default;    // internal variable
 //    @include msv('media', 'my-bp', (seg2:600pc, seg4:1500px));
 //    @debug gsv('media', 'my-bp'); --> seg1: 0, seg2: 600pc, sec3: 1000px, seg4: 1500px)
 //
-@mixin msv($key, $path, $value-set, $default:false)
+@mixin msv($key, $path, $value-set, $is-default:false)
 {
     @if type-of($value-set) !=map {
         @error "[_sys-reg.scss]: $value-set must be Map type."
     }
 
-    @if $path=='/' {
-        $path: null;
-    }
-
     $addr: if($path, $key + "/"+ $path, $key);
     $data: get($__sys-reg, $addr);
+
     $do-merge: false;
 
-    @if $default and data {
+    @if $is-default and $data {
         // do not update/store data
     }
 
     @else {
-        $data: map.merge($data, $value-set);
-        $__sys-reg: set($__sys-reg, $addr, $data, $default) !global;
+        $data: if($data, map.merge($data, $value-set), $value-set);
+        $__sys-reg: set($__sys-reg, $addr, $data, $is-default) !global;
     }
 }
 

@@ -37,7 +37,7 @@ $enable-visibility-test: true;
 
 
 //--- Test _color.scss
-@if $enable-color-test {
+@if variable-exists(enable-color-test) and $enable-color-test {
     @debug "\a\a----- _color.scss Test -----\10";
 
     @debug color.$text;
@@ -53,7 +53,7 @@ $enable-visibility-test: true;
 }
 
 //--- Test _math.scss
-@if $enable-math-test {
+@if variable-exists(enable-math-test) and $enable-math-test {
     @debug "\a\a----- _math.scss Test -----\10";
 
     .math-test {
@@ -74,7 +74,7 @@ $enable-visibility-test: true;
 }
 
 //--- Test _string.scss
-@if $enable-string-test {
+@if variable-exists(enable-string-test) and $enable-string-test {
     @debug "\a\a----- _string.scss Test -----\10";
 
     .string-test {
@@ -91,7 +91,7 @@ $enable-visibility-test: true;
 }
 
 //--- Test _list.scss
-@if $enable-list-test {
+@if variable-exists(enable-list-test) and $enable-list-test {
     @debug "\a\a----- _list.scss Test -----\10";
 
     $list: a, b, c, d, e, f;
@@ -125,7 +125,7 @@ $enable-visibility-test: true;
 }
 
 //-- Test _map.scss
-@if $enable-map-test {
+@if variable-exists(enable-map-test) and $enable-map-test {
     @debug "\a\a----- _map.scss Test -----\10";
 
     $box-color: (fg:darkgray, bg:white);
@@ -160,12 +160,20 @@ $enable-visibility-test: true;
 }
 
 //-- Test _reg.scss
-@if $enable-reg-test {
+@if variable-exists(enable-reg-test) and $enable-reg-test {
     @debug "\a\a----- _reg.scss Test -----\10";
 
     // $a: foo(());
 
     $reg: ();
+    $reg: reg.set($reg, null, 123);
+    @debug "(set null = 123)=> #{inspect($reg)}"; // --> ("A": ("B": ("C": 123)))
+    @debug "(get null)=> #{inspect(reg.get($reg, ''))}"; // --> ("A": ("B": ("C": 123)))
+
+    $reg: reg.set($reg, "/", 123);
+    @debug "(set "/" = 123)=> #{inspect($reg)}"; // --> ("A": ("B": ("C": 123)))
+    @debug "(get /)=> #{inspect(reg.get($reg, '/'))}"; // --> ("A": ("B": ("C": 123)))
+
     $reg: reg.set($reg, 'A/B/C', 123);
     @debug "(set A/B/C = 123)=> #{inspect($reg)}"; // --> ("A": ("B": ("C": 123)))
 
@@ -184,6 +192,18 @@ $enable-visibility-test: true;
     $reg: reg.set($reg, 'box/color', (fg:green, bg:blue));
     @debug "(set box/color)=> #{inspect($reg)}";
 
+    $reg: reg.merge($reg, (fg:red, bg:yellow));
+    @debug "merge1 => #{inspect($reg)}";
+
+    $reg: reg.merge((), (fg:red, bg:yellow));
+    @debug "merge2 => #{inspect($reg)}";
+
+    $reg: reg.merge((), (fg:red, bg:yellow), '/');
+    @debug "merge3 => #{inspect($reg)}";
+
+    $reg: reg.merge((), null);
+    @debug "merge4 => #{inspect($reg)}";
+
     .reg-test {
         width: reg.get($reg, '//B/C/XXX', 123);
         height: reg.get($reg, '//B/C');
@@ -193,7 +213,7 @@ $enable-visibility-test: true;
 }
 
 //-- Test _typography.scss
-@if $enable-typography-test {
+@if variable-exists(enable-typography-test) and $enable-typography-test {
     @debug "\a\a----- _typography.scss Test -----";
 
     @for $i from -5 through 5 {
@@ -216,7 +236,7 @@ $enable-visibility-test: true;
 }
 
 //-- Test _svg.scss
-@if $enable-svg-test {
+@if variable-exists(enable-svg-test) and $enable-svg-test {
     @debug "\a\a----- _svg.scss Test -----\10";
 
     .svg-test {
@@ -228,7 +248,7 @@ $enable-visibility-test: true;
 }
 
 //-- Test _type.scss
-@if $enable-type-test {
+@if variable-exists(enable-type-test) and $enable-type-test {
     @debug "\a\a----- _type.scss Test -----\10";
 
     .type-test {
@@ -240,7 +260,7 @@ $enable-visibility-test: true;
 }
 
 //-- Test _unit.scss
-@if $enable-unit-test {
+@if variable-exists(enable-unit-test) and $enable-unit-test {
     @debug "\a\a----- _unit.scss Test -----\10";
 
     .unit-test {
@@ -251,7 +271,7 @@ $enable-visibility-test: true;
 }
 
 //-- Test _align.scss
-@if $enable-align-test {
+@if variable-exists(enable-align-test) and $enable-align-test {
     @debug "\a\a----- _align.scss Test -----\10";
     .align-test {
         background: blue;
@@ -263,7 +283,7 @@ $enable-visibility-test: true;
 }
 
 //-- Test _sys-reg.scss
-@if $enable-sys-reg-test {
+@if variable-exists(enable-sys-reg-test) and $enable-sys-reg-test {
     @debug "\a\a----- _sys-reg.scss Test -----\10";
 
     .sys-reg-test {
@@ -279,7 +299,7 @@ $enable-visibility-test: true;
 }
 
 //-- Test _breakpoint.scss
-@if $enable-breakpoint-test {
+@if variable-exists(enable-breakpoint-test) and $enable-breakpoint-test {
     @debug "\a\a----- _breakpoint.scss Test -----\10";
 
     .breakpoint-test {
@@ -307,6 +327,6 @@ $enable-visibility-test: true;
 }
 
 //-- Test _visibility.scss
-@if $enable-visibility-test {
+@if variable-exists(enable-visibility-test) and $enable-visibility-test {
     @include ui.generate-visibility-classes((show, hide), (medium, large-only), 'table');
 }
