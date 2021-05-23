@@ -12,6 +12,7 @@
 
 @use "constants/color.constants" as *;
 @use "unit";
+@use "sass:math";
 
 //-----------------------------------------------------------------------------
 //  Variables (Configurables)
@@ -55,7 +56,7 @@ $link-hover:                darken($link, 10%) !default;
     $r: red($color);
     $g: green($color);
     $b: blue($color);
-    @return (($r*299) + ($g*587) + ($b*114))/(256*1000);
+    @return math.div((($r*299) + ($g*587) + ($b*114)), (256*1000));
 }
 
 
@@ -130,5 +131,5 @@ $link-hover:                darken($link, 10%) !default;
     }
 
     @return linear-gradient(to $direction,
-        tint($color, $gradient-level/2), shade($color, $gradient-level/2));
+        tint($color, math.div($gradient-level, 2)), shade($color, math.div($gradient-level, 2)));
 }

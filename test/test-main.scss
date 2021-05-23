@@ -69,7 +69,7 @@ $enable-visibility-test: true;
         @debug math.$pi;
 
         $val: 1px;
-        @debug $val / ($val*0 + 1), type-of($val), math.is-unitless($val);
+        @debug math.div($val, ($val*0 + 1)), type-of($val), math.is-unitless($val);
     }
 }
 

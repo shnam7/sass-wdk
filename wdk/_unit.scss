@@ -9,6 +9,7 @@
 
 @use "font";
 @use "sass:meta";
+@use "sass:math";
 
 //--- internal functions ----
 @function __default-font-size() {
@@ -36,7 +37,7 @@
         @warn "[unit.scss:_px2rem]: $value #{$value} is not in pixel unit.";
     }
 
-    $value: strip-unit($value) / strip-unit($base) * 1rem;
+    $value: math.div(strip-unit($value), strip-unit($base)) * 1rem;
     @if $value==0rem {
         $value: 0;
     }
@@ -75,7 +76,7 @@
 //
 @function strip-unit($num) {
     @if type-of($num)=='number' {
-        @return $num / ($num * 0 + 1);
+        @return math.div($num, ($num * 0 + 1));
     }
 
     @return $num;
