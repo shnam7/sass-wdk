@@ -9,7 +9,7 @@
 //
 //=========================================================
 
-@use "sass:string";
+@use "../string";
 @use "sass:math";
 
 //
@@ -27,12 +27,12 @@
 
     // Add missing namespace
     @if not str-index($svg, xmlns) {
-        $svg: str-replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+        $svg: string.replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
     }
 
     // replace fill color if new-fill is specified
     @if $new-fill {
-        $svg: str-replace($svg, to-string($fill-to-replace), to-string($new-fill));
+        $svg: string.replace($svg, to-string($fill-to-replace), to-string($new-fill));
     }
 
     // Chunk up string in order to avoid "stack level too deep" error
@@ -46,14 +46,14 @@
         //
         //   Encode (may need a few extra replacements)
         //
-        $chunk: str-replace($chunk, '"', '\'');
-        $chunk: str-replace($chunk, '%', '%25');
-        $chunk: str-replace($chunk, '&', '%26');
-        $chunk: str-replace($chunk, '#', '%23');
-        $chunk: str-replace($chunk, '{', '%7B');
-        $chunk: str-replace($chunk, '}', '%7D');
-        $chunk: str-replace($chunk, '<', '%3C');
-        $chunk: str-replace($chunk, '>', '%3E');
+        $chunk: string.replace($chunk, '"', '\'');
+        $chunk: string.replace($chunk, '%', '%25');
+        $chunk: string.replace($chunk, '&', '%26');
+        $chunk: string.replace($chunk, '#', '%23');
+        $chunk: string.replace($chunk, '{', '%7B');
+        $chunk: string.replace($chunk, '}', '%7D');
+        $chunk: string.replace($chunk, '<', '%3C');
+        $chunk: string.replace($chunk, '>', '%3E');
         $encoded: #{$encoded}#{$chunk};
         $index: $index + $slice;
     }
