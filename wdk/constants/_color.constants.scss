@@ -94,7 +94,6 @@ $falu-red:                  #790D0D !default;
 $dark-gray:                 #A8A8A8 !default;   // ==lighten(#000, 66%)
 $dark-green:                #006400 !default;
 $whisper:                   #EEEEEE !default;
-$lochmara:                  #1D78AF !default;
 $medium-carmine:            #BA3925 !default;
 $persimmon:                 #EC5800 !default;
 $amaranth:                  #DA314B !default;
@@ -111,9 +110,10 @@ $dark-red:                  #A30000 !default;
 $alice-blue:                #F3F6FA !default;
 
 // text colors
+$text-black:                $charcoal !default; // recommended for text reading. better than black.
 $text-white:                $whisper !default;
 $text-gray:                 $dim-gray !default;
-$text-black:                $charcoal !default; // recommended for text reading. better than black.
 $text-blue:                 $lochmara !default;
 $text-red:                  $medium-carmine !default;
 $text-orange:               $orange !default;
+// $text:                      $text-black;

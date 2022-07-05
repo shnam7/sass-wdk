@@ -5,6 +5,8 @@
 //  @module ui/shape
 //
 //=========================================================
+@use "../color";
+@use "sass:math";
 
 //
 //  Creates a CSS triangle, which can be used for dropdown arrows, etc.
@@ -65,20 +67,20 @@
 //  @credit
 //  https://github.com/zurb/foundation-sites/blob/master/scss/util/_mixins.scss
 //
-@mixin hamburger($color: $w-color-text-white,
+@mixin hamburger($color: color.$text-white,
     $color-hover: null,
     $width: 18px,
     $height: 14px,
     $weight: 2px,
     $bars: 3) {
-    $color-hover: if($color-hover, $color-hover, smart-scale($color, 15%));
+    $color-hover: if($color-hover, $color-hover, color.smart-scale($color, 15%));
 
     // box-shadow CSS output
     $shadow: ();
     $hover-shadow: ();
 
     // Spacing between bars is calculated based on the total height of the icon and the weight of each bar
-    $spacing: floor(($height - ($weight * $bars)) / ($bars - 1));
+    $spacing: math.floor(math.div(($height - ($weight * $bars)), ($bars - 1)));
 
     //Icon container
     position: relative;
@@ -135,5 +137,20 @@
 
     @if $color {
         background: $color;
+    }
+}
+
+@mixin pattern($color:reg.gsv('theme/color/fg'), $pattern-name:null) {
+    @if $pattern-name == null {
+    background-color: $color;
+    background-image:
+        repeating-linear-gradient(120deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px,
+            transparent 1px, transparent 60px),
+        repeating-linear-gradient(60deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px,
+            transparent 1px, transparent 60px),
+        linear-gradient(60deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%,
+            rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1)),
+        linear-gradient(120deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%,
+            rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1));
     }
 }

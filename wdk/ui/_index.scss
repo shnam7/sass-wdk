@@ -12,4 +12,5 @@
 @forward "media-query"                  as mq-*;
 @forward "../constants/tf.constants."   as timing-*;
 @forward "z-index"                      as z-index-*;
+@forward "theme"                        as theme-*;
 @forward "misc";

@@ -1,0 +1,97 @@
+//=========================================================
+//
+//  @package  Wicle
+//  @module   theme
+//
+//=========================================================
+
+@use "../reg";
+@use "../color";
+
+//--- internals
+$__key: 'theme';
+@mixin _scv($path, $value, $is-default) { @include reg.set($__conf, $path, $value, $is-default); }
+@mixin _ssv($path, $value, $is-default) { @include reg.ssv($__key, $path, $value, $is-default); }
+@function _gcv($path, $default:null) {  @return reg.get($__conf, $path, $default); }
+@function _gsv($path, $default:null) {  @return reg.gsv($__key, $path, $default); }
+
+
+//-----------------------------------------------
+//  Config: global defaults
+//-----------------------------------------------
+@include reg.ssv($__key, 'color/scheme', (
+                            primary: color.$navy-blue,
+                            secondary: color.$raven,
+                            success: color.$chateau-green,
+                            info: color.$pelorous,
+                            warning: color.$amber,
+                            danger: color.$amaranth
+                            ), true);
+@include reg.ssv($__key, 'color/fg', null, true);
+@include reg.ssv($__key, 'color/bg', null, true);
+@include reg.ssv($__key, 'color/link', null, true);
+@include reg.ssv($__key, 'color/link-hover', null, true);
+@include reg.ssv($__key, 'color/line', null, true);
+
+//--- color scheme
+// $primary:                   $navy-blue !default;
+// $secondary:                 $raven !default;
+// $success:                   $chateau-green !default;
+// $info:                      $pelorous !default;
+// $warning:                   $amber !default;
+// $danger:                    $amaranth !default;
+// $scheme:                    (
+//                             primary: $primary,
+//                             secondary: $secondary,
+//                             success: $success,
+//                             info: $info,
+//                             warning: $warning,
+//                             danger: $danger
+//                             ) !default;
+//                             $text:                      $text-black !default;   // default text color
+// $link:                      $cerulean !default;     // <a> color
+// $link-visited:              $link !default;
+// $link-hover:                darken($link, 10%) !default;
+
+$__conf: reg.gsv($__key);
+
+
+//-----------------------------------------------
+//  Mixins
+//-----------------------------------------------
+@mixin config($config: null) {
+    $__conf: reg.merge(reg.gsv($__key), $config) !global;
+}
+
+@mixin set-colors($fg:color.$bahama-blue, $bg:auto, $link:auto, $link-hover:null, $line:auto, $is-default:false) {
+    @include _ssv('color/fg', $fg, $is-default);
+    @include _ssv('color/bg', if($bg==auto, transparentize($fg, 0.95), $bg), $is-default);
+    @include _ssv('color/link', if($link==auto, darken($fg, 10%), $link), $is-default);
+    @if $link-hover {
+        @include _ssv('color/link-hover', color.$text-red, $is-default);
+    }
+    @include reg.ssv('color/line', if($line==auto, rgba($fg, 0.35), $line), $is-default);
+}
+
+@mixin select($name: default, $is-default:false) {
+    $name: inspect($name);
+
+    @if $name == 'amaranth' {
+        @include set-colors($fg:color.$amaranth, $link-hover:color.$persimmon, $is-default:$is-default);
+    }
+    @else if $name == 'purple' {
+
+        @include set-colors($fg:color.$purple, $is-default:$is-default);
+    }
+    @else if $name == 'teal' {
+        @include set-colors($fg:color.$teal, $is-default:$is-default);
+    }
+    @else if $name == 'harley-davison-orange' {
+        @include set-colors($fg:color.$harley-davidson-orange, $is-default:$is-default);
+    }
+    @else if $name == 'default' {
+        @include set-colors($fg:color.$bahama-blue, $is-default:$is-default);
+    }
+}
+
+@include select(default, $is-default:true);     // select default theme

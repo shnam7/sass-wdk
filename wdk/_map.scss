@@ -23,6 +23,8 @@
 //  @returns {any} - Retrived value.
 //
 @function deep-get($map, $keys) {
+    @if type-of($keys) != list { @return map.get($map, $keys); }
+
     @return map.get($map, $keys...);
 }
 
@@ -38,6 +40,8 @@
 //  @returns {Map} New map containg the value at the location described in $keys
 //
 @function deep-set($map, $keys, $value) {
+    @if type-of($keys) != list { @return map.set($map, $keys, $value); }
+
     @return map.set($map, list.append($keys, $value)...);
 }
 

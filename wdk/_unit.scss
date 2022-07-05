@@ -31,6 +31,7 @@
 //  @returns {number} Value in rem unit
 //
 @function _px2rem($value, $base) {
+    @if $value == null { @return 0rem; }
     @if unit($value) =='rem' { @return $value; }
 
     @if unit($value) !='px' {
@@ -52,6 +53,7 @@
 //  @returns {number} Value in px unit
 //
 @function _rem2px($value, $base) {
+    @if $value == null { @return 0px; }
     @if unit($value) =='px' { @return $value; }
 
     @if unit($value) !='rem' {

@@ -64,7 +64,7 @@
     @return if($val, $val, $default);
 }
 
-@function merge($reg, $value-set, $path:null, $is-default:false)
+@function merge($reg, $value-set, $is-default:false, $path:null)
 {
     @if $value-set == null { @return $reg; }
 
@@ -92,7 +92,7 @@ $__sys-reg: () !default;    // internal variable
 //  @param {any} $value - Value to store
 //  @param {bool} $default - If true, $value is stored only when the location at $path is empty
 //
-@mixin ssv($key, $path, $value, $is-default:false)
+@mixin ssv($key, $path:null, $value, $is-default:false)
 {
     $addr: if($path, $key + "/"+ $path, $key);
 
@@ -125,7 +125,7 @@ $__sys-reg: () !default;    // internal variable
 //    @include msv('media', 'my-bp', (seg2:600pc, seg4:1500px));
 //    @debug gsv('media', 'my-bp'); --> seg1: 0, seg2: 600pc, sec3: 1000px, seg4: 1500px)
 //
-@mixin msv($key, $path, $value-set, $is-default:false)
+@mixin msv($key, $path:null, $value-set, $is-default:false)
 {
     @if type-of($value-set) !=map {
         @error "[_sys-reg.scss]: $value-set must be Map type."
