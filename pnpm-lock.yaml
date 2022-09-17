@@ -2,11 +2,11 @@ lockfileVersion: 5.4
 
 specifiers:
   rimraf: ^3.0.2
-  sass: ^1.53.0
+  sass: ^1.54.9
 
 devDependencies:
   rimraf: 3.0.2
-  sass: 1.53.0
+  sass: 1.54.9
 
 packages:
 
@@ -177,8 +177,8 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /sass/1.53.0:
-    resolution: {integrity: sha512-zb/oMirbKhUgRQ0/GFz8TSAwRq2IlR29vOUJZOx0l8sV+CkHUfHa4u5nqrG+1VceZp7Jfj59SVW9ogdhTvJDcQ==}
+  /sass/1.54.9:
+    resolution: {integrity: sha512-xb1hjASzEH+0L0WI9oFjqhRi51t/gagWnxLiwUNMltA0Ab6jIDkAacgKiGYKM9Jhy109osM7woEEai6SXeJo5Q==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
