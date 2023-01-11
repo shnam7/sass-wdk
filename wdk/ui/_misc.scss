@@ -55,7 +55,7 @@
     @if $line-height==null {
         @if not meta.global-variable-exists('line-height', font) {
             @warn "[util.scss]:$w-line-height is not defined. Using 1.5 as default\a"
-            +"To supress this warning, load font module first.\a";
+            + "To supress this warning, load font module first.\a";
             $line-height: 1.5;
         }
 

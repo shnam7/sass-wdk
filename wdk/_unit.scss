@@ -15,7 +15,7 @@
 @function __default-font-size() {
     @if not meta.global-variable-exists('size', font) {
         @warn "[unit.scss]:font.$size is not defined. Using 16px as default.\a"
-        +"To supress this warning, load font module first.\a";
+        + "To supress this warning, load font module first.\a";
         @return 16px;
     }
 
