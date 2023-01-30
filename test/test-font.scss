@@ -1,0 +1,31 @@
+@use '../node_modules/sass-true' as *;
+@use 'wdk/font';
+
+@include describe('[font] module test') {
+    @include it('scale():scale font size.') {
+        @include assert-equal(font.scale(1em, 2), 1.5625em);
+        @include assert-equal(font.scale(1em, 1), 1.25em);
+        @include assert-equal(font.scale(1em, 0), 1em);
+        @include assert-equal(font.scale(1em, -1), 0.9em);
+        @include assert-equal(font.scale(1em, -2), 0.81em);
+        @include assert-equal(font.scale(1em), 1.25em);
+    }
+    @include it('sapcing():calculate spacing.') {
+        @include assert-equal(font.spacing(1), 1em);
+        @include assert-equal(font.spacing(2), 2em);
+        @include assert-equal(font.spacing(1, 2em), 2em);
+        @include assert-equal(font.spacing(2, 2em), 4em);
+    }
+    @include it('rem():convert px values to rem values (single or multi in list).') {
+        @include assert-equal(font.rem(1px), 0.0714285714rem, $inspect: true);
+        @include assert-equal(
+            font.rem((8px 16px 24px)),
+            (0.5714285714rem 1.1428571429rem 1.7142857143rem),
+            $inspect: true
+        );
+    }
+    @include it('px():convert rem values to px values (single or multi in list).') {
+        @include assert-equal(font.px(1rem), font.$size-base);
+        @include assert-equal(font.px((0.25rem 0.5rem 1rem 1.25rem 1.5rem)), (3.5px 7px 14px 17.5px 21px));
+    }
+}

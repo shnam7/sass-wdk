@@ -1,0 +1,43 @@
+@use '../node_modules/sass-true' as *;
+@use 'wdk/map';
+
+$map1: (L40:(a1:1, b1:2), L41:(d1:1, e1:2), x:1);
+$map2: (L40:(a2:1, b2:2), L41:(d2:1, e2:2), y:1);
+$map3: (L40:(a3:1, b3:2), L41:(d3:1, e3:2), z:1);
+@include describe('map module test') {
+    @include it('map.deep-set():set value into multi-level nested map.') {
+        $key-list: (A B);
+        // problem in sass:map.set()
+        // calling map.set() with $key-list + ellipsis can cause problem.
+        // So, deep-set() function is provided to use $key-list without ellipsis.
+        @include assert-equal(map.set((), $key-list..., 123), (123: (A: B)));
+        @include assert-equal(map.set((), A, B, 123), (A: (B:123)));
+        @include assert-equal(map.deep-set((), $key-list, 123), (A: (B:123)));
+    }
+    @include it('map.deep-get():get value from multi-level nested map.') {
+        $map: (A: (B: 123, C: (D: 456)));
+        $key-list: (A C D);
+        // no problem with sass:map module
+        // but, to support using $key-chain without elipsis, deep-get() is provided.
+        @include assert-equal(map.get($map, $key-list...), 456);
+        @include assert-equal(map.get($map, A, C, D), 456);
+        @include assert-equal(map.get($map, A, B), 123);
+        @include assert-equal(map.deep-get($map, $key-list), 456);
+    }
+    @include it('map.extend():jquery-style extend function.') {
+        $map-merged: (L40: (a2: 1, b2: 2), L41: (d2: 1, e2: 2), x: 1, y: 1);
+        $map-deep-merged: (L40: (a1: 1, b1: 2, a2: 1, b2: 2), L41: (d1: 1, e1: 2, d2: 1, e2: 2), x: 1, y: 1);
+        $map-extended: (L40: (a1: 1, b1: 2, a2: 1, b2: 2, a3: 1, b3: 2), L41: (d1: 1, e1: 2, d2: 1, e2: 2, d3: 1, e3: 2), x: 1, y: 1, z: 1);
+        // compare extend() with with sass:map.merge() and sass:map.deep-merge()
+        @include assert-equal(map.merge($map1, $map2), $map-merged);
+        @include assert-equal(map.deep-merge($map1, $map2), $map-deep-merged);
+        @include assert-equal(map.extend($map1, $map2, $map3), $map-extended);
+    }
+    @include it('map.trim():remove null entries from map..') {
+        $map: (A:(a:1, b:null, null:y, c:(d:1, null:x)), z:null, null:k);
+        @include assert-equal(map.trim($map), (A: (a: 1, b: null, null: y, c: (d: 1, null: x))));
+        @include assert-equal(map.trim($map, true), (A: (a: 1, c: (d: 1))));
+        @include assert-equal(map.trim($map, true, $trim-keys:false), (A: (a: 1, null: y, c: (d: 1, null: x)), null: k));
+        @include assert-equal(map.trim($map, true, $trim-values:false), (A:(a:1, b:null, c:(d:1)), z:null));
+    }
+}

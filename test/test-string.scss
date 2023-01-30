@@ -1,0 +1,59 @@
+@use '../node_modules/sass-true' as *;
+@use 'wdk/string';
+
+@include describe('string module test') {
+    @include it('string.char-at():Get a character at $index position.') {
+        $str: 'abcdefg';
+        @include assert-equal(string.char-at($str, 1), 'a');
+        @include assert-equal(string.char-at($str, 3), 'c');
+        @include assert-equal(string.char-at($str, string.length($str)), 'g');
+    }
+    @include it('string.starts-with():check if string starts with given string.') {
+        $str: 'abcdefg';
+        @include assert-equal(string.starts-with($str, 'a'), true);
+        @include assert-equal(string.starts-with($str, 'abcd'), true);
+        @include assert-equal(string.starts-with($str, $str), true);
+        @include assert-equal(string.starts-with($str, 'aabcd'), false);
+    }
+    @include it('string.ends-with():check if string ends with given string.') {
+        $str: 'abcdefg';
+        @include assert-equal(string.ends-with($str, 'g'), true);
+        @include assert-equal(string.ends-with($str, 'efg'), true);
+        @include assert-equal(string.ends-with($str, $str), true);
+        @include assert-equal(string.ends-with($str, 'aabcd'), false);
+    }
+    @include it('string.contains():check if contains given string.') {
+        $str: 'abcdefg';
+        @include assert-equal(string.contains($str, 'abc'), true);
+        @include assert-equal(string.contains($str, 'cde'), true);
+        @include assert-equal(string.contains($str, 'fg'), true);
+        @include assert-equal(string.contains($str, $str), true);
+        @include assert-equal(string.contains($str, 'aabcd'), false);
+    }
+    @include it('string.replace():replace first occurrence of $search with $replace.') {
+        $str: 'abcabcd';
+        @include assert-equal(string.replace($str, 'abc', '123'), '123123d');
+        @include assert-equal(string.replace($str, 'a', 'x'), 'xbcxbcd');
+        @include assert-equal(string.replace($str, 'abc', ''), 'd');
+    }
+    @include it('string.replace-batch():do replace() for all the items in $replace-map.') {
+        $str: 'abcabcd';
+        $r-map: (a:1, b:2, d:3);
+        @include assert-equal(string.replace-batch($str, $r-map), '12c12c3');
+        @include assert-equal(string.replace-batch($str, ()), 'abcabcd');
+    }
+    @include it('string.split():converts string to list of strings with chars in $separators as delimiters.') {
+        $str: 'li.myclass:hover';
+        @include assert-equal(string.split($str, ':'), ('li.myclass' ':hover'));
+        @include assert-equal(string.split($str, ':', ''), ('li.myclass' 'hover'));
+        @include assert-equal(string.split($str, '.:'), ('li' '.myclass' ':hover'));
+        @include assert-equal(string.split($str, '.:', ''), ('li' 'myclass' 'hover'));
+        @include assert-equal(string.split($str, '.:', '', 1), ('li' 'myclass:hover'));
+    }
+    // @include it('string.tokenize():split strings to tokens.') {
+    //     $str: '{Var1}{Var2}Content{Var3}';
+    //     @include assert-equal(string.tokenize($str, '{', '}'),  ('{Var1}' '{Var2}' 'Content' '{Var3}'));
+    //     @include assert-equal(string.tokenize($str, '{', '}', true),  ('Var1' 'Var2' 'Content' 'Var3'));
+    //     @include assert-equal(string.tokenize($str, '{', '}', true, 1),  ('Var1' '{Var2}Content{Var3}'));
+    // }
+}

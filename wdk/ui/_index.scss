@@ -9,7 +9,7 @@
 @forward "svg";
 @forward "shape";
 @forward "border"                       as border-*;
-@forward "media-query"                  as mq-*;
+@forward "media-query";
 @forward "../constants/tf.constants."   as timing-*;
 @forward "z-index"                      as z-index-*;
 @forward "theme"                        as theme-*;

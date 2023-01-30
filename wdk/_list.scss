@@ -1,59 +1,58 @@
-//=========================================================
-//
-//  @package sass-wdk
-//
-//  @module list
-//  @description Sass List operations
-//
-//  @credit
-//    http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/
-//
-//=========================================================
+/**
+ *    @package sass-wdk
+ *
+ *    @module list
+ *    @description Sass List operations
+ *
+ *    @credit
+ *      http://hugogiraudel.com/2013/08/08/advanced-sass-list-functions/
+ *
+ */
 
-@forward "sass:list";
+@forward 'sass:list';
 
-@use "sass:list";
-@use "sass:math";
-@use "string";
+@use 'sass:list';
+@use 'sass:math';
+@use 'string';
 
-//
-//  Get first element of list
-//  @param {List} $list - List
-//  @returns {any} First element of $list
-//
-//  Examples:
-//  $list: a, b, c, d, e, f;
-//  $first: first($list); // a
-//
+/**
+ *    Get first element of list
+ *    @param {list} $list - List
+ *    @returns {any} First element of $list
+ *
+ *    Examples:
+ *    $list: a, b, c, d, e, f;
+ *    $first: first($list); // a
+ */
 @function first($list) {
     @return list.nth($list, 1);
 }
 
-//
-//  Get last element of list
-//  @param {List} $list - List
-//  @returns {any} Last element of $list
-//
-//  Examples:
-//  $list: a, b, c, d, e, f;
-//  $last: last($list);   // f
-//
+/**
+ *  Get last element of list
+ *  @param {list} $list - List
+ *  @returns {any} Last element of $list
+ *
+ *  Examples:
+ *  $list: a, b, c, d, e, f;
+ *  $last: last($list);   // f
+ */
 @function last($list) {
     @return list.nth($list, list.length($list));
 }
 
-//
-//  Find a value in list
-//  @param {List} $list - List to be searched
-//  @param {any} $value - Value to search
-//  @returns {number} - Index of the value. null if value is not found
-//
-//  Examples:
-//  $list: a, b, c, d z, e, a, f;
-//  $first-index: index($list, a);     // 1
-//  $last-index: last-index($list, a); // 6
-//  $last-index: last-index($list, z); // null
-//
+/**
+ *  Find the last index of a value in list
+ *  @param {list} $list - List to be searched
+ *  @param {any} $value - Value to search
+ *  @returns {number} - Index of the value. null if value is not found
+ *
+ *  Examples:
+ *  $list: a, b, c, d z, e, a, f;
+ *  $first-index: index($list, a);     // 1
+ *  $last-index: last-index($list, a); // 6
+ *  $last-index: last-index($list, z); // null
+ */
 @function last-index($list, $value) {
     $index: null;
 
@@ -62,378 +61,307 @@
             $index: $i;
         }
     }
-
     @return $index;
 }
 
-//
-//  Prepend a value to list
-//  @param {List} $list - List to be operated
-//  @param {any} $value - Value to be prepended
-//  @returns {List} Resulting list
-//
-//  Examples:
-//  $list: b, c, d, e, f;
-//  $new-list: prepend($list, a);               // a, b, c, d, e, f
-//  $new-list: prepend($list, now i know my a); // now, i, know, my, a, b, c, d, e, f
-//
+/**
+ *  Prepend a value to list
+ *  @param {list} $list - List to be operated
+ *  @param {any} $value - Value to be prepended
+ *  @returns {list} Resulting list
+ *
+ *  Examples:
+ *  $list: b, c, d, e, f;
+ *  $new-list: prepend($list, a);               // a, b, c, d, e, f
+ *  $new-list: prepend($list, now i know my a); // now, i, know, my, a, b, c, d, e, f
+ */
 @function prepend($list, $value) {
-    $result: ($value);
-    @each $val in $list {
-        $result: list.append($result, $val);
-    }
-    @return $result;
+    @return list.join(($value, ), $list, $separator: list.separator($list));
 }
 
-//
-//  Insert a value to list at n-th index position
-//  @param {List} $list - List to be operated
-//  @param {number} $index - Index position to insert (starts from 1)
-//  @param {any} $value - Value to insert
-//  @returns {List} - Resulting list
-//
-//  Examples:
-//  $list: a, b, d, e, f;
-//  I want to add "c" as the 3rd index in the list
-//  $new-list: insert-at($list, 3, c);   // a, b, c, d, e, f
-//  $new-list: insert-at($list, -1, z);  // error
-//  $new-list: insert-at($list, 0, z);   // error
-//  $new-list: insert-at($list, 100, z); // error
-//  $new-list: insert-at($list, zog, z); // error
-//
+/**
+ *  Insert a value to list at n-th index position
+ *  @param {list} $list - List to be operated
+ *  @param {number} $index - Index position to insert (starts from 1)
+ *  @param {any} $value - Value to insert
+ *  @returns {list} - Resulting list
+ *
+ *  Examples:
+ *  $list: a, b, d, e, f;
+ *  I want to add "c" as the 3rd index in the list
+ *  $new-list: insert-at($list, 3, c);   // a, b, c, d, e, f
+ *  $new-list: insert-at($list, -1, z);  // error
+ *  $new-list: insert-at($list, 0, z);   // error
+ *  $new-list: insert-at($list, 100, z); // error
+ *  $new-list: insert-at($list, zog, z); // error
+ */
 @function insert-at($list, $index, $value) {
-    $result: null;
-
     @if type-of($index) != number {
-        @warn "$index: #{quote($index)} is not a number for `insert-at()`.";
+        @error "list.insert-at(): $index: #{quote($index)} is not a number.";
+    }
+    @if $index < 1 {
+        $index: list.length($list) + $index + 1;
+    }
+    @if $index<0 or $index>list.length($list) {
+        @error "list.insert-at(): $index #{$index} is out of range (list.lenght:=#{list.length($list)}).";
     }
 
-    @else if $index < 1 {
-        @warn "List index 0 must be a non-zero integer for `insert-at()`";
-    }
-
-    @else if $index>list.length($list) {
-        @warn "List index is #{$index} but list is only #{list.length($list)} item long for `insert-at()'.";
-    }
-
-    @else {
-        $result: ();
-
-        @for $i from 1 through list.length($list) {
-            @if $i==$index {
-                $result: list.append($result, $value);
-            }
-
-            $result: list.append($result, list.nth($list, $i));
-        }
-    }
-
-    @return $result;
-}
-
-//
-//  Remove element at n-th position
-//  @param {List} $list - List to be operated
-//  @param {number} $index - Index value to remove. If negative, count from the end
-//  @returns {List} Resulting list
-//
-//  Examples:
-//  $list: a, b, z, c, d, e, f;
-//  $new-list: remove-at($list,   3); // a, b, c, d, e, f
-//  $new-list: remove-at($list,   0); // error
-//  $new-list: remove-at($list,  -2); // a, b, z, c, d, f
-//  $new-list: remove-at($list, -10); // error
-//  $new-list: remove-at($list, 100); // error
-//  $new-list: remove-at($list, zog); // error
-//
-@function remove-at($list, $index) {
-    $result: null;
-
-    @if type-of($index) != number {
-        @warn "$index: #{quote($index)} is not a number for `remove-at()`.";
-    }
-
-    @else if $index==0 {
-        @warn "List index 0 must be a non-zero integer for `remove-at()`.";
-    }
-
-    @else if math.abs($index) > list.length($list) {
-        @warn "List index is #{$index} but list is only #{list.length($list)} item long for `remove-at()`.";
-    }
-
-    @else {
-        $result: ();
-        $index: if($index < 0, list.length($list) + $index + 1, $index);
-
-        @for $i from 1 through list.length($list) {
-            @if $i !=$index {
-                $result: list.append($result, list.nth($list, $i));
-            }
-        }
-    }
-
-    @return $result;
-}
-
-//
-//  Replace element at n-th position
-//  @param {List} $list - List to be operated
-//  @param {number} $index - Index position. Counts from the end, if negative
-//  @param {any} $value - New value to replace
-//  @returns {List} Resulting list
-//
-//  Examples:
-//  $list: a, b, z, d, e, f;
-//  $new-list: replace-nth($list,   3, c); // a, b, c, d, e, f
-//  $new-list: replace-nth($list,   0, c); // error
-//  $new-list: replace-nth($list,  -2, c); // a, b, c, d, z, f
-//  $new-list: replace-nth($list, -10, c); // error
-//  $new-list: replace-nth($list, 100, c); // error
-//  $new-list: replace-nth($list, zog, c); // error
-//
-
-// Use list.set-nth() instead of this
-// @function list-replace-nth($list, $index, $value) {
-//     $result: null;
-
-//     @if type-of($index) !=number {
-//         @warn "$index: #{quote($index)} is not a number for `replace-nth`.";
-//     }
-
-//     @else if $index==0 {
-//         @warn "List index 0 must be a non-zero integer for `replace-nth`.";
-//     }
-
-//     @else if math.abs($index)>length($list) {
-//         @warn "List index is #{$index} but list is only #{length($list)} item long for `replace-nth`.";
-//     }
-
-//     @else {
-//         $result: ();
-//         $index: if($index < 0, length($list) + $index + 1, $index);
-
-//         @for $i from 1 through length($list) {
-//             @if $i==$index {
-//                 $result: append($result, $value);
-//             }
-
-//             @else {
-//                 $result: append($result, nth($list, $i));
-//             }
-//         }
-//     }
-
-//     @return $result;
-// }
-
-//
-//  Replace values in list
-//  @param {List} $list - List to be operated
-//  @param {any} $old-value - Value to be replaced
-//  @param {any} $new-value - Value to replace
-//  @param {bool} [$recursive=false] - Recursive opion
-//  @returns {List} Resulting list
-//
-//  $list: a, b, r, a, c a, d a, b, r, a;
-//  $new-list: replace($list, a, u);       // u, b, r, u, c a, d a, b, r, u;
-//  $new-list: replace($list, a, u, true); // u, b, r, u, c u, d u, b, r, u;
-//
-@function replace($list, $old-value, $new-value, $recursive:false) {
     $result: ();
+    $sep: list.separator($list);
+
+    @for $i from 1 through list.length($list) {
+        @if $i == $index {
+            $result: list.append($result, $value, $separator:$sep);
+        }
+        $result: list.append($result, list.nth($list, $i), $separator:$sep);
+    }
+    @return $result;
+}
+
+/**
+ *  Remove element at n-th position
+ *  @param {list} $list - List to be operated
+ *  @param {number} $index - Index value to remove. If negative, count from the end
+ *  @returns {list} Resulting list
+ *
+ *  Examples:
+ *  $list: a, b, z, c, d, e, f;
+ *  $new-list: remove-at($list,   3); // a, b, c, d, e, f
+ *  $new-list: remove-at($list,   0); // error
+ *  $new-list: remove-at($list,  -2); // a, b, z, c, d, f
+ *  $new-list: remove-at($list, -10); // error
+ *  $new-list: remove-at($list, 100); // error
+ *  $new-list: remove-at($list, zog); // error
+ */
+@function remove-at($list, $index) {
+    @if type-of($index) != number {
+        @error "list.remove-at(): $index: #{quote($index)} is not a number.";
+    }
+    @if $index < 1 {
+        $index: list.length($list) + $index + 1;
+    }
+    @if $index<0 or $index>list.length($list) {
+        @error "list.remove-at(): $index #{$index} is out of range (list.lenght:=#{list.length($list)}).";
+    }
+
+    $result: ();
+    $sep: list.separator($list);
+
+    @for $i from 1 through list.length($list) {
+        @if $i != $index {
+            $result: list.append($result, list.nth($list, $i), $separator:$sep);
+        }
+    }
+    @return $result;
+}
+
+/**
+ *  Replace values in list
+ *  @param {list} $list - List to be operated
+ *  @param {any} $old-value - Value to be replaced
+ *  @param {any} $new-value - Value to replace
+ *  @param {bool} [$recursive=false] - Recursive opion
+ *  @returns {list} Resulting list
+ *
+ *  $list: (a, b, r, a, (c a), (d a), b, r, a);
+ *  $new-list: replace($list, a, u);       // (u, b, r, u, (c a), (d a), b, r, u);
+ *  $new-list: replace($list, a, u, true); // (u, b, r, u, (c u), (d u), b, r, u);
+ */
+@function replace($list, $old-value, $new-value, $recursive: false) {
+    $result: ();
+    $sep: list.separator($list);
 
     @for $i from 1 through list.length($list) {
         @if type-of(list.nth($list, $i))==list and $recursive {
             $result: list.append($result,
-                replace(list.nth($list, $i), $old-value, $new-value, $recursive));
+                    replace(list.nth($list, $i), $old-value, $new-value, $recursive));
         }
-
         @else {
             @if list.nth($list, $i)==$old-value {
-                $result: list.append($result, $new-value);
+                $result: list.append($result, $new-value, $separator: $sep);
             }
-
             @else {
-                $result: list.append($result, list.nth($list, $i));
+                $result: list.append($result, list.nth($list, $i), $separator: $sep);
             }
         }
     }
-
     @return $result;
 }
 
-//
-//  Remove matched value entry from list
-//  @param {List} $list - List to be operated
-//  @param {any} $value - Value to be searched and removed
-//  @param {bool} [$recursive=false] - Recursive option
-//  @returns {List} Resulting list
-//
-//  Examples:
-//  $list: a, b z, c, z, d, z, e, f;
-//  $new-list: remove($list, z);       // a, b z, c, d, e, f;
-//  $new-list: remove($list, z, true); // a, b, c, d, e, f
-//
-@function remove($list, $value, $recursive:false) {
+/**
+ *  Remove matched value entry from list
+ *  @param {List} $list - List to be operated
+ *  @param {any} $value - Value to be searched and removed
+ *  @param {bool} [$recursive=false] - Recursive option
+ *  @returns {List} Resulting list
+ *
+ *  Examples:
+ *  $list: a, b z, c, z, d, z, e, f;
+ *  $new-list: remove($list, z);       // a, b z, c, d, e, f;
+ *  $new-list: remove($list, z, true); // a, b, c, d, e, f
+ */
+@function remove($list, $value, $recursive: false) {
     $result: ();
+    $sep: list.separator($list);
 
     @for $i from 1 through list.length($list) {
         @if type-of(nth($list, $i))==list and $recursive {
-            $result: list.append($result, remove(list.nth($list, $i), $value, $recursive));
+            $result: list.append($result,
+                    remove(list.nth($list, $i), $value, $recursive), $separator: $sep);
         }
-
-        @else if list.nth($list, $i) != $value {
-            $result: list.append($result, list.nth($list, $i));
+        @else if list.nth($list, $i) !=$value {
+            $result: list.append($result, list.nth($list, $i), $separator: $sep);
         }
     }
-
     @return $result;
 }
 
-//
-//  Slice list
-//  @param {List} $list - List to be operated
-//  @param {number} [$start=1] - Start index
-//  @param {number} [$end=length($list)] - End index
-//  @returns {List} Resulting list
-//
-//  Examples:
-//  $list: a, b, c, d, e, f;
-//  $new-list: slice($list, 3, 5);   // c, d, e
-//  $new-list: slice($list, 4, 4);   // d
-//  $new-list: slice($list, 5, 3);   // error
-//  $new-list: slice($list, -1, 10); // error
-//
+/**
+ *  Slice list
+ *  @param {list} $list - List to be operated
+ *  @param {number} [$start=1] - Start index
+ *  @param {number} [$end=length($list)] - End index
+ *  @returns {list} Resulting list
+ *
+ *  Examples:
+ *  $list: a, b, c, d, e, f;
+ *  $new-list: slice($list, 3, 5);      // c, d, e
+ *  $new-list: slice($list, 4, 4);      // d
+ *  $new-list: slice($list, -4, -3);    // c, d
+ *  $new-list: slice($list, -1, 10);    // error
+ */
 @function slice($list, $start: 1, $end: list.length($list)) {
-    $result: null;
-
-    @if type-of($start) !=number or type-of($end) !=number {
-        @warn "Either $start or $end are not a number for `list.slice()`.";
+    @if type-of($start)!=number or type-of($end)!=number {
+        @error "Either $start or $end are not a number for `list.slice()`.";
+    }
+    @if $start < 1 {
+        $start: list.length($list) + $start + 1;
+    }
+    @if $end < 1 {
+        $end: list.length($list) + $end + 1;
+    }
+    @if $start > $end {
+        // @warn "The start index has to be lesser than or equals to the end index for `list.slice()`.";
+        @return null;
+    }
+    @if $start < 1 or $end > list.length($list) {
+        @error "list.slice(): index out of range(start=#{$start}, end=#{$end}, list.length=#{list.length($list)}.";
     }
 
-    @else if $start>$end {
-        @warn "The start index has to be lesser than or equals to the end index for `list.slice()`.";
+    $result: ();
+    $sep: list.separator($list);
+
+    @for $i from $start through $end {
+        $result: list.append($result, list.nth($list, $i), $separator: $sep);
     }
-
-    @else if $start < 1 or $end < 1 {
-        @warn "List indexes must be non-zero integers for `list.slice()`.";
-    }
-
-    @else if $start > list.length($list) {
-        @warn "List index is #{$start} but list is only #{list.length($list)} item long for `list.slice()`.";
-    }
-
-    @else if $end > list.length($list) {
-        @warn "List index is #{$end} but list is only #{list.length($list)} item long for `list.slice()`.";
-    }
-
-    @else {
-        $result: ();
-
-        @for $i from $start through $end {
-            $result: list.append($result, list.nth($list, $i));
-        }
-    }
-
     @return $result;
 }
 
-//
-//  Rearrange elements in reverse order
-//  @param {List} $list - List to be operated
-//  @param {bool} [$recursive=false] - Recursive option (deep dive if list entry is list)
-//  @returns {List} Resulting list
-//
-//  Examples:
-//  $list: a, b, c d e, f, g, h;
-//  $new-list: reverse($list);       // h, g, f, c d e, b, a
-//  $new-list: reverse($list, true); // h, g, f, e d c, b, a
-//
+/**
+ *  Rearrange elements in reverse order
+ *  @param {List} $list - List to be operated
+ *  @param {bool} [$recursive=false] - Recursive option (deep dive if list entry is list)
+ *  @returns {List} Resulting list
+ *
+ *  Examples:
+ *  $list: a, b, c d e, f, g, h;
+ *  $new-list: reverse($list);       // h, g, f, c d e, b, a
+ *  $new-list: reverse($list, true); // h, g, f, e d c, b, a
+ */
 @function reverse($list, $recursive: false) {
-    $result: ();
-
-    @if (list.length($list) == 0) {
+    @if (list.length($list)==0) {
         @return $result;
     }
 
-    @for $i from list.length($list)*-1 through -1 {
-        @if type-of(list.nth($list, math.abs($i)))==list and $recursive {
-            $result: list.append($result, reverse(nth($list, math.abs($i)), $recursive));
-        }
+    $result: ();
+    $sep: list.separator($list);
 
+    @for $i from list.length($list) * -1 through -1 {
+        @if type-of(list.nth($list, math.abs($i)))==list and $recursive {
+            $result: list.append($result,
+                    reverse(nth($list, math.abs($i)), $recursive), $separator: $sep);
+        }
         @else {
-            $result: list.append($result, nth($list, math.abs($i)));
+            $result: list.append($result, nth($list, math.abs($i)), $separator: $sep);
         }
     }
-
     @return $result;
 }
 
-//
-//  Convert list into string combining all the entries
-//  @param {List} $list - List to be operated
-//  @param {string} $glue - String to be inserted between elements
-//  @param {bool} [$unquote=true] - Unquote the resulting string
-//  @param {bool} [$flatten=false] - Remove braces denoting sub-lists
-//  @returns {string} Resulting string
-//
-//  Examples:
-//  $list: a, b, c d e, f, g, h;
-//  $new-list: to-string($list);      // abcdefgh
-//  $new-list: to-string($list, '-'); // a-b-c-d-e-f-g-h
-//
-@function to-string($list, $glue:' ', $unquote:true, $flatten:false) {
-    // $result: str-replace(str-trim(inspect($list), all, "()"), ", ", $glue);
-    $result: string.replace(inspect($list), ", ", $glue);
+/**
+ *  Convert list into string combining all the entries.
+ *  @param {list} $list - List to be operated
+ *  @param {string} $glue - String to be inserted between elements
+ *  @param {bool} [$unquote=true] - Unquote the resulting string
+ *  @param {bool} [$flatten=false] - Remove braces denoting sub-lists
+ *  @returns {string} Resulting string
+ *
+ *  Examples:
+ *  $list: a, b, c d e, f, g, h;
+ *  $new-list: to-string($list);      // 'a b c d e f g h'
+ *  $new-list: to-string($list, '-'); // 'a-b-c-d-e-f-g-h'
+ */
+@function to-string($list, $glue: ' ', $unquote: true, $flatten: false) {
+    $result: ();
+
+    @for $i from 1 through list.length($list) {
+        $val: list.nth($list, $i);
+        @if (type-of($val)==list) {
+            $val: to-string($val, $glue, $unquote, $flatten);
+        }
+        $result: list.append($result, inspect($val), $separator: comma);
+    }
+    $result: string.replace(inspect($result), ', ', $glue);
     @if $unquote {
         $result: string.replace($result, '"', '');
     }
-    @if $flatten {
-        $result: string.trim($result, all, '()');
+    @if (not $flatten) {
+        $result: "(" + $result + ")";
     }
     @return $result;
 }
 
-//
-//  Rotate the list
-//  @param {List} $list - List to be rotated
-//  @param {number} $count - Number of count to rotate. If positive, rotate to right, or left
-//  @returns {List} Resulting list
-//
-//  Examples:
-//  $list: a, b, c, d, e, f;
-//  $new-list: loop($list, 1);  // f, a, b, c, d, e
-//  $new-list: loop($list, -1); // b, c, d, e, f, a
-//
-@function rotate($list, $count:1) {
+/**
+ *  Rotate the list
+ *  @param {list} $list - List to be rotated
+ *  @param {number} $count - Number of count to rotate. If positive, rotate to right, or left
+ *  @returns {list} Resulting list
+ *
+ *  Examples:
+ *  $list: a, b, c, d, e, f;
+ *  $new-list: loop($list, 1);  // f, a, b, c, d, e
+ *  $new-list: loop($list, -1); // b, c, d, e, f, a
+ */
+@function rotate($list, $count: 1) {
     $result: ();
+    $sep: list.separator($list);
 
     @for $i from 0 to length($list) {
-        $result: append($result, nth($list, ($i - $count) % length($list) + 1));
+        $result: append($result, nth($list,
+                ($i - $count) % length($list) + 1), $separator: $sep);
     }
-
     @return $result;
 }
 
-//
-//  Remove all the null values
-//  @param {List} $list - List to be operated
-//
-@function list-trim($list) {
-    @return remove($list, null, true);
+/**
+ *  Remove all the null values
+ *  @param {List} $list - List to be operated
+ */
+@function trim($list, $recursive: false) {
+    @return remove($list, null, $recursive);
 }
 
-//
-//  Checks if a list contains a value(s).
-//  @param {List} $list - List to be tested
-//  @param {any...} $values - List of values to be searched
-//  @returns {bool}
-//
-@function list-contains($list, $values...) {
+/*
+ *  Checks if a list contains a value(s).
+ *  @param {List} $list - List to be tested
+ *  @param {any...} $values - List of values to be searched
+ *  @returns {bool}
+ */
+@function contains($list, $values...) {
     @each $value in $values {
-        @if type-of(index($list, $value)) !="number" {
+        @if type-of(list.index($list, $value)) != 'number' {
             @return false;
         }
     }
-
     @return true;
 }

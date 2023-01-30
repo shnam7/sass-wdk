@@ -1,0 +1,87 @@
+@use '../node_modules/sass-true' as *;
+@use 'wdk/list';
+
+$alist: (a, b, c, d);
+
+@include describe('[list] module test') {
+    @include it('first():get first element of list.') {
+        @include assert-equal(list.first($alist), a);
+    }
+    @include it('last():get last element of list.') {
+        @include assert-equal(list.last($alist), d);
+    }
+    @include it('last-index():find the last index of a value in list.') {
+        @include assert-equal(list.last-index($alist, a), 1);
+        @include assert-equal(list.last-index($alist, c), 3);
+        @include assert-equal(list.last-index($alist, z), null);
+    }
+    @include it('prepend():prepend a value to list.') {
+        @include assert-equal(list.prepend($alist, a), (a, a, b, c, d));
+        @include assert-equal(list.prepend($alist, now i know my a), ((now i know my a), a, b, c, d));
+    }
+    @include it('insert-at():insert a value to list at n-th index position.') {
+        @include assert-equal(list.insert-at($alist, 1, k), (k, a, b, c, d));
+        @include assert-equal(list.insert-at($alist, 3, x), (a, b, x, c, d));
+        @include assert-equal(list.insert-at($alist, -1, z), (a, b, c, z, d));
+        @include assert-equal(list.insert-at($alist, 4, z), (a, b, c, z, d));
+    }
+    @include it('remove-at():remove a value from list at n-th index position.') {
+        @include assert-equal(list.remove-at($alist, 1), (b, c, d));
+        @include assert-equal(list.remove-at($alist, 3), (a, b, d));
+        @include assert-equal(list.remove-at($alist, -1), (a, b, c));
+        @include assert-equal(list.remove-at($alist, 4), (a, b, c));
+    }
+    @include it('replace():replace values in list.') {
+        $inlist: (a, b, r, a, (c a), (d a), b, r, a);
+        $outlist1: (u, b, r, u, (c a), (d a), b, r, u);
+        $outlist2: (u, b, r, u, (c u), (d u), b, r, u);
+        @include assert-equal(list.replace($inlist, a, u), $outlist1);
+        @include assert-equal(list.replace($inlist, a, u, true), $outlist2);
+    }
+    @include it('remove():remove values from list.') {
+        $inlist: (a, b, r, a, (c a), (d a), b, r, a);
+        $outlist3: (b, r, (c a), (d a), b, r);
+        $outlist4: (b, r, (c), (d), b, r);
+        @include assert-equal(list.remove($inlist, a), $outlist3);
+        @include assert-equal(list.remove($inlist, a, true), $outlist4, $inspect: true);
+    }
+    @include it('slice():slice list.') {
+        @include assert-equal(list.slice($alist, 2), (b, c, d));
+        @include assert-equal(list.slice($alist, 2, 3), (b, c));
+        @include assert-equal(list.slice($alist, -3, -2), (b, c));
+        @include assert-equal(list.slice($alist, -2), (c, d));
+    }
+    @include it('reverse():rearrange elements in reverse order.') {
+        @include assert-equal(list.reverse(a b c d), (d c b a));
+        @include assert-equal(list.reverse(a b (x y) c d (v w)), ((v w) d c (x y) b a));
+        @include assert-equal(list.reverse(a b (x y) c d (v w), true), ((w v) d c (y x) b a));
+    }
+    @include it('to-string():convert list into string combining all the entries.') {
+        @include assert-equal(list.to-string($alist), '(a b c d)');
+        @include assert-equal(list.to-string($alist, $flatten: true), 'a b c d');
+        @include assert-equal(list.to-string($alist, '-'), '(a-b-c-d)');
+        @include assert-equal(list.to-string(("a", "b"), '-'), '(a-b)');
+        @include assert-equal(list.to-string(("a", "b"), '-', false), '("a"-"b")');
+        @include assert-equal(list.to-string((a b), '-'), '(a-b)');
+        @include assert-equal(list.to-string((a b (c d) e), '-'), '(a-b-(c-d)-e)');
+        @include assert-equal(list.to-string((a b (c d) e), '-', $flatten: true), 'a-b-c-d-e');
+    }
+    @include it('rotate():rotate the list.') {
+        @include assert-equal(list.rotate(a b c d), (d a b c));
+        @include assert-equal(list.rotate(a b c d, 2), (c d a b));
+        @include assert-equal(list.rotate(a b c d, -1), (b c d a));
+        @include assert-equal(list.rotate(a b c d, 10), (c d a b));
+        @include assert-equal(list.rotate(c d a b, -10), (a b c d));
+    }
+    @include it('trim():remove all the null values.') {
+        @include assert-equal(list.trim(a null c d), (a c d));
+        @include assert-equal(list.trim(a null (c null x) d), (a (c null x) d));
+        @include assert-equal(list.trim(a null (c null x) d, true), (a (c x) d));
+    }
+    @include it('contains():check if list contains value(s).') {
+        @include assert-equal(list.contains((a b c d), a), true);
+        @include assert-equal(list.contains((a b c d), x), false);
+        @include assert-equal(list.contains((a b c d), b, c), true);
+        @include assert-equal(list.contains((a b c d), b, c, e), false);
+    }
+}

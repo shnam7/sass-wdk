@@ -1,6 +1,8 @@
+# custom
+/__*
+
 .vscode
 .sass-cache
 node_modules
-__*
 *.map
 *.css

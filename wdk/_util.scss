@@ -1,0 +1,22 @@
+//=========================================================
+//
+//  @package sass-wdk
+//
+//  @module mixins/util
+//  @description Unit manipulation functions
+//
+//=========================================================
+
+@use 'sass:math';
+
+/**
+ *  Remove unit from a number
+ *  @param {number} $num - Number to remove unit from
+ *  @returns {number} Unitless number
+ */
+@function strip-unit($num) {
+    @if type-of($num) == 'number' {
+        @return math.div($num, ($num * 0 + 1));
+    }
+    @return $num;
+}

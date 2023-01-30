@@ -1,19 +1,23 @@
-//=========================================================
-//
-//  @package sass-wdk
-//
-//  @module constants/fonts
-//  @description Assorted web font collection
-//
-//=========================================================
+/**
+ *=========================================================
+ *
+ *    @package sass-wdk
+ *
+ *    @module constants/fonts
+ *    @description Assorted web font collection
+ *
+ *=========================================================
+ */
 
-@forward "constants/font.constants";
-@use "constants/font.constants" as *;
-@use "math";
+@forward 'constants/font.constants';
+@use 'constants/font.constants' as *;
+@use 'util' as *;
+@use 'sass:math';
 
 //-----------------------------------------------------------------------------
 //  Variables (Configurables)
 //-----------------------------------------------------------------------------
+
 //--- default fonts
 $sans:                       Arial,Helvetica,Verdana,sans-serif !default;
 $serif:                      Georgia,Times,Times New Roman,serif !default;
@@ -25,64 +29,148 @@ $heading:                   Montserrat,Roboto,Nanum Gothic,sans-serif !default;
 $code:                      $roboto-mono !default;
 
 //--- font scaling
-$size:                   14px !default;
-$scaler:                 1.25 !default;
-$down-scaler:            0.9 !default;
-$scale-up-unit:          0.5 !default;
-$scale-down-unit:        0.25 !default;
-$size-xxs:               1em * $down-scaler * $down-scaler * $down-scaler !default;
-$size-xs:                math.div($size-xxs, $down-scaler) !default;
-$size-sm:                math.div($size-xs, $down-scaler) !default;
-$size-md:                1em * $scaler !default;
-$size-lg:                $size-md * $scaler !default;
-$size-xl:                $size-lg * $scaler !default;
-$size-xxl:               $size-xl * $scaler !default;
-$size-xxxl:              $size-xxl * $scaler !default;
+$size-base:                 14px !default;
+$scaler:                    1.25 !default;
+$down-scaler:               0.9 !default;
+$scale-up-unit:             0.5 !default;
+$scale-down-unit:           0.25 !default;
+$size-xxs:                  1em * $down-scaler * $down-scaler * $down-scaler !default;
+$size-xs:                   math.div($size-xxs, $down-scaler) !default;
+$size-sm:                   math.div($size-xs, $down-scaler) !default;
+$size-md:                   1em * $scaler !default;
+$size-lg:                   $size-md * $scaler !default;
+$size-xl:                   $size-lg * $scaler !default;
+$size-xxl:                  $size-xl * $scaler !default;
+$size-xxxl:                 $size-xxl * $scaler !default;
 
 //--- line height
-$line-height:                 1.5 !default;
+$line-height:               1.5 !default;
 
 //--- spacing
-$space-unit:                  1em !default;
-
+$spacing-unit:              1em !default;
 
 //-----------------------------------------------------------------------------
 //  Functions
 //-----------------------------------------------------------------------------
-//
-//  Scale font size
-//  @param {number} $scale-factor - # of scaling. if negative, scale down
-//  @returns {FontSize} Scaled font size
-//
-@function scale($scale-index, $scaler:$scaler,
-    $down-scaler:$down-scaler, $base-font-size:1em)
-{
-    $font-size: $base-font-size;
-
-    @if $scale-index > 0 {
-        $font-size: math.pow($scaler, $scale-index) * $base-font-size;
-
-        // @for $i from 0 to $scale-factor {
-        //     $font-size: calc(#{$font-size} * #{$scaler});
-        // }
+/**
+ *  Scale font size
+ *  @param {number} [$font-size=1em] - base font size for scaling.
+ *  @param {number} [$scale-factor=1] - # of scaling with unit-scaling-factor. down scaling if < 0.
+ *  @param {number} [$scaler=$scaler] - scaling-up unit factor.
+ *  @param {number} [$down-scaler=$down-scaler] - scaling-down unit factor.
+ *  @returns {number} Scaled font size
+ */
+@function scale($font-size: 1em, $scale-factor: 1, $scaler: $scaler, $down-scaler: $down-scaler) {
+    @if $scale-factor > 0 {
+        $font-size: math.pow($scaler, $scale-factor) * $font-size;
+    } @else if $scale-factor < 0 {
+        $font-size: math.pow($down-scaler, $scale-factor * -1) * $font-size;
     }
-
-    @else if $scale-index < 0 {
-        $font-size: math.pow($down-scaler, $scale-index * -1) * $base-font-size;
-        // @for $i from 0 to $scale-factor {
-        //     $font-size: calc(#{$font-size} * var(--text-down-scaler, 0.9));
-        // }
-    }
-
     @return $font-size;
 }
 
-//
-//  Spacing calculator
-//  @param {number} $count - # of spacing units
-//  @param {Size} [$space-unit=$w-font-spacing-unit] - Unit spacing size
-//
-@function spacing($count, $unit: $space-unit)
-{
+/**
+ *  Spacing calculator
+ *  @param {number} $count - # of spacing units
+ *  @param {number} [$spacing-unit=$wspacing-unit] - Unit spacing size
+ */
+@function spacing($count, $unit: $spacing-unit) {
     @return $unit * $count;
+}
+
+/**
+ *  Internal function.
+ *  Convert unit from px to rem for single primitive argument
+ *  @param {number} $value - Number in px unit
+ *  @param {number} $base - Base font size
+ *  @returns {number} Value in rem unit
+ */
+@function _px2rem($value, $base) {
+    @if $value == null {
+        @return 0rem;
+    }
+    @if unit($value) == 'rem' {
+        @return $value;
+    }
+    @if unit($value) != 'px' {
+        @warn "[font._px2rem]: $value #{$value} is not in pixel unit.";
+    }
+
+    $value: math.div(strip-unit($value), strip-unit($base)) * 1rem;
+    @if $value==0rem {
+        $value: 0;
+    }
+    @return $value;
+}
+
+/**
+ *  Internal function.
+ *  Convert unit from rem to px for single primitive argument
+ *  @param {number} $value - Number in rem unit
+ *  @param {number} $base - Base font size
+ *  @returns {number} Value in px unit
+ */
+@function _rem2px($value, $base) {
+    @if $value == null {
+        @return 0px;
+    }
+    @if unit($value) == 'px' {
+        @return $value;
+    }
+    @if unit($value) != 'rem' {
+        @warn "[font._rem2px]: $value #{$value} is not in rem unit.";
+    }
+
+    $value: strip-unit($value) * strip-unit($base) * 1px;
+    @if $value==0px {
+        $value: 0;
+    }
+    @return $value;
+}
+
+/**
+ *  Convert px values to rem values (single or multi in list)
+ *  @param {number|List[number]} $value - Single number in px, or List of numbers in px
+ *  @param {number} $base - Base font size in px or percentage of global font size
+ *  @return {number|List[number]} Values in rem unit
+ */
+
+@function rem($values, $base: $size-base) {
+    $rem-values: ();
+    $count: length($values);
+
+    @if unit($base) == '%' {
+        $base: ($base / 100%) * $size-base;
+    }
+    @if $count==1 {
+        @return _px2rem($values, $base);
+    }
+
+    @for $i from 1 through $count {
+        $rem-values: append($rem-values, _px2rem(nth($values, $i), $base));
+    }
+    @return $rem-values;
+}
+
+/**
+ *  Convert rem values to px values (single or multi in list)
+ *  @param {number|List[number]} $value - Single number in rem, or List of numbers in rem
+ *  @param {number} $base - Base font size in px or percentage of global font size
+ *  @return {number|List[number]} Values in px unit
+ */
+@function px($values, $base: $size-base) {
+    $px-values: ();
+    $count: length($values);
+
+    @if unit($base) == '%' {
+        $base: ($base / 100%) * $size-base;
+    }
+    @if $count==1 {
+        @return _rem2px($values, $base);
+    }
+
+    @for $i from 1 through $count {
+        $px-values: append($px-values, _rem2px(nth($values, $i), $base));
+    }
+    @return $px-values;
 }

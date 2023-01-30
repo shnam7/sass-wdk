@@ -9,46 +9,77 @@
 
 @forward "sass:string";
 
-@use "sass:string" as str;
+@use "sass:string";
 @use "sass:list";
 @use "sass:math";
 
-//
-//  Get a character at '$index' in '$string'
-//  @param {string} $string - Target string
-//  @param {number} $index - Position counted from 1
-//  @returns {string} - Character at position $index
-//
+/**
+ *  Get a character at '$index' in '$string'
+ *  @param {string} $string - Target string
+ *  @param {number} $index - Position counted from 1
+ *  @returns {string} - Character at position $index
+ */
 @function char-at($string, $index) {
-    @return str.slice($string, $index, $index);
+    @return string.slice($string, $index, $index);
 }
 
-//
-//  Replace `$search` with `$replace` in `$string`
-//  @param {string} $string - Initial string
-//  @param {string} $search - Substring to replace
-//  @param {string} [$replace=''] - New value
-//  @returns {string} - Updated string
-//
-//  @ref https://css-tricks.com/snippets/sass/str-replace-function/
-//
+/**
+ *  Check if string starts with given string
+ *  @param
+ */
+@function starts-with($string, $search-str) {
+    $len: string.length($search-str);
+    @if $len > string.length($string) {
+        @return false;
+    }
+    @return string.slice($string, 1, $len) == $search-str;
+}
+
+/**
+ *  Check if string ends with given string
+ *  @param
+ */
+@function ends-with($string, $search-str) {
+    $len: string.length($search-str);
+    @if $len > string.length($string) {
+        @return false;
+    }
+    @return string.slice($string, -$len, -1) == $search-str;
+}
+
+/**
+ *  Check if string contains given string
+ *  @param
+ */
+@function contains($string, $search-str) {
+    @return string.index($string, $search-str) != null;
+}
+
+/**
+ *  Replace all occurrence of $search with $replace.
+ *  @param {string} $string - Target string
+ *  @param {string} $search - Search string
+ *  @param {string} [$replace=''] - New value to replace
+ *  @returns {string} - Updated string
+ *
+ *  @ref https://css-tricks.com/snippets/sass/str-replace-function/
+ */
 @function replace($string, $search, $replace:'') {
-    $index: str.index($string, $search);
+    $index: string.index($string, $search);
 
     @if $index {
-        @return str.slice($string, 1, $index - 1) + $replace
-            + replace(str.slice($string, $index + str.length($search)), $search, $replace);
+        @return string.slice($string, 1, $index - 1) + $replace
+            + replace(string.slice($string, $index + string.length($search)), $search, $replace);
     }
-
     @return $string;
 }
 
-//
-//  Do replace() for all the items in $replace-map
-//  @param {string} $string - String to be operated
-//  @param {Map} $replace-map - list of key-value pairs for str-replace()
-//  @returns {string} Updated string
-//
+/**
+ *  Do replace() for all the items in $replace-map
+ *  @param {string} $string - String to be operated
+ *  @param {map} $replace-map - list of key-value pairs for str-replace()
+ *  @returns {string} Updated string
+ */
 @function replace-batch($string, $replace-map) {
     @each $token-item in $replace-map {
         $key: list.nth($token-item, 1);
@@ -60,23 +91,23 @@
     @return $string;
 }
 
-//
-//  Converts string to list with characters in '$separators' as delimiters
-//  @param {string} $string - target string
-//  @param {string} $separators - List of separator characters. ex) ':,;'
-//  @param {string} [$new-separator=null] - String to replace each separator chars
-//  @param {number} [$max-count=0] - Maximum count of replacement. zero or negative value means limitless
-//  @return {List} - List of splitted string
-//
-//  Examples:
-//  str-split('li.myclass:hover', ':') --> ('li.myclass', ':hover')
-//  str-split('li.myclass:hover', ':', '') --> ('li.myclass', 'hover')
-//  str-split('li.myclass:hover', '.:') --> ('li', '.myclass', ':hover')
-//  str-split('li.myclass:hover', '.:', '', 1) --> ('li', 'myclass:hover')
-//
+/**
+ *  Converts string to a list of strings with chars in $separators as delimiters
+ *  @param {string} $string - target string
+ *  @param {string} $separators - List of separator characters. ex) ':,;'
+ *  @param {string} [$new-separator=null] - String to replace each separator chars
+ *  @param {number} [$max-count=0] - Maximum count of replacement. zero or negative value means limitless
+ *  @return {List} - List of splitted string
+ *
+ *  Examples:
+ *  str-split('li.myclass:hover', ':') --> ('li.myclass', ':hover')
+ *  str-split('li.myclass:hover', ':', '') --> ('li.myclass', 'hover')
+ *  str-split('li.myclass:hover', '.:') --> ('li', '.myclass', ':hover')
+ *  str-split('li.myclass:hover', '.:', '', 1) --> ('li', 'myclass:hover')
+ */
 @function split($string, $separators:'', $new-separator:null, $max-count:0) {
     $result: ();
-    $slen: str.length($string);
+    $slen: string.length($string);
     $max-count: if($max-count<=0, $slen, math.min($max-count, $slen));
 
     // str-slice has bug if string length is 1. this block fixes the problem from that bug
@@ -89,7 +120,7 @@
 
     @for $index from 1 through $slen {
         @if $count < $max-count {
-            @if str.length($separators)==0 {
+            @if string.length($separators)==0 {
                 // if no separator is set, then split each characters
                 $token: char-at($string, $index);
                 $result: list.append($result, if($count==0, $token,
@@ -98,9 +129,9 @@
                 $start: $index + 1;
             }
 
-            @else if str.index($separators, char-at($string, $index))
+            @else if string.index($separators, char-at($string, $index))
                     /* and $index>$start */ {
-                $token: if($start==$index, '', str.slice($string, $start, $index - 1));
+                $token: if($start==$index, '', string.slice($string, $start, $index - 1));
                 $start: if($new-separator==null, $index, $index + 1);
                 $result: list.append($result, if($count==0, $token,
                     if($new-separator==null, $token, $new-separator+$token)));
@@ -111,7 +142,7 @@
 
     @if $start<=$slen {
         // $max-count was hit
-        $token: str.slice($string, $start);
+        $token: string.slice($string, $start);
         $result: list.append($result, if($count==0, $token,
             if($new-separator==null, $token, $new-separator+$token)));
         //@debug last-token, $token, $count;
@@ -120,117 +151,101 @@
     @return $result;
 }
 
-//
-//  Trim requested characters
-//  @param {string} $string - String to be operated
-//  @param {string} $all - Option: left, right, both, all
-//  @param {string} [$chars=' '] - Characters to trim
-//
-//  Examples:
-//  trim(' a bc ') --> 'abc'
-//  trim(' a bc ', left) --> 'a bc '
-//  trim(' a bc ', right) --> ' a bc'
-//  trim(' a bc ', both) --> 'a bc'
-//  trim(' a bc ', all) --> 'abc'
-//
+/**
+ *  Trim the characters in $chars
+ *  @param {string} $string - String to be operated
+ *  @param {string} $all - Option: left, right, both, all
+ *  @param {string} [$chars=' '] - Characters to trim
+ *
+ *  Examples:
+ *  trim(' a bc ') --> 'abc'
+ *  trim(' a bc ', left) --> 'a bc '
+ *  trim(' a bc ', right) --> ' a bc'
+ *  trim(' a bc ', both) --> 'a bc'
+ *  trim(' a bc ', all) --> 'abc'
+ */
 @function trim($string, $opt:all, $chars:' ') {
-    $slen: str.length($string);
+    $slen: string.length($string);
 
     @if $slen==0 {
         @return $string;
     }
-
     @if $opt==all {
         @each $c in split($chars) {
             $string: replace($string, $c, '');
         }
         @return $string;
     }
-
     @if $opt==left or $opt==both {
-        @while str.length($string)>0 and str.index($chars, char-at($string, 1)) {
-            $string: str.slice($string, 2);
+        @while string.length($string)>0 and string.index($chars, char-at($string, 1)) {
+            $string: string.slice($string, 2);
         }
     }
-
     @if $opt==right or $opt==both {
-        @while str.length($string)>0 and str.index($chars, char-at($string, -1)) {
-            $string: str.slice($string, 0, -2);
+        @while string.length($string)>0 and string.index($chars, char-at($string, -1)) {
+            $string: string.slice($string, 0, -2);
         }
     }
-
     @return $string;
 }
 
-//
-//  Split strings to tokens, which start with $open and end with $close characters
-//  if $open or $close is empty, it works the same as str-split()
-//  @param {string} $string - String to be operated
-//  @param {string} [$open=''] - String consists of opening characters of delimiters
-//  @param {string} [$close=' ,'] - String consists of Ending characters of delimiers
-//  @param {bool} [$trim-delimiters=false] - Remove delimiters if true
-//  @param {number} [$max-count=0] - Maximum count of tokenizing. zero or negative value means limitless
-//
-//  Example:
-//    str-tokenize('{Var1}{Var2}Content{Var3}', '{', '}') --> "{Var1}" "{Var2}" "Content" "{Var3}"
-//    str-tokenize('{Var1}{Var2}Content{Var3}', '{', '}', true) --> "Var1" "Var2" "Content" "Var3"
-//
-@function tokenize($string, $open:'', $close:' ,', $trim-delimiters:false, $max-count:0) {
-    $result: ();
-    $list: split($string, $open+$close, null, $max-count);
+/**
+ *  Split strings to tokens, which start with $open and end with $close characters
+ *  if $open or $close is empty, it works the same as split()
+ *  @param {string} $string - String to be operated
+ *  @param {string} [$open=''] - String consists of opening characters of delimiters
+ *  @param {string} [$close=' ,'] - String consists of Ending characters of delimiers
+ *  @param {bool} [$trim-delimiters=false] - Remove delimiters if true
+ *  @param {number} [$max-count=0] - Maximum count of tokenizing. zero or negative value means limitless
+ *
+ *  Example:
+ *
+ */
+// @function tokenize($string, $open:'', $close:' ,', $trim-delimiters:false, $max-count:0) {
+//     $result: ();
+//     $list: split($string, $open+$close, null, $max-count);
 
-    //@debug str-split=$list;
-    @if $open==''or $close=='' {
-        @return $list;
-    }
+//     //@debug str-split=$list;
+//     @if $open==''or $close=='' {
+//         @return split($string, $open+$close, null, $max-count);;
+//     }
 
-    $prev: '';
-    $count: 0;
+//     $prev: '';
+//     $count: 0;
 
-    @for $i from 1 through length($list) {
-        $item: list.nth($list, $i);
+//     @for $i from 1 through length($list) {
+//         $item: list.nth($list, $i);
 
-        @if str.index($open, char-at($item, 1)) {
-            // item with opening delimiter
-            $prev: if($trim-delimiters, str.slice($item, 2), $item);
-        }
+//         @if string.index($open, char-at($item, 1)) {
+//             // item with opening delimiter
+//             $prev: if($trim-delimiters, string.slice($item, 2), $item);
+//         }
+//         @else if string.index($close, char-at($item, 1)) {
+//             // item with closing delimiter
+//             @if $prev=='' {
+//                 @error 'str-tokenizer: opening delimiter is not found: '$prev;
+//             }
+//             @if not $trim-delimiters {
+//                 $prev: $prev + char-at($item, 1);
+//             }
+//             $result: list.append($result, $prev);
 
-        @else if str.index($close, char-at($item, 1)) {
-
-            // item with closing delimiter
-            @if $prev=='' {
-                @error 'str-tokenizer: opening delimiter is not found: '$prev;
-            }
-
-            @if not $trim-delimiters {
-                $prev: $prev + char-at($item, 1);
-            }
-
-            $result: list.append($result, $prev);
-
-            @if str.length($item)>=2 {
-                $result: list.append($result, str.slice($item, 2));
-            }
-
-            $prev:'';
-        }
-
-        @else {
-
-            // normal element (outside of open-close pair)
-            @if $prev !='' {
-                @error 'str-tokenizer: closing delimiter is not found: '+$prev;
-            }
-
-            $result: list.append($result, $item);
-        }
-
-        //@debug count=$i item=$item prev=$prev result=$result;
-    }
-
-    @if $prev !='' {
-        $result: list.append($result, $prev);
-    }
-
-    @return $result;
-}
+//             @if string.length($item)>=2 {
+//                 $result: list.append($result, string.slice($item, 2));
+//             }
+//             $prev:'';
+//         }
+//         @else {
+//             // normal element (outside of open-close pair)
+//             @if $prev !='' {
+//                 @error 'str-tokenizer: closing delimiter is not found: '+$prev;
+//             }
+//             $result: list.append($result, $item);
+//         }
+//         //@debug count=$i item=$item prev=$prev result=$result;
+//     }
+//     @if $prev !='' {
+//         $result: list.append($result, $prev);
+//     }
+//     @return $result;
+// }

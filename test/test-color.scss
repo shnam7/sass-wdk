@@ -1,0 +1,40 @@
+@use '../node_modules/sass-true' as *;
+@use 'wdk/color';
+
+@include describe('[color] module test') {
+    @include it('yiq():calculate YIQ value.') {
+        @include assert-equal(color.yiq(#444), 0.265625);
+        @include assert-equal(color.yiq(#eee), 0.9296875);
+    }
+    @include it('yiq-color():choose black or white color which has higher constrast.') {
+        @include assert-equal(color.yiq-color(color.gray(30%)), #eee);
+        @include assert-equal(color.yiq-color(color.gray(61%)), #444);
+        @include assert-equal(color.yiq-color(color.gray(90%)), #444);
+    }
+    @include it('tint():mix a color with whilte.') {
+        @include assert-equal(color.tint(blue, 30%), #4d4dff);
+        @include assert-equal(color.tint(blue, 50%), #8080ff);
+        @include assert-equal(color.tint(blue, 70%), #b3b3ff);
+    }
+    @include it('shade():mix a color with black.') {
+        @include assert-equal(color.shade(blue, 30%), #0000b3);
+        @include assert-equal(color.shade(blue, 50%), navy);
+        @include assert-equal(color.shade(blue, 70%), #00004d);
+    }
+    @include it('gray():gray scale color.') {
+        @include assert-equal(color.gray(30%), #4d4d4d);
+        @include assert-equal(color.gray(50%), gray);
+        @include assert-equal(color.gray(70%), #b3b3b3);
+        @include assert-equal(color.gray(70%, 0.5), rgba(179, 179, 179, 0.5));
+    }
+    @include it('smart-scale():scale a color to be lighter if it is light, or darker if it is dark.') {
+        @include assert-equal(color.smart-scale(blue, 30%), #0000b3);
+        @include assert-equal(color.smart-scale(blue, 50%), navy);
+        @include assert-equal(color.smart-scale(blue, 70%), #00004d);
+        @include assert-equal(color.smart-scale(blue, 70%, 60%), #b3b3ff);
+    }
+    @include it('gradient():make linear gradient with $color in the center of gradient.') {
+        @include assert-equal(color.gradient(blue, 10%), linear-gradient(to bottom, #0d0dff, #0000f2));
+        @include assert-equal(color.gradient(green, 10, top), linear-gradient(to top, #0d860d, #007a00));
+    }
+}

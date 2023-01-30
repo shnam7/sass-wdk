@@ -7,10 +7,10 @@
 //
 //=========================================================
 
-@forward "../constants/mq.constants";
-@use "../constants/mq.constants" as *;
-@use "../unit";
-@use "sass:map";
+@forward '../constants/mq.constants';
+@use '../constants/mq.constants' as *;
+@use '../util' as *;
+@use 'sass:map';
 
 //-----------------------------------------------------------------------------
 //  Internals
@@ -48,34 +48,57 @@
     @if $length>=2 {
         $min: map-get($breakpoints, nth($keys, 1));
 
-        @if unit.strip-unit($min) != 0 {
+        @if strip-unit($min) != 0 {
             @error 'First element of the breakpoint list should have zero value';
         }
 
         $name: nth($keys, 1);
         $max: map-get($breakpoints, nth($keys, 2));
-        $result: ($name: '(max-width:'+ ($max - 1) + ')');
+        $result: (
+            $name:
+                '(max-width:'+
+                (
+                    $max - 1,
+                ) +
+                ')',
+        );
 
         @for $i from 2 to $length {
             $name: nth($keys, $i);
             $min: $max;
-            $max: map-get($breakpoints, nth($keys, $i+1));
-            $result: map-merge($result, ($name: '(min-width:'+ $min + ')'));
-            $result: map-merge($result, ($name+'-only': '(min-width:'+ $min + ') and (max-width:'+ ($max - 1) + ')'));
-            $result: map-merge($result, ($name+'-down': '(max-width:'+ $max + ')'));
+            $max: map-get($breakpoints, nth($keys, $i + 1));
+            $result: map-merge(
+                $result,
+                (
+                    $name: '(min-width:' + $min + ')',
+                )
+            );
+            $result: map-merge(
+                $result,
+                ($name + '-only': '(min-width:' + $min + ') and (max-width:'+ ($max - 1) + ')')
+            );
+            $result: map-merge($result, ($name + '-down': '(max-width:' + $max + ')'));
         }
 
         $name: nth($keys, $length);
         $max: map-get($breakpoints, nth($keys, $length));
-        $result: map-merge($result, ($name: '(min-width:'+ $max + ')'));
-    }
-
-    @else if $length==1 {
+        $result: map-merge(
+            $result,
+            (
+                $name: '(min-width:' + $max + ')',
+            )
+        );
+    } @else if $length==1 {
         $name: nth($keys, 1);
         $val: map-get($breakpoints, nth($keys, 1));
 
         @if $val>0 {
-            $result: map-merge($result, ($name: '(min-width:'+ $val + ')'));
+            $result: map-merge(
+                $result,
+                (
+                    $name: '(min-width:' + $val + ')',
+                )
+            );
             //$result: map-merge($result, ($name+'-down': '(max-width:' + ($val - 1) + ')'));
         }
     }
@@ -96,25 +119,22 @@
 $__breakpoints-default: $w-breakpoints-basic !default;
 $__mq-set: __mq-set-of($__breakpoints-default) !default;
 
-
 //-----------------------------------------------------------------------------
 //  Functions
 //-----------------------------------------------------------------------------
 //
 //  Returns currently active mq-set
 //
-@function current() {
+@function mq-current_set() {
     @return $__mq-set;
 }
 
 //
 //  Returns the list of media query names of current mq-set
 //
-@function query-names() {
+@function mq-query-names() {
     @return map-keys($__mq-set);
 }
-
-
 
 //-----------------------------------------------------------------------------
 //  Mixin's
@@ -145,13 +165,13 @@ $__mq-set: __mq-set-of($__breakpoints-default) !default;
 //    @include w-media(medium-only) {...} --> "(min-width:768px) and (max-width:959px)"
 //    @include w-media(medium-down) {...} --> "(max-width:960px)"
 //
-@mixin media($name, $media-type:null) {
+@mixin media($name, $media-type: null) {
     @if __mq-invalid($name) {
         @error '[_breakpoint.scss:w-media]: #{$name} is not in media-query list.';
         @error '[_breakpoint.scss:w-media]: mq-set: #{$__mq-set}';
     }
 
-    $media-type: if($media-type, $media-type + " and ", "");
+    $media-type: if($media-type, $media-type + ' and ', '');
 
     @media #{$media-type + map.get($__mq-set, $name)} {
         @content;

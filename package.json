@@ -1,37 +1,42 @@
 {
-    "name": "sass-wdk",
-    "version": "1.1.2",
-    "description": "Sass web style development kit",
-    "main": "index.js",
-    "files": [
-        "wdk",
-        "_wdk.scss"
-    ],
-    "scripts": {
-        "build": "sass -I. --no-source-map test:__output",
-        "watch": "sass -w -I. --no-source-map test:__output",
-        "clean": "rimraf __output",
-        "prepare-to-commit": "npm run build && npm run clean",
-        "npm-dry-run": "npm publish --dry-run"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/shnam7/sass-wdk.git"
-    },
-    "keywords": [
-        "sass",
-        "scss",
-        "css",
-        "library"
-    ],
-    "author": "Robin Soo-hyuk Nam",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/shnam7/sass-wdk/issues"
-    },
-    "homepage": "https://github.com/shnam7/sass-wdk#readme",
-    "devDependencies": {
-        "rimraf": "^4.0.4",
-        "sass": "^1.57.1"
-    }
+  "name": "sass-wdk",
+  "version": "1.1.2",
+  "description": "Sass web style development kit",
+  "main": "index.js",
+  "files": [
+    "wdk",
+    "_wdk.scss"
+  ],
+  "scripts": {
+    "sass-build": "sass -I. --no-source-map --no-error-css test:__output",
+    "sass-watch": "sass -w -I. --no-source-map test:__output",
+    "clean": "rimraf __output",
+    "prepare-to-commit": "npm run build && npm run clean",
+    "npm-dry-run": "npm publish --dry-run",
+    "watch": "chokidar \"./{wdk,test}/**/*.scss\" -c \"npm run test\"",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shnam7/sass-wdk.git"
+  },
+  "keywords": [
+    "sass",
+    "scss",
+    "css",
+    "library"
+  ],
+  "author": "Robin Soo-hyuk Nam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shnam7/sass-wdk/issues"
+  },
+  "homepage": "https://github.com/shnam7/sass-wdk#readme",
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0",
+    "jest": "^29.4.1",
+    "rimraf": "^4.1.2",
+    "sass": "^1.57.1",
+    "sass-true": "^7.0.0"
+  }
 }

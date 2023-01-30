@@ -24,7 +24,6 @@
 //  svg-url($svg-image) --> url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300...
 //
 @function svg-url($svg, $fill-to-replace:null, $new-fill:null) {
-
     // Add missing namespace
     @if not str-index($svg, xmlns) {
         $svg: string.replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
