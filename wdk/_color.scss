@@ -12,6 +12,7 @@
 @use 'constants/color.constants' as *;
 @use 'util' as *;
 @use 'sass:math';
+@use 'sass:color';
 
 //-----------------------------------------------------------------------------
 //  Functions
@@ -47,7 +48,7 @@
  */
 @function tint($color, $percent: 5%) {
     $percent: strip-unit($percent) * 1%;
-    @return mix(#fff, $color, $percent);
+    @return color.mix(#fff, $color, $percent);
 }
 
 /**
@@ -57,7 +58,7 @@
  */
 @function shade($color, $percent: 5%) {
     $percent: strip-unit($percent) * 1%;
-    @return mix(#000, $color, $percent);
+    @return color.mix(#000, $color, $percent);
 }
 
 /**
@@ -68,7 +69,7 @@
  */
 @function gray($percent, $alpha: null) {
     $percent: strip-unit($percent) * 1%;
-    $val: lighten(#000, $percent);
+    $val: color.scale(#000, $lightness: $percent);
     @return if($alpha, rgba($val, $alpha), $val);
 }
 
@@ -82,10 +83,10 @@
  *  @notes Source from foundation-site (http://foundation.zurb.com/)
  */
 @function smart-scale($color, $scale: 5%, $threshold: 40%) {
-    @if lightness($color) >$threshold {
+    @if color.lightness($color) > $threshold {
         $scale: -$scale;
     }
-    @return scale-color($color, $lightness: $scale);
+    @return color.scale($color, $lightness: $scale);
 }
 
 /**
