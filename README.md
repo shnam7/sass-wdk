@@ -14,13 +14,23 @@ npm install sass-wdk
 In your scss file, just import 'wdk'.
 
 ```scss
-@import "node_modules/sass-wdk/wdk";
+@use 'node_modules/sass-wdk/wdk';
 //...
 ```
 
 ## Documentation
 
 Not available yet. See the source codes comments for now.
+
+## Development
+
+Development environment is set using Jest unit test module.
+
+```bash
+pnpm run dev
+```
+
+If changing \*.scss test file doesnot trigger test rerun, then press 'a' in the jest watch mode.
 
 ## Credits
 

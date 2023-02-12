@@ -1,4 +1,4 @@
-@use '../node_modules/sass-true' as *;
+@use 'true' as *;
 @use 'wdk/map';
 
 $map1: (L40:(a1:1, b1:2), L41:(d1:1, e1:2), x:1);
