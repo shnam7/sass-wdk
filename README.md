@@ -1,7 +1,34 @@
 # Sass WDK - Sass Web Development Kit
 
 Sass programming library extension for web style developers.
-Importing any part of this library will not generate any CSS output.
+Importing any part of this library will not generate any CSS output. It just provides functions and mixins helping sass programming.
+
+Modules included:
+
+* Constants
+    - color.constants: assorted color names
+    - font.constants: assorted font names
+    - mq.constants: assorted media query names
+    - z-index: z-index constants
+
+* Fuction moidules
+    - color: color handling functions
+    - font: font handling functions
+    - string: string handling functions
+    - list: list data structure
+    - map: map data structure
+    - reg: configuration data handling, registry model setting and getting data with path name.
+    - type: sass type conversion functions
+    - util: misc functions
+
+* Mixins modules for UI
+    - border: mixins for drawing borders
+    - media-query: mixins for handling media qqueries
+    - shape: mixins for drawing shapes such as circle, pattern, hamberger bar, etc.
+    - misc: miscellaneus mixins inclding clearfix, align, visbility control, etc.
+    - svg: mixins to handle svg handling
+    - theme: mxins for handling themes
+
 
 ## Installation
 
@@ -30,7 +57,7 @@ Development environment is set using Jest unit test module.
 pnpm run dev
 ```
 
-If changing \*.scss test file doesnot trigger test rerun, then press 'a' in the jest watch mode.
+If changing \*.scss test file does not trigger test rerun, then press 'a' in the jest watch mode.
 
 ## Credits
 

@@ -9,17 +9,17 @@
 @use "../color";
 
 //--- internals
-$__key: 'theme';
+$key: 'theme';
 @mixin _scv($path, $value, $is-default) { @include reg.set($__conf, $path, $value, $is-default); }
-@mixin _ssv($path, $value, $is-default) { @include reg.ssv($__key, $path, $value, $is-default); }
+@mixin _ssv($path, $value, $is-default) { @include reg.ssv($key, $path, $value, $is-default); }
 @function _gcv($path, $default:null) {  @return reg.get($__conf, $path, $default); }
-@function _gsv($path, $default:null) {  @return reg.gsv($__key, $path, $default); }
+@function _gsv($path, $default:null) {  @return reg.gsv($key, $path, $default); }
 
 
 //-----------------------------------------------
 //  Config: global defaults
 //-----------------------------------------------
-@include reg.ssv($__key, 'color/scheme', (
+@include reg.ssv($key, 'color/scheme', (
                             primary: color.$navy-blue,
                             secondary: color.$raven,
                             success: color.$chateau-green,
@@ -27,11 +27,11 @@ $__key: 'theme';
                             warning: color.$amber,
                             danger: color.$amaranth
                             ), true);
-@include reg.ssv($__key, 'color/fg', null, true);
-@include reg.ssv($__key, 'color/bg', null, true);
-@include reg.ssv($__key, 'color/link', null, true);
-@include reg.ssv($__key, 'color/link-hover', null, true);
-@include reg.ssv($__key, 'color/line', null, true);
+@include reg.ssv($key, 'color/fg', null, true);
+@include reg.ssv($key, 'color/bg', null, true);
+@include reg.ssv($key, 'color/link', null, true);
+@include reg.ssv($key, 'color/link-hover', null, true);
+@include reg.ssv($key, 'color/line', null, true);
 
 //--- color scheme
 // $primary:                   $navy-blue !default;
@@ -53,20 +53,20 @@ $__key: 'theme';
 // $link-visited:              $link !default;
 // $link-hover:                darken($link, 10%) !default;
 
-$__conf: reg.gsv($__key);
+$__conf: reg.gsv($key);
 
 
 //-----------------------------------------------
 //  Mixins
 //-----------------------------------------------
 @mixin config($config: null) {
-    $__conf: reg.merge(reg.gsv($__key), $config) !global;
+    $__conf: reg.merge(reg.gsv($key), $config) !global;
 }
 
 @mixin set-colors($fg:color.$bahama-blue, $bg:auto, $link:auto, $link-hover:null, $line:auto, $is-default:false) {
     @include _ssv('color/fg', $fg, $is-default);
-    @include _ssv('color/bg', if($bg==auto, transparentize($fg, 0.95), $bg), $is-default);
-    @include _ssv('color/link', if($link==auto, darken($fg, 10%), $link), $is-default);
+    @include _ssv('color/bg', if($bg==auto, color.scale($fg, $alpha: -95%), $bg), $is-default);
+    @include _ssv('color/link', if($link==auto, color.scale($fg, $lightness: -10%), $link), $is-default);
     @if $link-hover {
         @include _ssv('color/link-hover', color.$text-red, $is-default);
     }
