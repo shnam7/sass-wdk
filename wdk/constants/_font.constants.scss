@@ -20,50 +20,53 @@
 //    Multiple fonts can be loaded from fonts.googleapis.com using | between font names
 //    It's recommended to use <link> rather than @import for better performance using parallel file loading
 //-----------------------------------------------------------------------------
-$roboto:                     'Roboto',sans-serif !default;
-$roboto-url:                 '//fonts.googleapis.com/css?family=Roboto' !default;
+$roboto:                        'Roboto',sans-serif !default;
+$roboto-url:                    '//fonts.googleapis.com/css2?family=Roboto&display=swap' !default;
 
-$roboto-mono:                'Roboto mono',monospace !default;
-$roboto-url:                 '//fonts.googleapis.com/css?family=Roboto+Mono' !default;
+$playfair-display-coding:       'Playfair Display',serif !default;
+$playfair-display-coding-url:   '//fonts.googleapis.com/css2?family=Playfair+Display&display=swap' !default;
 
-$montserrat:                 'Montserrat',sans-serif !default;
-$montserrat-url:             '//fonts.googleapis.com/css?family=Montserrat' !default;
+$roboto-mono:                   'Roboto mono',monospace !default;
+$roboto-url:                    '//fonts.googleapis.com/css2?family=Roboto+Mono&display=swap' !default;
 
-$fira-sans:                  'Fira Sans',sans-serif !default;
-$fira-sans-url:              '//fonts.googleapis.com/css?family=Fira+Sans' !default;
+$montserrat:                    'Montserrat',sans-serif !default;
+$montserrat-url:                '//fonts.googleapis.com/css2?family=Montserrat&display=swap' !default;
 
-$open-sans:                  'Open Sans',sans-serif !default;
-$open-sans-url:              '//fonts.googleapis.com/css?family=Open+Sans' !default;
+$fira-sans:                     'Fira Sans',sans-serif !default;
+$fira-sans-url:                 '//fonts.googleapis.com/css2?family=Fira+Sans&display=swap' !default;
 
-$lato:                       'Lato',sans-serif !default;
-$lato-url:                   '//fonts.googleapis.com/css?family=Lato' !default;
+$open-sans:                     'Open Sans',sans-serif !default;
+$open-sans-url:                 '//fonts.googleapis.com/css2?family=Open+Sans&display=swap' !default;
 
-$noto-sans:                  'Noto Sans',sans-serif !default;
-$noto-sans-url:              '//fonts.googleapis.com/css?family=Noto+Sans' !default;
+$lato:                          'Lato',sans-serif !default;
+$lato-url:                      '//fonts.googleapis.com/css2?family=Lato&display=swap' !default;
 
-$noto-sans-kr:               'Noto Sans KR',sans-serif !default;
-$noto-sans-kr-url:           '//fonts.googleapis.com/css?family=Noto+Sans+KR' !default;
+$noto-sans:                     'Noto Sans',sans-serif !default;
+$noto-sans-url:                 '//fonts.googleapis.com/css2?family=Noto+Sans&display=swap' !default;
 
-$source-sans-pro:            'Nanum Gothic Coding',monospace !default;
-$source-sans-pro-uri:        '//fonts.googleapis.com/css?family=Source+Sans+Pro' !default;
+$noto-sans-kr:                  'Noto Sans KR',sans-serif !default;
+$noto-sans-kr-url:              '//fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap' !default;
 
-//--- nNanum fonts
-$nanum-gothic:               'Nanum Gothic',sans-serif !default;
-$nanum-gothic-url:           '//fonts.googleapis.com/css?family=Nanum+Gothic' !default;
+$source-sans-pro:               'Nanum Gothic Coding',monospace !default;
+$source-sans-pro-uri:           '//fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap' !default;
 
-$nanum-myeongjo:             'Nanum Myeongjo',serif !default;
-$nanum-myeongjo-url:         '//fonts.googleapis.com/css?family=Nanum+Myeongjo' !default;
+//--- Nanum fonts
+$nanum-gothic:                  'Nanum Gothic',sans-serif !default;
+$nanum-gothic-url:              '//fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap' !default;
 
-$nanum-pen-script:           'Nanum Pen Script',cursive !default;
-$nanum-pen-script-url:       '//fonts.googleapis.com/css?family=Nanum+Pen+Script' !default;
+$nanum-myeongjo:                'Nanum Myeongjo',serif !default;
+$nanum-myeongjo-url:            '//fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap' !default;
 
-$nanum-brush-script:         'Nanum Brush Script',cursive !default;
-$nanum-brush-script-url:     '//fonts.googleapis.com/css?family=Nanum+Brush+Script' !default;
+$nanum-pen-script:              'Nanum Pen Script',cursive !default;
+$nanum-pen-script-url:          '//fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap' !default;
 
-$nanum-gothic-coding:        'Nanum Gothic Coding',monospace !default;
-$nanum-gothic-coding-url:    '//fonts.googleapis.com/css?family=Nanum+Gothic+Coding' !default;
+$nanum-brush-script:            'Nanum Brush Script',cursive !default;
+$nanum-brush-script-url:        '//fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap' !default;
+
+$nanum-gothic-coding:           'Nanum Gothic Coding',monospace !default;
+$nanum-gothic-coding-url:       '//fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap' !default;
 
 
 //--- Online Webfonts: https://www.onlinewebfonts.com/
-$helvetica-neue-lt-pro:      'Helvetica+Neue+LT+Pro';
-$helvetica-neue-lt-pro-url:  '//db.onlinewebfonts.com/c/b9c4b6f31f1d4c4c9755b89abb981506?family=Helvetica+Neue+LT+Pro' !default;
+$helvetica-neue-lt-pro:         'Helvetica+Neue+LT+Pro';
+$helvetica-neue-lt-pro-url:     '//db.onlinewebfonts.com/c/b9c4b6f31f1d4c4c9755b89abb981506?family=Helvetica+Neue+LT+Pro&display=swap' !default;
