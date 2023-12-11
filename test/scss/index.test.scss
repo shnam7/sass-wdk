@@ -1,0 +1,7 @@
+@use 'true' as *;
+@use 'wdk';
+
+@include describe('index module test') {
+    @include it('@use \'wdk\' shoild work.') {
+    }
+}

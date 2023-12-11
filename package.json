@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "dev": "vitest",
+    "build": "pnpm run test",
     "test": "vitest run",
     "prepare-to-commit": "npm run test",
     "npm-dry-run": "npm publish --dry-run",
@@ -34,10 +35,10 @@
   },
   "homepage": "https://github.com/shnam7/sass-wdk#readme",
   "devDependencies": {
-    "@types/node": "^20.10.4",
+    "@types/node": "^20.11.17",
     "rimraf": "^5.0.5",
-    "sass": "^1.69.5",
-    "sass-true": "^7.0.0",
-    "vitest": "^1.0.4"
+    "sass": "^1.70.0",
+    "sass-true": "^7.0.1",
+    "vitest": "^1.2.2"
   }
 }
