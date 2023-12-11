@@ -1,5 +1,6 @@
-const path = require('path');
-const sassTrue = require('sass-true');
+import path from 'path';
+import sassTrue from 'sass-true';
+import { describe, it } from 'vitest';
 
 const sassModules = ['color', 'font', 'string', 'list', 'map', 'reg'];
 

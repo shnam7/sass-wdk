@@ -2,14 +2,14 @@
   "name": "sass-wdk",
   "version": "1.1.2",
   "description": "Sass web style development kit",
-  "main": "index.js",
+  "type": "module",
   "files": [
     "wdk",
     "_wdk.scss"
   ],
   "scripts": {
-    "dev": "jest --watch",
-    "test": "jest",
+    "dev": "vitest",
+    "test": "vitest run",
     "prepare-to-commit": "npm run test",
     "npm-dry-run": "npm publish --dry-run",
     "--sass-build": "sass -I. --no-source-map --no-error-css test:__output",
@@ -34,9 +34,10 @@
   },
   "homepage": "https://github.com/shnam7/sass-wdk#readme",
   "devDependencies": {
-    "jest": "^29.7.0",
+    "@types/node": "^20.10.4",
     "rimraf": "^5.0.5",
     "sass": "^1.69.5",
-    "sass-true": "^7.0.0"
+    "sass-true": "^7.0.0",
+    "vitest": "^1.0.4"
   }
 }
