@@ -21,11 +21,9 @@
     @if $where==null or $where==all {
         border: $width $style $color;
     }
-
     @else if $where==left or $where==top or $where==right or $where==bottom {
         border-#{$where}: $width $style $color;
     }
-
     @else if type-of($where)==list {
         @each $side in $where {
             border-#{$side}: $width $style $color;
@@ -46,11 +44,9 @@
     @if $where==null or $where==all {
         border-color: $color;
     }
-
     @else if $where==left or $where==top or $where==right or $where==bottom {
         border-#{$where}-color: $color;
     }
-
     @else if type-of($where)==list {
         @each $side in $where {
             border-#{$side}-color: $color;
@@ -71,12 +67,10 @@
     @if $where==null or $where==all {
         border-radius: $radius;
     }
-
     @else if $where==left or $where==right {
         border-top-#{$where}-radius: $radius;
         border-bottom-#{$where}-radius: $radius;
     }
-
     @else if $where==top or $where==bottom {
         border-#{$where}-left-radius: $radius;
         border-#{$where}-right-radius: $radius;
@@ -96,11 +90,9 @@
     @if $where==null or $where==all {
         border-style: $style;
     }
-
     @else if $where==left or $where==top or $where==right or $where==bottom {
         border-#{$where}-style: $style;
     }
-
     @else if type-of($where)==list {
         @each $side in $where {
             border-#{$side}-style: $style;

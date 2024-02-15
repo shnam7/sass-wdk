@@ -1,0 +1,18 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "pipeline": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "inputs": ["wdk/**", "test/**"],
+      "outputs": ["dist/**", "!coverag/**"]
+    },
+    "test": {},
+    "clean": {
+      "cache": false
+    }
+  }
+}

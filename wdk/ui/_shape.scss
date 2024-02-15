@@ -7,6 +7,7 @@
 //=========================================================
 @use "../color";
 @use "sass:math";
+@use "sass:list";
 
 //
 //  Creates a CSS triangle, which can be used for dropdown arrows, etc.
@@ -28,25 +29,25 @@
     height: 0;
     border: inset $triangle-size;
 
-    @if ($triangle-direction==down) {
+    @if $triangle-direction==down {
         border-color: $triangle-color transparent transparent;
         border-top-style: solid;
         border-bottom-width: 0;
     }
 
-    @if ($triangle-direction==up) {
+    @if $triangle-direction==up {
         border-color: transparent transparent $triangle-color;
         border-bottom-style: solid;
         border-top-width: 0;
     }
 
-    @if ($triangle-direction==right) {
+    @if $triangle-direction==right {
         border-color: transparent transparent transparent $triangle-color;
         border-left-style: solid;
         border-right-width: 0;
     }
 
-    @if ($triangle-direction==left) {
+    @if $triangle-direction==left {
         border-color: transparent $triangle-color transparent transparent;
         border-right-style: solid;
         border-left-width: 0;
@@ -103,7 +104,7 @@
 
         @for $i from 2 through $bars {
             $offset: ($weight + $spacing) * ($i - 1);
-            $shadow: append($shadow, 0 $offset 0 $color, comma);
+            $shadow: list.append($shadow, 0 $offset 0 $color, comma);
         }
 
         box-shadow: $shadow;
@@ -115,7 +116,7 @@
         // Generate CSS
         @for $i from 2 through $bars {
             $offset: ($weight + $spacing) * ($i - 1);
-            $hover-shadow: append($hover-shadow, 0 $offset 0 $color-hover, comma);
+            $hover-shadow: list.append($hover-shadow, 0 $offset 0 $color-hover, comma);
         }
 
         &:hover::after {
@@ -141,16 +142,16 @@
 }
 
 @mixin pattern($color:reg.gsv('theme/color/fg'), $pattern-name:null) {
-    @if $pattern-name == null {
+    @if $pattern-name==null {
     background-color: $color;
     background-image:
-        repeating-linear-gradient(120deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px,
+        repeating-linear-gradient(120deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 10%) 1px,
             transparent 1px, transparent 60px),
-        repeating-linear-gradient(60deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 1px,
+        repeating-linear-gradient(60deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 10%) 1px,
             transparent 1px, transparent 60px),
-        linear-gradient(60deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%,
-            rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1)),
-        linear-gradient(120deg, rgba(0, 0, 0, .1) 25%, transparent 25%, transparent 75%,
-            rgba(0, 0, 0, .1) 75%, rgba(0, 0, 0, .1));
+        linear-gradient(60deg, rgb(0 0 0 / 10%) 25%, transparent 25%, transparent 75%,
+            rgb(0 0 0 / 10%) 75%, rgb(0 0 0  / 10%)),
+        linear-gradient(120deg, rgb(0 0 0 / 10%) 25%, transparent 25%, transparent 75%,
+            rgb(0 0 0 / 10%) 75%, rgb(0 0 0 / 10%));
     }
 }

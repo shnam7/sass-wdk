@@ -1,16 +1,19 @@
 {
     "tabWidth": 4,
     "useTabs": false,
-    "semi": true,
     "singleQuote": true,
+    "semi": false,
     "printWidth": 100,
-    "trailingComma": "es5",
+    "trailingComma": "all",
+    "arrowParens": "avoid",
+    "bracketSameLine": true,
+    "endOfLine": "lf",
     "pluginSearchDirs": ["."],
     "overrides": [
         {
             "files": "*.json",
             "options": {
-                "tabWidth": 2
+                "tabWidth": 4
             }
         }
     ]

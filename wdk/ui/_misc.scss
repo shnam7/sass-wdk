@@ -20,19 +20,20 @@
 //
 @mixin clearfix($ie8:false) {
     @if $ie8 {
-        &:before,
-        &:after {
+        &::before,
+        &::after {
             display: table;
             content: ' ';
         }
-        &:after {
+
+        &::after {
             clear: both;
         }
         // IE6 and IE7 support is removed
         // zoom: 1; // For IE 6/7 (trigger hasLayout)
     }
     @else {
-        &:after {
+        &::after {
             content: '';
             display: block;
             clear: both;
@@ -50,8 +51,7 @@
 @mixin truncate-text($lines:1, $line-height: null) {
     @if $line-height==null {
         @if not meta.global-variable-exists('line-height', font) {
-            @warn "[util.scss]:$w-line-height is not defined. Using 1.5 as default\a"
-            + "To supress this warning, load font module first.\a";
+            @warn "[util.scss]:$w-line-height is not defined. Using 1.5 as default\aTo supress this warning, load font module first.\a";
             $line-height: 1.5;
         }
         @else {
@@ -66,8 +66,9 @@
         height: $lines * $line-height;
         line-height: $line-height;
         line-clamp: $lines;
-        box-orient: vertical;
+        flex-direction: column;
     }
+
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -80,7 +81,7 @@
         display: $display;
     }
     @if $display==table {
-        @if ($direction==center) {
+        @if $direction==center {
             margin: 0 auto;
         }
         @else {
@@ -88,7 +89,7 @@
         }
     }
     @else {
-        @if ($direction==center) {
+        @if $direction==center {
             margin-left: auto;
             margin-right: auto;
         }
@@ -127,37 +128,37 @@
     $v-names: if($v-names==all, (show, hide, visible, invisible), $v-names);
     $mq-list: if($mq-list==null, w-media-query-names(), $mq-list);
 
-    @if (list-contains($v-names, 'show')) {
+    @if list-contains($v-names, 'show') {
         .show {
             display: block;
         }
     }
-    @if (list-contains($v-names, 'hide')) {
+    @if list-contains($v-names, 'hide') {
         .hide {
             display: none;
         }
     }
-    @if (list-contains($v-names, 'visible')) {
+    @if list-contains($v-names, 'visible') {
         .visible {
             visibility: visible;
         }
     }
-    @if (list-contains($v-names, 'invisible')) {
+    @if list-contains($v-names, 'invisible') {
         .invisible {
             visibility: hidden;
         }
     }
     @for $i from 1 through length($mq-list) {
-        $mq-name: nth($mq-list, $i);
-        @if (list-contains($v-names, 'show')) {
+        $mq-name: list.nth($mq-list, $i);
+        @if list-contains($v-names, 'show') {
             .show\@#{$mq-name} {
                 display: none;
                 @include mq.media($mq-name) {
-                    display: unquote($display-type);
+                    display: string.unquote($display-type);
                 }
             }
         }
-        @if (list-contains($v-names, 'hide')) {
+        @if list-contains($v-names, 'hide') {
             .hide\@#{$mq-name} {
                 display: block;
                 @include mq.media($mq-name) {
@@ -165,7 +166,7 @@
                 }
             }
         }
-        @if (list-contains($v-names, 'visible')) {
+        @if list-contains($v-names, 'visible') {
             .visible\@#{$mq-name} {
                 visibility: hidden;
                 @include mq.media($mq-name) {
@@ -173,7 +174,7 @@
                 }
             }
         }
-        @if (list-contains($v-names, 'invisible')) {
+        @if list-contains($v-names, 'invisible') {
             .invisible\@#{$mq-name} {
                 visibility: hidden;
                 @include mq.media($mq-name) {

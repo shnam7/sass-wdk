@@ -2,6 +2,11 @@
 @use 'wdk/color';
 
 @include describe('[color] module test') {
+    @include test('color constant should be available') {
+        @include assert-equal(color.$text-black, #444444);
+        @include assert-equal(color.$text-black, #444);
+    }
+
     @include it('yiq():calculate YIQ value.') {
         @include assert-equal(color.yiq(#444), 0.265625);
         @include assert-equal(color.yiq(#eee), 0.9296875);

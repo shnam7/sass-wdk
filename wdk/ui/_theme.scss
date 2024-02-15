@@ -7,6 +7,7 @@
 
 @use "../reg";
 @use "../color";
+@use "sass:meta";
 
 //--- internals
 $key: 'theme';
@@ -74,7 +75,7 @@ $__conf: reg.gsv($key);
 }
 
 @mixin select($name: default, $is-default:false) {
-    $name: inspect($name);
+    $name: meta.inspect($name);
 
     @if $name == 'amaranth' {
         @include set-colors($fg:color.$amaranth, $link-hover:color.$persimmon, $is-default:$is-default);
