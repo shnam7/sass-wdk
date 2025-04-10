@@ -15,6 +15,7 @@
 
 @use "sass:map";
 @use "sass:list";
+@use "sass:meta";
 
 /**
  * Notes:
@@ -33,7 +34,7 @@
  *  @returns {map} New map ipdated.
  */
 @function deep-set($map, $keys, $value) {
-    @if type-of($keys) != list { @return map.set($map, $keys, $value); }
+    @if meta.type-of($keys) != list { @return map.set($map, $keys, $value); }
 
     @return map.set($map, list.append($keys, $value)...);
 }
@@ -45,7 +46,7 @@
  *  @returns {any} - Retrived value.
  */
 @function deep-get($map, $keys) {
-    @if type-of($keys) != list { @return map.get($map, $keys); }
+    @if meta.type-of($keys) != list { @return map.get($map, $keys); }
 
     @return map.get($map, $keys...);
 }
@@ -107,7 +108,7 @@
         @if ($trim-values and $val==null) {
             $map: map.remove($map, $key);
         }
-        @else if ($recursive and type-of($val)==map) {
+        @else if ($recursive and meta.type-of($val)==map) {
             $new-val: trim($val, $recursive, $trim-keys, $trim-values);
             @if $new-val != null {
                 $map: map.merge($map, ($key: $new-val));

@@ -14,6 +14,7 @@
 @use 'sass:list';
 @use 'sass:math';
 @use 'string';
+@use 'sass:meta';
 
 /**
  *    Get first element of list
@@ -96,7 +97,7 @@
  *  $new-list: insert-at($list, zog, z); // error
  */
 @function insert-at($list, $index, $value) {
-    @if type-of($index) != number {
+    @if meta.type-of($index) != number {
         @error "list.insert-at(): $index: #{quote($index)} is not a number.";
     }
     @if $index < 1 {
@@ -134,7 +135,7 @@
  *  $new-list: remove-at($list, zog); // error
  */
 @function remove-at($list, $index) {
-    @if type-of($index) != number {
+    @if meta.type-of($index) != number {
         @error "list.remove-at(): $index: #{quote($index)} is not a number.";
     }
     @if $index < 1 {
@@ -172,7 +173,7 @@
     $sep: list.separator($list);
 
     @for $i from 1 through list.length($list) {
-        @if type-of(list.nth($list, $i))==list and $recursive {
+        @if meta.type-of(list.nth($list, $i))==list and $recursive {
             $result: list.append($result,
                     replace(list.nth($list, $i), $old-value, $new-value, $recursive));
         }
@@ -205,7 +206,7 @@
     $sep: list.separator($list);
 
     @for $i from 1 through list.length($list) {
-        @if type-of(nth($list, $i))==list and $recursive {
+        @if meta.type-of(list.nth($list, $i))==list and $recursive {
             $result: list.append($result,
                     remove(list.nth($list, $i), $value, $recursive), $separator: $sep);
         }
@@ -231,7 +232,7 @@
  *  $new-list: slice($list, -1, 10);    // error
  */
 @function slice($list, $start: 1, $end: list.length($list)) {
-    @if type-of($start)!=number or type-of($end)!=number {
+    @if meta.type-of($start)!=number or meta.type-of($end)!=number {
         @error "Either $start or $end are not a number for `list.slice()`.";
     }
     @if $start < 1 {
@@ -277,12 +278,12 @@
     $sep: list.separator($list);
 
     @for $i from list.length($list) * -1 through -1 {
-        @if type-of(list.nth($list, math.abs($i)))==list and $recursive {
+        @if meta.type-of(list.nth($list, math.abs($i)))==list and $recursive {
             $result: list.append($result,
-                    reverse(nth($list, math.abs($i)), $recursive), $separator: $sep);
+                    reverse(list.nth($list, math.abs($i)), $recursive), $separator: $sep);
         }
         @else {
-            $result: list.append($result, nth($list, math.abs($i)), $separator: $sep);
+            $result: list.append($result, list.nth($list, math.abs($i)), $separator: $sep);
         }
     }
     @return $result;
@@ -306,12 +307,12 @@
 
     @for $i from 1 through list.length($list) {
         $val: list.nth($list, $i);
-        @if (type-of($val)==list) {
+        @if (meta.type-of($val)==list) {
             $val: to-string($val, $glue, $unquote, $flatten);
         }
-        $result: list.append($result, inspect($val), $separator: comma);
+        $result: list.append($result, meta.inspect($val), $separator: comma);
     }
-    $result: string.replace(inspect($result), ', ', $glue);
+    $result: string.replace(meta.inspect($result), ', ', $glue);
     @if $unquote {
         $result: string.replace($result, '"', '');
     }
@@ -336,9 +337,9 @@
     $result: ();
     $sep: list.separator($list);
 
-    @for $i from 0 to length($list) {
-        $result: append($result, nth($list,
-                ($i - $count) % length($list) + 1), $separator: $sep);
+    @for $i from 0 to list.length($list) {
+        $result: list.append($result, list.nth($list,
+                ($i - $count) % list.length($list) + 1), $separator: $sep);
     }
     @return $result;
 }
@@ -359,7 +360,7 @@
  */
 @function contains($list, $values...) {
     @each $value in $values {
-        @if type-of(list.index($list, $value)) != 'number' {
+        @if meta.type-of(list.index($list, $value)) != 'number' {
             @return false;
         }
     }

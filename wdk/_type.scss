@@ -10,6 +10,8 @@
 //
 //=========================================================
 
+@use "sass:meta";
+
 /**
  *  Convert type to string
  *  @param {any} $value - Target for type conversion
@@ -25,7 +27,7 @@
  *  @returns {string} $value as string type
  */
 @function to-list($value) {
-    @return if(type-of($value) != list, ($value, ), $value);
+    @return if(meta.type-of($value) != list, ($value, ), $value);
 }
 
 /**
@@ -34,7 +36,7 @@
  *  @returns {string} $value as string type
  */
 @function to-map($value, $key: 1) {
-    @return if(type-of($value) != map, ($key: $value), $value);
+    @return if(meta.type-of($value) != map, ($key: $value), $value);
 }
 
 /**

@@ -6,6 +6,8 @@
 //
 //=========================================================
 
+@use "sass:meta";
+
 //
 //  Set borders
 //  @param {Color} $color - Border color
@@ -24,7 +26,7 @@
     @else if $where==left or $where==top or $where==right or $where==bottom {
         border-#{$where}: $width $style $color;
     }
-    @else if type-of($where)==list {
+    @else if meta.type-of($where)==list {
         @each $side in $where {
             border-#{$side}: $width $style $color;
         }
@@ -47,7 +49,7 @@
     @else if $where==left or $where==top or $where==right or $where==bottom {
         border-#{$where}-color: $color;
     }
-    @else if type-of($where)==list {
+    @else if meta.type-of($where)==list {
         @each $side in $where {
             border-#{$side}-color: $color;
         }
@@ -93,7 +95,7 @@
     @else if $where==left or $where==top or $where==right or $where==bottom {
         border-#{$where}-style: $style;
     }
-    @else if type-of($where)==list {
+    @else if meta.type-of($where)==list {
         @each $side in $where {
             border-#{$side}-style: $style;
         }

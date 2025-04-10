@@ -12,6 +12,7 @@
 @forward 'constants/font.constants';
 @use 'constants/font.constants' as *;
 @use 'util' as *;
+@use 'sass:list';
 @use 'sass:math';
 
 //-----------------------------------------------------------------------------
@@ -89,12 +90,19 @@ $spacing-unit:              1em !default;
     @if $value == null {
         @return 0rem;
     }
-    @if unit($value) == 'rem' {
+    @if math.compatible($value, 1rem) {
         @return $value;
     }
-    @if unit($value) != 'px' {
+    @if not math.compatible($value, 1px) {
         @warn "[font._px2rem]: $value #{$value} is not in pixel unit.";
     }
+
+    // @if math.unit($value) == 'rem' {
+    //     @return $value;
+    // }
+    // @if math.unit($value) != 'px' {
+    //     @warn "[font._px2rem]: $value #{$value} is not in pixel unit.";
+    // }
 
     $value: math.div(strip-unit($value), strip-unit($base)) * 1rem;
     @if $value==0rem {
@@ -114,12 +122,18 @@ $spacing-unit:              1em !default;
     @if $value == null {
         @return 0px;
     }
-    @if unit($value) == 'px' {
+    @if math.compatible($value, 1px) {
         @return $value;
     }
-    @if unit($value) != 'rem' {
+    @if not math.compatible($value, 1rem) {
         @warn "[font._rem2px]: $value #{$value} is not in rem unit.";
     }
+    // @if math.unit($value) == 'px' {
+    //     @return $value;
+    // }
+    // @if math.unit($value) != 'rem' {
+    //     @warn "[font._rem2px]: $value #{$value} is not in rem unit.";
+    // }
 
     $value: strip-unit($value) * strip-unit($base) * 1px;
     @if $value==0px {
@@ -137,17 +151,20 @@ $spacing-unit:              1em !default;
 
 @function rem($values, $base: $size-base) {
     $rem-values: ();
-    $count: length($values);
+    $count: list.length($values);
 
-    @if unit($base) == '%' {
+    @if math.compatible($base, 1%) {
         $base: ($base / 100%) * $size-base;
     }
+    // @if math.unit($base) == '%' {
+    //     $base: ($base / 100%) * $size-base;
+    // }
     @if $count==1 {
         @return _px2rem($values, $base);
     }
 
     @for $i from 1 through $count {
-        $rem-values: append($rem-values, _px2rem(nth($values, $i), $base));
+        $rem-values: list.append($rem-values, _px2rem(list.nth($values, $i), $base));
     }
     @return $rem-values;
 }
@@ -160,17 +177,20 @@ $spacing-unit:              1em !default;
  */
 @function px($values, $base: $size-base) {
     $px-values: ();
-    $count: length($values);
+    $count: list.length($values);
 
-    @if unit($base) == '%' {
+    @if math.compatible($base, 1%) {
         $base: ($base / 100%) * $size-base;
     }
+    // @if math.unit($base) == '%' {
+    //     $base: ($base / 100%) * $size-base;
+    // }
     @if $count==1 {
         @return _rem2px($values, $base);
     }
 
     @for $i from 1 through $count {
-        $px-values: append($px-values, _rem2px(nth($values, $i), $base));
+        $px-values: list.append($px-values, _rem2px(list.nth($values, $i), $base));
     }
     @return $px-values;
 }

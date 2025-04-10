@@ -9,6 +9,7 @@
 @use "list";
 @use "string" as str;
 @use "map";
+@use "sass:meta";
 
 /**
  *  Store value into the specified path in a database(Map)
@@ -132,7 +133,7 @@ $__sys-reg: () !default;    // internal variable
  */
 @mixin msv($key, $path, $value-set, $default:false)
 {
-    @if type-of($value-set) !=map {
+    @if meta.type-of($value-set) !=map {
         @error "[_sys-reg.scss]: $value-set must be Map type."
     }
 

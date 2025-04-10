@@ -23,9 +23,9 @@
  *  @returns {number} Normalized YIQ value (0.0 ~ 1.0)
  */
 @function yiq($color) {
-    $r: red($color);
-    $g: green($color);
-    $b: blue($color);
+    $r: color.channel($color, "red", $space: rgb);
+    $g: color.channel($color, "green", $space: rgb);
+    $b: color.channel($color, "blue", $space: rgb);
     @return math.div((($r * 299) + ($g * 587) + ($b * 114)), (256 * 1000));
 }
 
@@ -83,9 +83,12 @@
  *  @notes Source from foundation-site (http://foundation.zurb.com/)
  */
 @function smart-scale($color, $scale: 5%, $threshold: 40%) {
-    @if color.lightness($color) > $threshold {
+    @if color.channel($color, "lightness", $space: hsl) > $threshold {
         $scale: -$scale;
     }
+    // @if color.lightness($color) > $threshold {
+    //     $scale: -$scale;
+    // }
     @return color.scale($color, $lightness: $scale);
 }
 
