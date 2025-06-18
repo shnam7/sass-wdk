@@ -83,13 +83,15 @@
     // Spacing between bars is calculated based on the total height of the icon and the weight of each bar
     $spacing: math.floor(math.div(($height - ($weight * $bars)), ($bars - 1)));
 
-    //Icon container
-    position: relative;
-    //display: inline-block;
-    vertical-align: middle;
-    cursor: pointer;
-    width: $width;
-    height: $height;
+    & {
+        //Icon container
+        position: relative;
+        //display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+        width: $width;
+    }
+    // height: $height;
 
     // Icon bars
     &::after {

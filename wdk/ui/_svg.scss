@@ -9,8 +9,8 @@
 //
 //=========================================================
 
-@use "../string";
 @use "sass:math";
+@use "wdk/string";
 
 //
 //  Convert svg file format string into css url image format(svg+xml)
@@ -25,7 +25,7 @@
 //
 @function svg-url($svg, $fill-to-replace:null, $new-fill:null) {
     // Add missing namespace
-    @if not str-index($svg, xmlns) {
+    @if not string.index($svg, xmlns) {
         $svg: string.replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
     }
 

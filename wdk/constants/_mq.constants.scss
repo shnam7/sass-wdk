@@ -69,3 +69,12 @@ $w-breakpoints-basic: (
         large:                  960px,
         xlarge:                 1220px
 ) !default;
+
+$w-breakpoints-tailwind: (
+        __:                     0,
+        sm:                     640,            // 40rem
+        md:                     768px,          // 48rem
+        lg:                     1024px,         // 64rem
+        xl:                     1280px,         // 80rem
+        2xl:                    1536px,         // 96rem
+) !default;
