@@ -9,90 +9,98 @@
 @use "../color";
 @use "sass:meta";
 
-//--- internals
 $key: 'theme';
-@mixin _scv($path, $value, $is-default) { @include reg.set($__conf, $path, $value, $is-default); }
-@mixin _ssv($path, $value, $is-default) { @include reg.ssv($key, $path, $value, $is-default); }
-@function _gcv($path, $default:null) {  @return reg.get($__conf, $path, $default); }
-@function _gsv($path, $default:null) {  @return reg.gsv($key, $path, $default); }
 
 
-//-----------------------------------------------
-//  Config: global defaults
-//-----------------------------------------------
-@include reg.ssv($key, 'color/scheme', (
-                            primary: color.$navy-blue,
-                            secondary: color.$raven,
-                            success: color.$chateau-green,
-                            info: color.$pelorous,
-                            warning: color.$amber,
-                            danger: color.$amaranth
-                            ), true);
-@include reg.ssv($key, 'color/fg', null, true);
-@include reg.ssv($key, 'color/bg', null, true);
-@include reg.ssv($key, 'color/link', null, true);
-@include reg.ssv($key, 'color/link-hover', null, true);
-@include reg.ssv($key, 'color/line', null, true);
+//---------------------------------------------------------
+//  @mixin and functions
+//---------------------------------------------------------
+@mixin ssv($path, $value, $is-default:false) { @include reg.ssv($key, $path, $value, $is-default); }
+@function gsv($path, $default:null) {  @return reg.gsv($key, $path, $default); }
+
+@mixin set-theme-color($theme-color) {
+    @include ssv('color/fg', $theme-color);
+    @include ssv('color/bg', color.adjust($theme-color, $alpha: -95));
+    @include ssv('color/link', color.scale($theme-color, $lightness: -10%));
+    @include ssv('color/link-hover', color.$text-red);
+    @include ssv('color/line', rgba($theme-color, 0.35));
+}
+
+
+//----------------------------------------------------------
+//  variables
+//----------------------------------------------------------
+//--- fonts / default fonts
+$font-size:                 gsv('font-size', 14px)  !default; // default font size
+$border-radius:             gsv('border-radius', 3px) !default;
+
+//--- colors
+$color-fg:                  gsv('color/fg', color.$bahama-blue) !default;
+$color-bg:                  gsv('color/bg', color.adjust($color-fg, $alpha: -95)) !default;
+$color-link:                gsv('color/link', color.scale($color-fg, $lightness: -10%)) !default;
+$color-link-hover:          gsv('color/link-hover', color.$text-red) !default;
+$color-line:                gsv('color/line', rgba($color-fg, 0.35)) !default;
+
+//--- text colors
+$text:                      gsv('text/fg', color.$text-black) !default;
+$text-bg:                   gsv('text/bg',#FFF) !default; // default background color
+$text-link:                 gsv('text/link/fg', color.$cerulean) !default; // <a> color
+$text-link-visited:         gsv('rext/link/visited', $text-link) !default;
+$text-link-hover:           gsv('text/link/hover', color.scale($text-link, $lightness: -10%)) !default;
+$code-block:                gsv('code-block', color.$alice-blue) !default; // <pre><code> color
 
 //--- color scheme
-// $primary:                   $navy-blue !default;
-// $secondary:                 $raven !default;
-// $success:                   $chateau-green !default;
-// $info:                      $pelorous !default;
-// $warning:                   $amber !default;
-// $danger:                    $amaranth !default;
-// $scheme:                    (
-//                             primary: $primary,
-//                             secondary: $secondary,
-//                             success: $success,
-//                             info: $info,
-//                             warning: $warning,
-//                             danger: $danger
-//                             ) !default;
-//                             $text:                      $text-black !default;   // default text color
-// $link:                      $cerulean !default;     // <a> color
-// $link-visited:              $link !default;
-// $link-hover:                darken($link, 10%) !default;
-
-$__conf: reg.gsv($key);
-
+$primary:                   gsv('color/primary', color.$navy-blue);
+$secondary:                 gsv('color/secondary', color.$raven);
+$success:                   gsv('color/success', color.$chateau-green);
+$info:                      gsv('color/info', color.$pelorous);
+$warning:                   gsv('color/warning', color.$amber);
+$danger:                    gsv('color/danger', color.$amaranth);
+$color-scheme:              (
+                                primary: $primary,
+                                secondary: $secondary,
+                                success: $success,
+                                info: $info,
+                                warning: $warning,
+                                danger: $danger
+                            ) !default;
 
 //-----------------------------------------------
 //  Mixins
 //-----------------------------------------------
-@mixin config($config: null) {
-    $__conf: reg.merge(reg.gsv($key), $config) !global;
-}
+// @mixin config($config: null) {
+//     $__conf: reg.merge(reg.gsv($key), $config) !global;
+// }
 
-@mixin set-colors($fg:color.$bahama-blue, $bg:auto, $link:auto, $link-hover:null, $line:auto, $is-default:false) {
-    @include _ssv('color/fg', $fg, $is-default);
-    @include _ssv('color/bg', if($bg==auto, color.scale($fg, $alpha: -95%), $bg), $is-default);
-    @include _ssv('color/link', if($link==auto, color.scale($fg, $lightness: -10%), $link), $is-default);
-    @if $link-hover {
-        @include _ssv('color/link-hover', color.$text-red, $is-default);
-    }
-    @include reg.ssv('color/line', if($line==auto, rgba($fg, 0.35), $line), $is-default);
-}
+// @mixin set-colors($fg:color.$bahama-blue, $bg:auto, $link:auto, $link-hover:null, $line:auto, $is-default:false) {
+//     @include _ssv('color/fg', $fg, $is-default);
+//     @include _ssv('color/bg', if($bg==auto, color.scale($fg, $alpha: -95%), $bg), $is-default);
+//     @include _ssv('color/link', if($link==auto, color.scale($fg, $lightness: -10%), $link), $is-default);
+//     @if $link-hover {
+//         @include _ssv('color/link-hover', color.$text-red, $is-default);
+//     }
+//     @include reg.ssv('color/line', if($line==auto, rgba($fg, 0.35), $line), $is-default);
+// }
 
-@mixin select($name: default, $is-default:false) {
-    $name: meta.inspect($name);
+// @mixin select($name: default, $is-default:false) {
+//     $name: meta.inspect($name);
 
-    @if $name == 'amaranth' {
-        @include set-colors($fg:color.$amaranth, $link-hover:color.$persimmon, $is-default:$is-default);
-    }
-    @else if $name == 'purple' {
+//     @if $name == 'amaranth' {
+//         @include set-colors($fg:color.$amaranth, $link-hover:color.$persimmon, $is-default:$is-default);
+//     }
+//     @else if $name == 'purple' {
 
-        @include set-colors($fg:color.$purple, $is-default:$is-default);
-    }
-    @else if $name == 'teal' {
-        @include set-colors($fg:color.$teal, $is-default:$is-default);
-    }
-    @else if $name == 'harley-davison-orange' {
-        @include set-colors($fg:color.$harley-davidson-orange, $is-default:$is-default);
-    }
-    @else if $name == 'default' {
-        @include set-colors($fg:color.$bahama-blue, $is-default:$is-default);
-    }
-}
+//         @include set-colors($fg:color.$purple, $is-default:$is-default);
+//     }
+//     @else if $name == 'teal' {
+//         @include set-colors($fg:color.$teal, $is-default:$is-default);
+//     }
+//     @else if $name == 'harley-davison-orange' {
+//         @include set-colors($fg:color.$harley-davidson-orange, $is-default:$is-default);
+//     }
+//     @else if $name == 'default' {
+//         @include set-colors($fg:color.$bahama-blue, $is-default:$is-default);
+//     }
+// }
 
-@include select(default, $is-default:true);     // select default theme
+// @include select(default, $is-default:true);     // select default theme

@@ -1,0 +1,13 @@
+//=========================================================
+//
+//  @package sass-wdk
+//
+//  @module conf
+//  @description global configuration database
+//
+//=========================================================
+
+$key: '__conf';
+
+@mixin scv($path, $value, $is-default) { @include reg.ssv($key, $path, $value, $is-default); }
+@function gcv($path, $default:null) {  @return reg.gsv($key, $path, $default); }

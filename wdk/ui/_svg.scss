@@ -21,9 +21,9 @@
 //
 //  Examples:
 //  $svg-image:'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><path fill="#804D35"...
-//  svg-url($svg-image) --> url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300...
+//  to-cssurl($svg-image) --> url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300...
 //
-@function svg-url($svg, $fill-to-replace:null, $new-fill:null) {
+@function to-cssurl($svg, $fill-to-replace:null, $new-fill:null) {
     // Add missing namespace
     @if not string.index($svg, xmlns) {
         $svg: string.replace($svg, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
