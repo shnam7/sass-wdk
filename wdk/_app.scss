@@ -2,12 +2,18 @@
 //
 //  @package sass-wdk
 //
-//  @module conf
-//  @description global configuration database
+//  @module app
+//  @description application wide global configuration
 //
 //=========================================================
 
-$key: '__conf';
+//---------------------------------------------------------
+//  Configuration
+//---------------------------------------------------------
+$key: '__app';
 
 @mixin scv($path, $value, $is-default) { @include reg.ssv($key, $path, $value, $is-default); }
 @function gcv($path, $default:null) {  @return reg.gsv($key, $path, $default); }
+
+// No initial configuration
+// Users can add config items by calling `scv()` mixin.
