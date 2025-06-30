@@ -18,11 +18,13 @@ const getFiles = (dir: string, recurrsive: boolean = true): string[] => {
     return files;
 };
 
-const basePath = path.relative(process.cwd(), __dirname);
-const sassTestFiles = getFiles(path.join(basePath, 'scss'));
+const basePath = path.relative(process.cwd(), __dirname)
+const sassTestFiles = getFiles(path.join(basePath, 'scss')).filter(
+    s => s.endsWith('.test.scss') || s.endsWith('.test.sass'),
+)
 
-sassTestFiles
-    .filter((s) => s.endsWith('.test.scss') || s.endsWith('.test.sass'))
-    .map((sassFile) => {
-        sassTrue.runSass({ describe, it }, sassFile, { loadPaths: ['.'] });
-    });
+for (const sassFile of sassTestFiles) {
+    sassTrue.runSass({describe, it}, sassFile, {
+        loadPaths: ['node_modules/sass-wdk', '.'],
+    })
+}

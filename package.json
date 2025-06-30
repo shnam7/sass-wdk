@@ -9,9 +9,10 @@
     ],
     "scripts": {
         "dev": "vitest",
-        "build": "pnpm stylelint --config stylelint.config.js wdk/**/*.scss",
+        "build": "pnpm run lint",
+        "lint": "stylelint --config stylelint.config.js wdk/**/*.scss",
         "test": "vitest run",
-        "prepare-to-commit": "pnpm run test",
+        "prepare-to-commit": "pnpm test",
         "npm-dry-run": "npm publish --dry-run",
         "--sass-build": "sass -I. --no-source-map --no-error-css test:__output",
         "--sass-watch": "sass -w -I. --no-source-map test:__output",
@@ -35,7 +36,7 @@
     },
     "homepage": "https://github.com/shnam7/sass-wdk#readme",
     "devDependencies": {
-        "@types/node": "^24.0.6",
+        "@types/node": "^24.0.7",
         "rimraf": "^6.0.1",
         "sass": "^1.89.2",
         "sass-true": "^9.0.0",

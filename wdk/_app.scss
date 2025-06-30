@@ -7,13 +7,15 @@
 //
 //=========================================================
 
+@use 'reg';
+
 //---------------------------------------------------------
 //  Configuration
 //---------------------------------------------------------
-$key: '__app';
+$key: 'w-app';
 
-@mixin scv($path, $value, $is-default) { @include reg.ssv($key, $path, $value, $is-default); }
-@function gcv($path, $default:null) {  @return reg.gsv($key, $path, $default); }
+@mixin ssv($path, $value, $is-default) { @include reg.ssv($key, $path, $value, $is-default); }
+@function gsv($path, $default:null) {  @return reg.gsv($key, $path, $default); }
 
 // No initial configuration
 // Users can add config items by calling `scv()` mixin.

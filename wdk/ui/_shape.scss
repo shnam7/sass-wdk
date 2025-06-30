@@ -5,9 +5,9 @@
 //  @module ui/shape
 //
 //=========================================================
-@use "../color";
-@use "sass:math";
-@use "sass:list";
+@use '../color';
+@use 'sass:math';
+@use 'sass:list';
 
 //
 //  Creates a CSS triangle, which can be used for dropdown arrows, etc.
@@ -20,9 +20,7 @@
 //  @credit
 //  https://github.com/zurb/foundation-sites/blob/master/scss/util/_mixins.scss
 //
-@mixin triangle($triangle-size,
-    $triangle-color,
-    $triangle-direction) {
+@mixin triangle($triangle-size, $triangle-color, $triangle-direction) {
     content: '';
     display: block;
     width: 0;
@@ -68,12 +66,14 @@
 //  @credit
 //  https://github.com/zurb/foundation-sites/blob/master/scss/util/_mixins.scss
 //
-@mixin hamburger($color: color.$text-white,
+@mixin hamburger(
+    $color: color.$text-white,
     $color-hover: null,
     $width: 18px,
     $height: 14px,
     $weight: 2px,
-    $bars: 3) {
+    $bars: 3
+) {
     $color-hover: if($color-hover, $color-hover, color.smart-scale($color, 15%));
 
     // box-shadow CSS output
@@ -83,15 +83,13 @@
     // Spacing between bars is calculated based on the total height of the icon and the weight of each bar
     $spacing: math.floor(math.div(($height - ($weight * $bars)), ($bars - 1)));
 
-    & {
-        //Icon container
-        position: relative;
-        //display: inline-block;
-        vertical-align: middle;
-        cursor: pointer;
-        width: $width;
-    }
-    // height: $height;
+    //Icon container
+    position: relative;
+    //display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    width: $width;
+    height: $height;
 
     // Icon bars
     &::after {
@@ -114,7 +112,6 @@
 
     // Hover state
     @if $color-hover {
-
         // Generate CSS
         @for $i from 2 through $bars {
             $offset: ($weight + $spacing) * ($i - 1);
@@ -133,7 +130,7 @@
 //  @param {number} $radius - Radius of the curcle
 //  @param {Color} [$color=null] - Color of the circle
 //
-@mixin circle($radius, $color:null) {
+@mixin circle($radius, $color: null) {
     height: $radius;
     width: $radius;
     border-radius: 50%;
@@ -143,17 +140,38 @@
     }
 }
 
-@mixin pattern($color:reg.gsv('theme/color/fg'), $pattern-name:null) {
+@mixin pattern($color: reg.gsv('theme/color/fg'), $pattern-name: null) {
     @if $pattern-name==null {
-    background-color: $color;
-    background-image:
-        repeating-linear-gradient(120deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 10%) 1px,
-            transparent 1px, transparent 60px),
-        repeating-linear-gradient(60deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 10%) 1px,
-            transparent 1px, transparent 60px),
-        linear-gradient(60deg, rgb(0 0 0 / 10%) 25%, transparent 25%, transparent 75%,
-            rgb(0 0 0 / 10%) 75%, rgb(0 0 0  / 10%)),
-        linear-gradient(120deg, rgb(0 0 0 / 10%) 25%, transparent 25%, transparent 75%,
-            rgb(0 0 0 / 10%) 75%, rgb(0 0 0 / 10%));
+        background-color: $color;
+        background-image: repeating-linear-gradient(
+                120deg,
+                rgb(255 255 255 / 10%),
+                rgb(255 255 255 / 10%) 1px,
+                transparent 1px,
+                transparent 60px
+            ),
+            repeating-linear-gradient(
+                60deg,
+                rgb(255 255 255 / 10%),
+                rgb(255 255 255 / 10%) 1px,
+                transparent 1px,
+                transparent 60px
+            ),
+            linear-gradient(
+                60deg,
+                rgb(0 0 0 / 10%) 25%,
+                transparent 25%,
+                transparent 75%,
+                rgb(0 0 0 / 10%) 75%,
+                rgb(0 0 0 / 10%)
+            ),
+            linear-gradient(
+                120deg,
+                rgb(0 0 0 / 10%) 25%,
+                transparent 25%,
+                transparent 75%,
+                rgb(0 0 0 / 10%) 75%,
+                rgb(0 0 0 / 10%)
+            );
     }
 }
