@@ -1,0 +1,10 @@
+@use 'true' as *;
+@use 'wdk/color';
+@use 'wdk/ui/theme';
+@use 'sass:meta';
+
+@include describe('theme module test') {
+    @include it('has default configuration values.') {
+        @include assert-unequal(theme.gsv('color/fg'), null);
+    }
+}

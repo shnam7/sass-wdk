@@ -5,18 +5,21 @@
 //
 //=========================================================
 
-@use "../reg";
-@use "../color";
-@use "sass:meta";
+@use '../reg';
+@use '../color';
+@use 'sass:meta';
 
 $key: 'theme';
-
 
 //---------------------------------------------------------
 //  Configuration
 //---------------------------------------------------------
-@mixin ssv($path, $value, $is-default:false) { @include reg.ssv($key, $path, $value, $is-default); }
-@function gsv($path, $default:null) {  @return reg.gsv($key, $path, $default); }
+@mixin ssv($path, $value, $is-default: false) {
+    @include reg.ssv($key, $path, $value, $is-default);
+}
+@function gsv($path, $default: null) {
+    @return reg.gsv($key, $path, $default);
+}
 
 @mixin set-theme-color($theme-color) {
     @include ssv('color/fg', $theme-color);
@@ -26,44 +29,82 @@ $key: 'theme';
     @include ssv('color/line', rgba($theme-color, 0.35));
 }
 
-
-//----------------------------------------------------------
-//  variables
-//----------------------------------------------------------
-//--- fonts / default fonts
-$font-size:                 gsv('font-size', 14px)  !default; // default font size
-$border-radius:             gsv('border-radius', 3px) !default;
+//--- fonts
+@include ssv('font-size', 14px, true); // default font size
+@include ssv('border-radius', 3px, true); // default border radius
 
 //--- colors
-$color-fg:                  gsv('color/fg', color.$bahama-blue) !default;
-$color-bg:                  gsv('color/bg', color.adjust($color-fg, $alpha: -95)) !default;
-$color-link:                gsv('color/link', color.scale($color-fg, $lightness: -10%)) !default;
-$color-link-hover:          gsv('color/link-hover', color.$text-red) !default;
-$color-line:                gsv('color/line', rgba($color-fg, 0.35)) !default;
+@include ssv('color/fg', color.$bahama-blue, true);
+@include ssv('color/bg', color.adjust(gsv('color/fg'), $alpha: -95), true);
+@include ssv('color/link', color.scale(gsv('color/fg'), $lightness: -10%), true);
+@include ssv('color/link-hover', color.$text-red, true);
+@include ssv('color/line', rgba(gsv('color/fg'), 0.35), true);
 
 //--- text colors
-$text:                      gsv('text/fg', color.$text-black) !default;
-$text-bg:                   gsv('text/bg',#FFF) !default; // default background color
-$text-link:                 gsv('text/link/fg', color.$cerulean) !default; // <a> color
-$text-link-visited:         gsv('rext/link/visited', $text-link) !default;
-$text-link-hover:           gsv('text/link/hover', color.scale($text-link, $lightness: -10%)) !default;
-$code-block:                gsv('code-block', color.$alice-blue) !default; // <pre><code> color
+@include ssv('text/fg', color.$text-black, true); // default text color
+@include ssv('text/bg', #fff, true); // default background color
+@include ssv('text/link/fg', color.$cerulean, true); // <a> color
+@include ssv('rext/link/visited', gsv('text/link/fg'), true);
+@include ssv('text/link/hover', color.scale(gsv('text/link/fg'), $lightness: -10%), true);
+@include ssv('code-block', color.$alice-blue, true); // <pre><code> color
 
 //--- color scheme
-$primary:                   gsv('color/primary', color.$navy-blue);
-$secondary:                 gsv('color/secondary', color.$raven);
-$success:                   gsv('color/success', color.$chateau-green);
-$info:                      gsv('color/info', color.$pelorous);
-$warning:                   gsv('color/warning', color.$amber);
-$danger:                    gsv('color/danger', color.$amaranth);
-$color-scheme:              (
-                                primary: $primary,
-                                secondary: $secondary,
-                                success: $success,
-                                info: $info,
-                                warning: $warning,
-                                danger: $danger
-                            ) !default;
+@include ssv('color/primary', color.$navy-blue, true);
+@include ssv('color/secondary', color.$raven, true);
+@include ssv('color/success', color.$chateau-green, true);
+@include ssv('color/info', color.$pelorous, true);
+@include ssv('color/warning', color.$amber, true);
+@include ssv('color/danger', color.$amaranth, true);
+@include ssv(
+    'color-scheme',
+    (
+        primary: gsv('color/primary'),
+        secondary: gsv('color/secondary'),
+        success: gsv('color/success'),
+        info: gsv('color/info'),
+        warning: gsv('color/warning'),
+        danger: gsv('color/danger'),
+    ),
+    true
+);
+
+// //----------------------------------------------------------
+// //  variables
+// //----------------------------------------------------------
+// // --- fonts / default fonts
+// $font-size: gsv('font-size', 14px) !default; // default font size
+// $border-radius: gsv('border-radius', 3px) !default;
+
+// // --- colors
+// $color-fg: gsv('color/fg', color.$bahama-blue) !default;
+// $color-bg: gsv('color/bg', color.adjust($color-fg, $alpha: -95)) !default;
+// $color-link: gsv('color/link', color.scale($color-fg, $lightness: -10%)) !default;
+// $color-link-hover: gsv('color/link-hover', color.$text-red) !default;
+// $color-line: gsv('color/line', rgba($color-fg, 0.35)) !default;
+
+// // --- text colors
+// $text: gsv('text/fg', color.$text-black) !default;
+// $text-bg: gsv('text/bg', #fff) !default; // default background color
+// $text-link: gsv('text/link/fg', color.$cerulean) !default; // <a> color
+// $text-link-visited: gsv('rext/link/visited', $text-link) !default;
+// $text-link-hover: gsv('text/link/hover', color.scale($text-link, $lightness: -10%)) !default;
+// $code-block: gsv('code-block', color.$alice-blue) !default; // <pre><code> color
+
+// // --- color scheme
+// $primary: gsv('color/primary', color.$navy-blue);
+// $secondary: gsv('color/secondary', color.$raven);
+// $success: gsv('color/success', color.$chateau-green);
+// $info: gsv('color/info', color.$pelorous);
+// $warning: gsv('color/warning', color.$amber);
+// $danger: gsv('color/danger', color.$amaranth);
+// $color-scheme: (
+//     primary: $primary,
+//     secondary: $secondary,
+//     success: $success,
+//     info: $info,
+//     warning: $warning,
+//     danger: $danger,
+// ) !default;
 
 //-----------------------------------------------
 //  Mixins

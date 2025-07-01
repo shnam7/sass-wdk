@@ -8,6 +8,7 @@
 @use '../color';
 @use 'sass:math';
 @use 'sass:list';
+@use './theme';
 
 //
 //  Creates a CSS triangle, which can be used for dropdown arrows, etc.
@@ -140,7 +141,7 @@
     }
 }
 
-@mixin pattern($color: reg.gsv('theme/color/fg'), $pattern-name: null) {
+@mixin pattern($color: theme.gsv('color/fg'), $pattern-name: null) {
     @if $pattern-name==null {
         background-color: $color;
         background-image: repeating-linear-gradient(

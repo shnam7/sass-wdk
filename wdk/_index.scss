@@ -9,12 +9,13 @@
 //=========================================================
 
 //--- functions
-@forward 'wdk/color'        as color-*;
-@forward 'wdk/font'         as font-*;
-@forward 'wdk/list'         as list-*;
-@forward 'wdk/map'          as map-*;
-@forward 'wdk/reg'          as reg-*;
-@forward 'wdk/string'       as str-*;
+@forward 'wdk/color' as color-*;
+@forward 'wdk/font' as font-*;
+@forward 'wdk/list' as list-*;
+@forward 'wdk/map' as map-*;
+@forward 'wdk/reg' as reg-*;
+@forward 'wdk/string' as str-*;
 @forward 'wdk/type';
 @forward 'wdk/util';
 @forward 'wdk/ui';
+@forward 'wdk/ui/theme';

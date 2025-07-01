@@ -25,6 +25,6 @@ const sassTestFiles = getFiles(path.join(basePath, 'scss')).filter(
 
 for (const sassFile of sassTestFiles) {
     sassTrue.runSass({describe, it}, sassFile, {
-        loadPaths: ['node_modules/sass-wdk', '.'],
+        loadPaths: ['.'],
     })
 }
