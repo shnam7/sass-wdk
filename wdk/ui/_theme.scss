@@ -23,7 +23,7 @@ $key: 'theme';
 
 @mixin set-theme-color($theme-color) {
     @include ssv('color/fg', $theme-color);
-    @include ssv('color/bg', color.adjust($theme-color, $alpha: -95));
+    @include ssv('color/bg', color.adjust($theme-color, $alpha: -0.95));
     @include ssv('color/link', color.scale($theme-color, $lightness: -10%));
     @include ssv('color/link-hover', color.$text-red);
     @include ssv('color/line', rgba($theme-color, 0.35));
@@ -35,7 +35,7 @@ $key: 'theme';
 
 //--- colors
 @include ssv('color/fg', color.$bahama-blue, true);
-@include ssv('color/bg', color.adjust(gsv('color/fg'), $alpha: -95), true);
+@include ssv('color/bg', color.adjust(gsv('color/fg'), $alpha: -0.95), true);
 @include ssv('color/link', color.scale(gsv('color/fg'), $lightness: -10%), true);
 @include ssv('color/link-hover', color.$text-red, true);
 @include ssv('color/line', rgba(gsv('color/fg'), 0.35), true);
@@ -77,7 +77,7 @@ $key: 'theme';
 
 // // --- colors
 // $color-fg: gsv('color/fg', color.$bahama-blue) !default;
-// $color-bg: gsv('color/bg', color.adjust($color-fg, $alpha: -95)) !default;
+// $color-bg: gsv('color/bg', color.adjust($color-fg, $alpha: -0.95)) !default;
 // $color-link: gsv('color/link', color.scale($color-fg, $lightness: -10%)) !default;
 // $color-link-hover: gsv('color/link-hover', color.$text-red) !default;
 // $color-line: gsv('color/line', rgba($color-fg, 0.35)) !default;
