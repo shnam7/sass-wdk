@@ -104,7 +104,12 @@ $spacing-unit:              1em !default;
     //     @warn "[font._px2rem]: $value #{$value} is not in pixel unit.";
     // }
 
-    $value: math.div(strip-unit($value), strip-unit($base)) * 1rem;
+    $result: math.div(strip-unit($value), strip-unit($base));
+
+    // Round to 10 decimal places to avoid floating point precision issues
+    $result: math.div(math.round($result * 10000000000), 10000000000);
+    $value: $result * 1rem;
+
     @if $value==0rem {
         $value: 0;
     }

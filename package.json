@@ -1,48 +1,82 @@
 {
     "name": "sass-wdk",
     "version": "1.2.0",
-    "description": "Sass web style development kit",
-    "type": "module",
-    "files": [
-        "wdk",
-        "_wdk.scss"
-    ],
-    "scripts": {
-        "dev": "vitest",
-        "build": "pnpm run lint",
-        "lint": "stylelint --config stylelint.config.js wdk/**/*.scss",
-        "test": "vitest run",
-        "prepare-to-commit": "pnpm test",
-        "npm-dry-run": "npm publish --dry-run",
-        "--sass-build": "sass -I. --no-source-map --no-error-css test:__output",
-        "--sass-watch": "sass -w -I. --no-source-map test:__output",
-        "--clean": "rimraf __output",
-        "--watch": "chokidar \"./{wdk,test}/**/*.scss\" -c \"npm run test\""
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/shnam7/sass-wdk.git"
-    },
+    "description": "Sass web development kit - A comprehensive library of functions, mixins, and utilities for Sass/SCSS development",
     "keywords": [
         "sass",
         "scss",
-        "css",
-        "library"
+        "sass-functions",
+        "sass-mixins",
+        "sass-utilities",
+        "media-queries",
+        "theming",
+        "design-system",
+        "design-tokens",
+        "color-utils"
     ],
-    "author": "Robin Soo-hyuk Nam",
-    "license": "MIT",
+    "homepage": "https://github.com/shnam7/sass-wdk#readme",
     "bugs": {
         "url": "https://github.com/shnam7/sass-wdk/issues"
     },
-    "homepage": "https://github.com/shnam7/sass-wdk#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shnam7/sass-wdk.git",
+        "directory": "."
+    },
+    "license": "MIT",
+    "author": {
+        "name": "Robin Nam",
+        "email": "shnam7@gmail.com",
+        "url": "https://github.com/shnam7"
+    },
+    "sass": "wdk/_index.scss",
+    "style": "wdk/_index.scss",
+    "exports": {
+        ".": "./wdk/_index.scss",
+        "./wdk/*": "./wdk/*.scss",
+        "./*": "./wdk/*.scss"
+    },
+    "files": [
+        "wdk",
+        "docs",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "pnpm run lint",
+        "dev": "vitest",
+        "lint": "stylelint --config stylelint.config.js wdk/**/*.scss",
+        "lint:fix": "stylelint --config stylelint.config.js wdk/**/*.scss --fix",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "prepare-to-commit": "pnpm test",
+        "prepublishOnly": "pnpm run test",
+        "npm-dry-run": "npm publish --dry-run",
+        "--clean": "rimraf __output",
+        "--sass-build": "sass -I. --no-source-map --no-error-css test:__output",
+        "--sass-watch": "sass -w -I. --no-source-map test:__output",
+        "--watch": "chokidar \"./{wdk,test}/**/*.scss\" -c \"npm run test\""
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "pnpm": ">=8.0.0"
+    },
+    "peerDependencies": {
+        "sass": "^1.50.0"
+    },
     "devDependencies": {
-        "@types/node": "^24.0.14",
+        "@types/node": "^24.3.0",
         "rimraf": "^6.0.1",
-        "sass": "^1.89.2",
+        "sass": "^1.91.0",
         "sass-true": "^9.0.0",
-        "stylelint": "^16.21.1",
+        "stylelint": "^16.23.1",
+        "stylelint-config-standard": "^39.0.0",
         "stylelint-config-standard-scss": "^15.0.1",
         "vitest": "^3.2.4"
     },
-    "packageManager": "pnpm@10.13.1"
+    "packageManager": "pnpm@10.15.0",
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org/"
+    }
 }
