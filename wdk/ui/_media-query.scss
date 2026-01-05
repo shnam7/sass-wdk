@@ -138,7 +138,7 @@ $__mq-set: __mq-set-of($__breakpoints-default) !default;
 //    @param {Map}    $breakpoints  List of breakpoints
 //
 @mixin set-breakpoints($breakpoints: null) {
-    $breakpoints: if($breakpoints==null, $__breakpoints-default, $breakpoints);
+    $breakpoints: if(sass($breakpoints==null): $__breakpoints-default; else: $breakpoints);
     $__mq-set: __mq-set-of($breakpoints) !global;
 }
 
@@ -165,7 +165,7 @@ $__mq-set: __mq-set-of($__breakpoints-default) !default;
         @error '[_breakpoint.scss:w-media]: mq-set: #{$__mq-set}';
     }
 
-    $media-type: if($media-type, $media-type + ' and ', '');
+    $media-type: if(sass($media-type): $media-type + ' and '; else: '');
 
     @media #{$media-type + map.get($__mq-set, $name)} {
         @content;

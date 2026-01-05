@@ -27,7 +27,7 @@
  *  @returns {string} $value as string type
  */
 @function to-list($value) {
-    @return if(meta.type-of($value) != list, ($value, ), $value);
+    @return if(sass(meta.type-of($value) != list): ($value, ); else: $value);
 }
 
 /**
@@ -36,7 +36,7 @@
  *  @returns {string} $value as string type
  */
 @function to-map($value, $key: 1) {
-    @return if(meta.type-of($value) != map, ($key: $value), $value);
+    @return if(sass(meta.type-of($value) != map): ($key: $value); else: $value);
 }
 
 /**

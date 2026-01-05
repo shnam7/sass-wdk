@@ -72,8 +72,8 @@
 @function extend($map, $maps...) {
     $last: list.nth($maps, -1);
     $deep: $last==true;
-    $max: if($deep, list.length($maps)-1, list.length($maps));
-    $map: if($map==null, (), $map);
+    $max: if(sass($deep): list.length($maps)-1; else: list.length($maps));
+    $map: if(sass($map==null): (); else: $map);
 
     @for $i from 1 through $max {
         $map: map.deep-merge($map, list.nth($maps, $i));

@@ -41,9 +41,9 @@ $alist: (a, b, c, d);
     @include it('remove():remove values from list.') {
         $inlist: (a, b, r, a, (c a), (d a), b, r, a);
         $outlist3: (b, r, (c a), (d a), b, r);
-        $outlist4: (b, r, (c), (d), b, r);
+        $outlist4: (b, r, c, d, b, r);
         @include assert-equal(list.remove($inlist, a), $outlist3);
-        @include assert-equal(list.remove($inlist, a, true), $outlist4, $inspect: true);
+        @include assert-equal(list.remove($inlist, a, true), $outlist4);
     }
     @include it('slice():slice list.') {
         @include assert-equal(list.slice($alist, 2), (b, c, d));

@@ -2,6 +2,7 @@
     "name": "sass-wdk",
     "version": "1.2.0",
     "description": "Sass web development kit - A comprehensive library of functions, mixins, and utilities for Sass/SCSS development",
+    "type": "module",
     "keywords": [
         "sass",
         "scss",
@@ -49,7 +50,7 @@
         "lint:fix": "stylelint --config stylelint.config.js wdk/**/*.scss --fix",
         "test": "vitest run",
         "test:watch": "vitest",
-        "prepare-to-commit": "pnpm test",
+        "prepare-to-commit": "pnpm build && pnpm test",
         "prepublishOnly": "pnpm run test",
         "npm-dry-run": "npm publish --dry-run",
         "--clean": "rimraf __output",
@@ -65,16 +66,16 @@
         "sass": "^1.50.0"
     },
     "devDependencies": {
-        "@types/node": "^24.3.0",
-        "rimraf": "^6.0.1",
-        "sass": "^1.91.0",
-        "sass-true": "^9.0.0",
-        "stylelint": "^16.23.1",
-        "stylelint-config-standard": "^39.0.0",
-        "stylelint-config-standard-scss": "^15.0.1",
-        "vitest": "^3.2.4"
+        "@types/node": "^25.0.3",
+        "rimraf": "^6.1.2",
+        "sass": "^1.97.2",
+        "sass-true": "^10.1.0",
+        "stylelint": "^16.26.1",
+        "stylelint-config-standard": "^39.0.1",
+        "stylelint-config-standard-scss": "^16.0.0",
+        "vitest": "^4.0.16"
     },
-    "packageManager": "pnpm@10.15.0",
+    "packageManager": "pnpm@10.27.0",
     "publishConfig": {
         "access": "public",
         "registry": "https://registry.npmjs.org/"

@@ -118,8 +118,8 @@
 //  @param {string} [$
 //
 @mixin generate-visibility-classes($v-names: all, $mq-list: null, $display-type: block) {
-    $v-names: if($v-names==all, (show, hide, visible, invisible), $v-names);
-    $mq-list: if($mq-list==null, w-media-query-names(), $mq-list);
+    $v-names: if(sass($v-names==all): (show, hide, visible, invisible); else: $v-names);
+    $mq-list: if(sass($mq-list==null): w-media-query-names(); else: $mq-list);
 
     @if list-contains($v-names, 'show') {
         .show {

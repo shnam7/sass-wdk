@@ -75,7 +75,7 @@
     $weight: 2px,
     $bars: 3
 ) {
-    $color-hover: if($color-hover, $color-hover, color.smart-scale($color, 15%));
+    $color-hover: if(sass($color-hover): $color-hover; else: color.smart-scale($color, 15%));
 
     // box-shadow CSS output
     $shadow: ();

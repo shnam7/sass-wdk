@@ -38,7 +38,7 @@
  *  @returns {color} $black or $white which has higher contrast with $color
  */
 @function yiq-color($color, $threshold: 0.6, $black: #444, $white: #eee) {
-    @return if(yiq($color) >= $threshold, $black, $white);
+    @return if(sass(yiq($color) >= $threshold): $black; else: $white);
 }
 
 /**
@@ -70,7 +70,7 @@
 @function gray($percent, $alpha: null) {
     $percent: strip-unit($percent) * 1%;
     $val: color.scale(#000, $lightness: $percent);
-    @return if($alpha, rgba($val, $alpha), $val);
+    @return if(sass($alpha): rgba($val, $alpha); else: $val);
 }
 
 /**

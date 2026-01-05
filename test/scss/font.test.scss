@@ -17,11 +17,10 @@
         @include assert-equal(font.spacing(2, 2em), 4em);
     }
     @include it('rem():convert px values to rem values (single or multi in list).') {
-        @include assert-equal(font.rem(1px), 0.0714285714rem, $inspect: true);
+        @include assert-equal(font.rem(1px), 0.0714285714rem);
         @include assert-equal(
             font.rem((8px 16px 24px)),
-            (0.5714285714rem 1.1428571429rem 1.7142857143rem),
-            $inspect: true
+            (0.5714285714rem 1.1428571429rem 1.7142857143rem)            
         );
     }
     @include it('px():convert rem values to px values (single or multi in list).') {

@@ -9,12 +9,12 @@
  *
  */
 
-@forward 'sass:list';
+@forward "sass:list";
 
-@use 'sass:list';
-@use 'sass:math';
-@use 'string';
-@use 'sass:meta';
+@use "sass:list";
+@use "sass:math";
+@use "string";
+@use "sass:meta";
 
 /**
  *    Get first element of list
@@ -58,7 +58,7 @@
     $index: null;
 
     @for $i from 1 through list.length($list) {
-        @if list.nth($list, $i)==$value {
+        @if list.nth($list, $i) == $value {
             $index: $i;
         }
     }
@@ -77,7 +77,7 @@
  *  $new-list: prepend($list, now i know my a); // now, i, know, my, a, b, c, d, e, f
  */
 @function prepend($list, $value) {
-    @return list.join(($value, ), $list, $separator: list.separator($list));
+    @return list.join(($value,), $list, $separator: list.separator($list));
 }
 
 /**
@@ -175,14 +175,14 @@
     @for $i from 1 through list.length($list) {
         @if meta.type-of(list.nth($list, $i))==list and $recursive {
             $result: list.append($result,
-                    replace(list.nth($list, $i), $old-value, $new-value, $recursive));
+                replace(list.nth($list, $i), $old-value, $new-value, $recursive));
         }
         @else {
             @if list.nth($list, $i)==$old-value {
-                $result: list.append($result, $new-value, $separator: $sep);
+                $result: list.append($result, $new-value, $separator:$sep);
             }
             @else {
-                $result: list.append($result, list.nth($list, $i), $separator: $sep);
+                $result: list.append($result, list.nth($list, $i), $separator:$sep);
             }
         }
     }
@@ -207,11 +207,19 @@
 
     @for $i from 1 through list.length($list) {
         @if meta.type-of(list.nth($list, $i))==list and $recursive {
-            $result: list.append($result,
-                    remove(list.nth($list, $i), $value, $recursive), $separator: $sep);
-        }
-        @else if list.nth($list, $i) !=$value {
-            $result: list.append($result, list.nth($list, $i), $separator: $sep);
+            $inner: remove(list.nth($list, $i), $value, $recursive);
+            @if list.length($inner) == 1 {
+                $result: list.append($result, list.nth($inner, 1), $separator: $sep);
+            }
+            @else if list.length($inner) > 0 {
+                $result: list.append($result, $inner, $separator: $sep);
+            }
+        } @else if list.nth($list, $i) != $value {
+            $result: list.append(
+                $result,
+                list.nth($list, $i),
+                $separator: $sep
+            );
         }
     }
     @return $result;
@@ -232,7 +240,7 @@
  *  $new-list: slice($list, -1, 10);    // error
  */
 @function slice($list, $start: 1, $end: list.length($list)) {
-    @if meta.type-of($start)!=number or meta.type-of($end)!=number {
+    @if meta.type-of($start) != number or meta.type-of($end) != number {
         @error "Either $start or $end are not a number for `list.slice()`.";
     }
     @if $start < 1 {
@@ -246,7 +254,9 @@
         @return null;
     }
     @if $start < 1 or $end > list.length($list) {
-        @error "list.slice(): index out of range(start=#{$start}, end=#{$end}, list.length=#{list.length($list)}.";
+        @error "list.slice(): index out of range(start=#{$start}, end=#{$end}, list.length=#{list.length(
+            $list
+        )}.";
     }
 
     $result: ();
@@ -270,7 +280,7 @@
  *  $new-list: reverse($list, true); // h, g, f, e d c, b, a
  */
 @function reverse($list, $recursive: false) {
-    @if (list.length($list)==0) {
+    @if (list.length($list) == 0) {
         @return $result;
     }
 
@@ -278,12 +288,18 @@
     $sep: list.separator($list);
 
     @for $i from list.length($list) * -1 through -1 {
-        @if meta.type-of(list.nth($list, math.abs($i)))==list and $recursive {
-            $result: list.append($result,
-                    reverse(list.nth($list, math.abs($i)), $recursive), $separator: $sep);
-        }
-        @else {
-            $result: list.append($result, list.nth($list, math.abs($i)), $separator: $sep);
+        @if meta.type-of(list.nth($list, math.abs($i))) == list and $recursive {
+            $result: list.append(
+                $result,
+                reverse(list.nth($list, math.abs($i)), $recursive),
+                $separator: $sep
+            );
+        } @else {
+            $result: list.append(
+                $result,
+                list.nth($list, math.abs($i)),
+                $separator: $sep
+            );
         }
     }
     @return $result;
@@ -302,19 +318,19 @@
  *  $new-list: to-string($list);      // 'a b c d e f g h'
  *  $new-list: to-string($list, '-'); // 'a-b-c-d-e-f-g-h'
  */
-@function to-string($list, $glue: ' ', $unquote: true, $flatten: false) {
+@function to-string($list, $glue: " ", $unquote: true, $flatten: false) {
     $result: ();
 
     @for $i from 1 through list.length($list) {
         $val: list.nth($list, $i);
-        @if (meta.type-of($val)==list) {
+        @if (meta.type-of($val) == list) {
             $val: to-string($val, $glue, $unquote, $flatten);
         }
         $result: list.append($result, meta.inspect($val), $separator: comma);
     }
-    $result: string.replace(meta.inspect($result), ', ', $glue);
+    $result: string.replace(meta.inspect($result), ", ", $glue);
     @if $unquote {
-        $result: string.replace($result, '"', '');
+        $result: string.replace($result, '"', "");
     }
     @if (not $flatten) {
         $result: "(" + $result + ")";
@@ -338,8 +354,11 @@
     $sep: list.separator($list);
 
     @for $i from 0 to list.length($list) {
-        $result: list.append($result, list.nth($list,
-                ($i - $count) % list.length($list) + 1), $separator: $sep);
+        $result: list.append(
+            $result,
+            list.nth($list, ($i - $count) % list.length($list) + 1),
+            $separator: $sep
+        );
     }
     @return $result;
 }
@@ -360,7 +379,7 @@
  */
 @function contains($list, $values...) {
     @each $value in $values {
-        @if meta.type-of(list.index($list, $value)) != 'number' {
+        @if meta.type-of(list.index($list, $value)) != "number" {
             @return false;
         }
     }
